@@ -1,8 +1,3 @@
----
-output:
-  html_document: default
-  pdf_document: default
----
 # data
 
 This data has 32,833 rows and 23 columns
