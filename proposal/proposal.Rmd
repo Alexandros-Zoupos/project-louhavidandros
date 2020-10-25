@@ -16,15 +16,15 @@ library(broom)
 We have decided that for our project, it would be interesting to try and find what makes a song popular in its genre. For this, we will use spotify_songs which gets its data from the spotifyr package which in turn gets its data from spotify. In this data set the cases are songs and the variables include the name of the song, its album, its artist, the playlist it was taken from, the genre and subgenre of that playlist, the songs release date, the tracks popularity and a selection of variables calculated by spotify to represent an aspect of a song such as its energy or tempo, as well as more general information like the song's key. 
 
 ## 2. Data
-```{r}
+```{r load-data-set}
 spotify_songs <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-01-21/spotify_songs.csv')
 
 
 
 ```
 
-```{r}
-
+```{r glimpse-data}
+glimpse(spotify_songs)
 ```
 
 
@@ -32,12 +32,12 @@ spotify_songs <- readr::read_csv('https://raw.githubusercontent.com/rfordatascie
 
 Since the aim of the project is to examine what aspects make a song popular the response variable will always be the popularity of a song (track_popularity). Each genre of music will be studied separately, using all the numeric variables as well as the artist of each song. The comparison groups are the genres of music.
 
-```{r}
+```{r first-look}
 spotify_songs %>%
   count(playlist_genre)
 ```
 
-```{r}
+```{r popularity-plot}
 spotify_songs %>%
   group_by(playlist_genre) %>%
   summarise(min_pop = min(track_popularity), mean_pop = mean(track_popularity), max_pop = max(track_popularity)) %>%
