@@ -21,5 +21,8 @@ We have decided that for our project, it would be interesting to try and find wh
 
 ## 3. Data analysis plan
 
+Since the aim of the project is to examine what aspects make a song popular the response variable will always be the popularity of a song (track_popularity). Each genre of music will be studied separately, using all the numeric variables as well as the artist of each song. The comparison groups are the genres of music.
+
+
 
 
