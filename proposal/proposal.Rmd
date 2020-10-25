@@ -1,14 +1,14 @@
 ---
 title: "Project proposal"
-author: "Team name"
+author: "Louhavidandros"
 output: github_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r load-packages, message = FALSE}
 library(tidyverse)
 library(broom)
-spotify_songs <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-01-21/spotify_songs.csv')
-write_csv(spotify_songs,"data/Spotify.csv")
 ```
 
 ## 1. Introduction
@@ -16,6 +16,9 @@ write_csv(spotify_songs,"data/Spotify.csv")
 We have decided that for our project, it would be interesting to try and find what makes a song popular in its genre. For this, we will use spotify_songs which gets its data from the spotifyr package which in turn gets its data from spotify.
 
 ## 2. Data
+```{r}
+spotify_songs <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-01-21/spotify_songs.csv')
+```
 
 
 
@@ -23,6 +26,20 @@ We have decided that for our project, it would be interesting to try and find wh
 
 Since the aim of the project is to examine what aspects make a song popular the response variable will always be the popularity of a song (track_popularity). Each genre of music will be studied separately, using all the numeric variables as well as the artist of each song. The comparison groups are the genres of music.
 
+```{r}
+spotify_songs %>%
+  count(playlist_genre)
+```
 
+```{r}
+spotify_songs %>%
+  group_by(playlist_genre) %>%
+  summarise(min_pop = min(track_popularity), mean_pop = mean(track_popularity), max_pop = max(track_popularity)) %>%
+  ggplot(aes(x = mean_pop, y = playlist_genre, fill = playlist_genre)) + 
+  geom_col() + theme_minimal() + 
+  labs(title = "Average Popularity of Each Genre", x = "Mean Popularity", y = NULL) +
+  guides(fill = FALSE)
+```
 
+From the plot we can see that on average, pop music is the most popular and Latin music is close behind (possibly from large quantities of listeners from Spanish-speaking countries). Electronic Dance Music is the least popular on average.
 
