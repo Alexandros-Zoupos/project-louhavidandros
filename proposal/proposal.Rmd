@@ -13,13 +13,19 @@ library(broom)
 
 ## 1. Introduction
 
-We have decided that for our project, it would be interesting to try and find what makes a song popular in its genre. For this, we will use spotify_songs which gets its data from the spotifyr package which in turn gets its data from spotify.
+We have decided that for our project, it would be interesting to try and find what makes a song popular in its genre. For this, we will use spotify_songs which gets its data from the spotifyr package which in turn gets its data from spotify. In this data set the cases are songs and the variables include the name of the song, its album, its artist, the playlist it was taken from, the genre and subgenre of that playlist, the songs release date, the tracks popularity and a selection of variables calculated by spotify to represent an aspect of a song such as its energy or tempo, as well as more general information like the song's key. 
 
 ## 2. Data
 ```{r}
 spotify_songs <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-01-21/spotify_songs.csv')
+
+
+
 ```
 
+```{r}
+
+```
 
 
 ## 3. Data analysis plan
@@ -41,5 +47,7 @@ spotify_songs %>%
   guides(fill = FALSE)
 ```
 
-From the plot we can see that on average, pop music is the most popular and Latin music is close behind (possibly from large quantities of listeners from Spanish-speaking countries). Electronic Dance Music is the least popular on average.
+From the plot we can see that on average, pop music is the most popular and Latin music is close behind (possibly from large quantities of listeners from Spanish-speaking countries). Electronic Dance Music is the least popular on average. 
+
+Statistical methods we aim to use in this project will mainly be multiple forms of graphs, but mainly scatter and bar plots, we have a lot of numerical data to use so we will aim to get as much useful data onto our graphs as possible. We may also use histograms for some specific cases such as grouping songs by length. We also plan on using summarize() to show condensed data while making comparisons between variables. One specific idea we have is grouping songs by mode (whether the song is in a major or minor key) and calculating their mean popularity to observe any difference. 
 
