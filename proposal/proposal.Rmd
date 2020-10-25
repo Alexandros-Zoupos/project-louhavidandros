@@ -7,11 +7,13 @@ output: github_document
 ```{r load-packages, message = FALSE}
 library(tidyverse)
 library(broom)
+
+spotify_songs <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-01-21/spotify_songs.csv')
 ```
 
 ## 1. Introduction
 
-
+We have decided that for our project, it would be interesting to try and find what makes a song popular in its genre. For this, we will use spotify_songs which gets its data from the spotifyr package which in turn gets its data from spotify.
 
 ## 2. Data
 
