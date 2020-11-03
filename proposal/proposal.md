@@ -4,7 +4,6 @@ Louhavidandros
 
 ``` r
 library(tidyverse)
-library(broom)
 ```
 
 ## 1\. Introduction
@@ -18,12 +17,15 @@ the playlist it was taken from, the genre and subgenre of that playlist,
 the songs release date, the tracks popularity and a selection of
 variables calculated by spotify to represent an aspect of a song such as
 its energy or tempo, as well as more general information like the song’s
-key.
+key. The songs are from the top 20 playlists from the top 4 sub-genres
+from the top 6 genres. This means that the genre used is based on the
+playlist the song was found in, not the genre of the track itself. This
+may cause slight problems.
 
 ## 2\. Data
 
 ``` r
-spotify_songs <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-01-21/spotify_songs.csv')
+spotify_songs <- readr::read_csv('data/Spotify.csv')
 ```
 
     ## Parsed with column specification:
