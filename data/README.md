@@ -2,7 +2,8 @@
 
 This data has 32,833 rows and 23 columns
 
-The descriptors for the variables were taken from the GitHub page where we got the data
+The descriptors for the variables were taken from the GitHub page where we got the data.
+
 
 ## Spotify
 
