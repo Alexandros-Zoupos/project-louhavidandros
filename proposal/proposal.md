@@ -108,7 +108,7 @@ spotify_songs %>%
 
     ## `summarise()` ungrouping output (override with `.groups` argument)
 
-![](proposal_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+![](proposal_files/figure-gfm/popularity-plot-1.png)<!-- -->
 
 From the plot we can see that on average, pop music is the most popular
 and Latin music is close behind (possibly from large quantities of
