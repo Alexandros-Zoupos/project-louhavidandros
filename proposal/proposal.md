@@ -4,6 +4,7 @@ Louhavidandros
 
 ``` r
 library(tidyverse)
+library(here)
 ```
 
 ## 1\. Introduction
@@ -31,7 +32,7 @@ the playlist genre may not be identical to the track genre.
 ## 2\. Data
 
 ``` r
-spotify_songs <- read_csv('data/Spotify.csv')
+spotify_songs <- read_csv(here('data/Spotify.csv'))
 ```
 
     ## Parsed with column specification:

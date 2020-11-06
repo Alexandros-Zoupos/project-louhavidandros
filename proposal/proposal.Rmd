@@ -8,6 +8,7 @@ editor_options:
 
 ```{r load-packages, message = FALSE}
 library(tidyverse)
+library(here)
 ```
 
 ## 1. Introduction
@@ -20,7 +21,7 @@ The songs are from the top 20 playlists from the top 4 sub-genres from the top 6
 
 ## 2. Data
 ```{r load-data-set}
-spotify_songs <- read_csv('data/Spotify.csv')
+spotify_songs <- read_csv(here('data/Spotify.csv'))
 ```
 
 ```{r glimpse-data}
