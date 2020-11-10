@@ -3,28 +3,35 @@ title: "Untitled"
 output: github_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r}
+library(tidyverse)
+library(broom)
 ```
 
-## GitHub Documents
 
-This is an R Markdown format used for publishing markdown documents to GitHub. When you click the **Knit** button all R code chunks are run and a markdown file (.md) suitable for publishing to GitHub is generated.
-
-## Including Code
-
-You can include R code in the document as follows:
-
-```{r cars}
-summary(cars)
+```{r}
+Spotify%>%
+  filter(playlist_genre=="rock")%>%
+  summarise(average=median(mode))
 ```
 
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r}
+Spotify_rock <-Spotify%>%
+  filter(playlist_genre=="rock")
+  
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r}
+Spotify%>%
+  filter(playlist_genre=="rock")%>%
+  filter(track_popularity>"70")%>%
+  summarise(avg_pop=mean(track_popularity),  avg_danceability=mean(danceability), avg_energy=mean(energy), common_mode=median(mode), avg_speechiness= mean(speechiness), avg_acoustic= mean(acousticness), avg_instrumental= mean(instrumentalness), avg_liveness= mean(liveness), avg_valence= mean(valence), avg_tempo= mean(tempo), avg_length= mean(duration_ms))
+```
+
+```{r}
+Spotify%>%
+  filter(playlist_genre=="rock")%>%
+  filter(track_popularity>"70")%>%
+  view()
+```
+
