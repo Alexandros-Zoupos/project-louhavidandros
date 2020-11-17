@@ -10,3 +10,361 @@ library(tidyverse)
 library(dplyr)
 ```
 
+```{r load-data}
+spotify_songs <- read_csv("data/Spotify.csv")
+```
+
+```{r}
+pop_songs <- spotify_songs %>%
+  filter(playlist_genre == "pop")
+```
+
+
+### General Summary
+
+```{r general-summary}
+pop_songs %>%
+  summarise(min_pop = min(track_popularity), iqr_pop = IQR(track_popularity), med_pop = median(track_popularity), max_pop = max(track_popularity), quantile(track_popularity))
+```
+
+### Popularity Level
+
+```{r popularity-level}
+pop_songs <- pop_songs %>%
+  mutate(popularity_level = case_when(
+    track_popularity <= 31 ~ "Very Low",
+    track_popularity > 31 & track_popularity <= 52 ~ "Low",
+    track_popularity > 52 & track_popularity < 68 ~ "Fairly High",
+    track_popularity >= 68 & track_popularity <= 100 ~ "High"
+  ))
+```
+
+### Median Values
+
+```{r median-values}
+pop_songs %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  group_by(popularity_level) %>%
+  summarise(med_dance = median(danceability),
+            med_energy = median(energy),
+            med_tempo = median(tempo),
+            med_duration_s = median(duration_ms)/1000,
+            med_speech = median(speechiness),
+            med_acoustic = median(acousticness)) 
+```
+
+### Statistics
+
+```{r dance-energy-stats}
+pop_songs %>%
+  group_by(popularity_level) %>%
+  summarise(min_dance = min(danceability), med_dance = median(danceability), max_dance = max(danceability), min_energy = min(energy), med_energy = median(energy), max_energy = max(energy))
+```
+
+```{r duration-acousticness-stats}
+pop_songs %>%
+  group_by(popularity_level) %>%
+  summarise(min_duration_ms = min(duration_ms), med_duration_ms = median(duration_ms), max_duration_ms = max(duration_ms), min_acousticness = min(acousticness), med_acousticness = median(acousticness), max_acousticness = max(acousticness))
+```
+
+```{r speechiness-instrumentalness-stats}
+pop_songs %>%
+  group_by(popularity_level) %>%
+  summarise(min_speechiness = min(speechiness), med_speechiness = median(speechiness), max_speechiness = max(speechiness), min_instrumentalness = min(instrumentalness), med_instrumentalness = median(instrumentalness), max_instrumentalness = max(instrumentalness))
+```
+
+```{r tempo-stats}
+pop_songs %>%
+  group_by(popularity_level) %>%
+  summarise(min_tempo = min(tempo), med_tempo = median(tempo), max_tempo = max(tempo))
+```
+
+### Key Popularity
+
+```{r major-key-histogram}
+pop_songs %>%
+  filter(mode == "1") %>%
+  ggplot(aes(x = key)) +
+  geom_histogram() +
+  facet_wrap(~popularity_level)
+  
+```
+
+```{r minor-key-histogram}
+pop_songs %>%
+  filter(mode == "0") %>%
+  ggplot(aes(x = key)) +
+  geom_histogram() +
+  facet_wrap(~popularity_level)
+```
+
+The most common key for a popular pop song with a major key is C# major, followed by C major and then by F# major, whilst the most common keys for an unpopular pop song with a major key are C major then D major and then F# major. Eb major is the least frequent in both popular and unpopular songs, though it is used slighlt more in unpopular songs.
+
+The most common key for a popular pop song with a minor key is C# Minor, followed by B minor and F minor, whilst the most common keys for unpopular pop songs with a minor key are B minor, then A minor and then C# minor
+```{r}
+major_key_popularity <-pop_songs %>%
+  filter(mode == "1") %>%
+  group_by(popularity_level, key) %>%
+  count(key)
+```
+
+``` {r}
+minor_key_popularity <- pop_songs %>%
+  filter(mode == "0") %>%
+  group_by(popularity_level, key) %>%
+  count(key)
+```
+
+### Most Pop vs Least Pop
+```{r}
+pop_songs %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  ggplot(aes(x = acousticness, color = popularity_level)) +
+  geom_density(adjust = 2)
+```
+
+BETWEEN X AND Y MORE LIKELY TO BE V POP THAN V UNPOP
+
+```{r}
+pop_songs %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  ggplot(aes(x = danceability, color = popularity_level)) +
+  geom_density(adjust = 2)
+```
+
+DANCEABILITY IS GOOD
+
+```{r}
+pop_songs %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  ggplot(aes(x = energy, color = popularity_level)) +
+  geom_density(adjust = 2)
+```
+
+ENERGY DECENT
+
+```{r}
+pop_songs %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  ggplot(aes(x = loudness, color = popularity_level)) +
+  geom_density(adjust = 2)
+```
+
+LOUDNESS ALRIGHT - ABOVE X MORE LIKELY TO BE POP
+
+```{r}
+pop_songs %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  ggplot(aes(x = speechiness, color = popularity_level)) +
+  geom_density(adjust = 2)
+```
+
+MEH
+
+```{r}
+pop_songs %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  ggplot(aes(x = instrumentalness, color = popularity_level)) +
+  geom_density(adjust = 2)
+```
+
+WACK
+
+```{r}
+pop_songs %>%
+  filter(playlist_genre == "pop",
+         popularity_level == c("High", "Very Low")) %>%
+  ggplot(aes(x = liveness, color = popularity_level)) +
+  geom_density(adjust = 2)
+```
+
+
+```{r}
+pop_songs %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  ggplot(aes(x = valence, color = popularity_level)) +
+  geom_density(adjust = 2)
+```
+
+VALENCE USEFUL
+
+```{r}
+pop_songs %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  ggplot(aes(x = tempo, color = popularity_level)) +
+  geom_density(adjust = 2)
+```
+
+
+```{r}
+pop_songs %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  ggplot(aes(x = duration_ms, color = popularity_level)) +
+  geom_density(adjust = 2)
+```
+
+DURATION ALRIGHT
+
+
+### New Analysis
+```{r}
+pop_songs %>%
+  group_by(playlist_subgenre) %>%
+  ggplot(aes(x = track_popularity, color = playlist_subgenre)) +
+  geom_density(adjust = 2)
+  
+```
+
+
+```{r}
+pop_songs %>%
+  group_by(popularity_level) %>%
+  count(playlist_subgenre) %>%
+  arrange(desc(n))
+```
+
+
+
+1. Post Teen
+2. Dance Pop
+3. Electropop
+4. Indie
+
+### Beginning of Nicely Presented Analysis
+
+The quartile values for `track_popularity` were found and these values were used as cut off points to define `popularity_level`, with a song being classified as 'very low', 'low', 'fairly high' and 'high' depending on whether it was higher than any of the quartile values.
+
+The main comparisons are made between songs which have a high popularity level and songs which have a very low popularity level.
+
+```{r immediate-differences}
+pop_songs %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  group_by(popularity_level) %>%
+  summarise(med_dance = median(danceability),
+            med_energy = median(energy),
+            med_tempo = median(tempo),
+            med_duration_s = median(duration_ms)/1000,
+            med_speech = median(speechiness),
+            med_acoustic = median(acousticness),
+            med_valence = median(valence)) 
+```
+
+To begin with, the median values for a selection of variables was compared and the following conclusions were made:
+On average, popular pop songs have a higher danceability, speechiness, acousticness and valence than unpopular pop songs, and on average a lower energy and duration than unpopular pop songs. The average tempo for both popular and unpopular pop songs is the same.
+
+### Graphing Popularity Likelihood
+Graphical representations then made it easier to tell whether a song was more likely to be popular or unpopular given a certain variable:
+
+### Danceability
+
+```{r danceability}
+pop_songs %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  ggplot(aes(x = danceability, color = popularity_level)) +
+  geom_density(adjust = 2) +
+    labs(x = "Danceability",
+       y = "Frequency",
+       color = "Popularity Level") +
+  theme_minimal()
+```
+
+On average, if a pop song has a danceablility over 0.66 it is more likely to be popular than to be very unpopular. Similarly if its has a danceability less than 0.66, it is more likely to be very unpopular than popular. 
+
+Takeaway: Pop songs which are popular are more likely to be suitable for dancing than pop songs which are very unpopular
+
+### Energy
+
+```{r energy}
+pop_songs %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  ggplot(aes(x = energy, color = popularity_level)) +
+  geom_density(adjust = 2) +
+  labs(x = "Energy",
+       y = "Frequency",
+       color = "Popularity Level") +
+  theme_minimal()
+```
+
+There is clearly a desirable range of energy values: a pop song with an energy between 0.40 and 0.83 is more likely to be popular than very unpopular, and an energy outwith these values makes a pop song more likely to be very unpopular.
+
+### Valence
+
+```{r valence}
+pop_songs %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  ggplot(aes(x = valence, color = popularity_level)) +
+  geom_density(adjust = 2) +
+    labs(x = "Valence",
+       y = "Frequency",
+       color = "Popularity Level") +
+  theme_minimal()
+```
+
+Another optimal range can be seen with valence values:
+A pop song with a valence between 0.38 and 0.82 is more likely to be popular than very unpopular.A valence below 0.38 will give a higher likelihood of the pop song being very unpopular, and a valence higher than 0.82 will change the odds in  very slight favour of the song being very unpopular rather than popular.
+
+### Acousticness
+
+```{r acousticness}
+pop_songs %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  ggplot(aes(x = acousticness, color = popularity_level)) +
+  geom_density(adjust = 2) +
+    labs(x = "Acousticness",
+       y = "Frequency",
+       color = "Popularity Level") +
+  theme_minimal()
+```
+
+The distribution of acousticness is very similar, but for the biggest likelihood of a pop song being popular rather than unpopular the acousticness should be between 0.07 and 0.63, as other values result in there being a higher likelihood of the song being very unpopular than being popular
+
+### Loudness
+
+```{r}
+pop_songs %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  ggplot(aes(x = loudness, color = popularity_level)) +
+  geom_density(adjust = 2) +
+    labs(x = "Loudness",
+       y = "Frequency",
+       color = "Popularity Level") +
+  theme_minimal()
+```
+
+On average, a pop song with a loudness value higher than -7 is more likely to be popular than very unpopular. On average, popular pop songs are louder than very unpopular pop songs
+
+### Duration
+
+```{r}
+pop_songs %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  ggplot(aes(x = duration_ms/1000, color = popularity_level)) +
+  geom_density(adjust = 2) +
+    labs(x = "Duration (s)",
+       y = "Frequency",
+       color = "Popularity Level") +
+  theme_minimal()
+```
+
+On average, a pop song with a duration shorter than four minutes (240s) has a greater chance of being popular than unpopular, and durations above four minutes lead to a higher chance of a pop song being unpopular than poular. However the range of durations of pop songs which have the greatest chance of being popular is three minutes to four minutes (180-240s).
+
+### Sub-genre
+
+```{r}
+pop_songs %>%
+  group_by(playlist_subgenre) %>%
+  ggplot(aes(x = track_popularity, color = playlist_subgenre)) +
+  geom_density(adjust = 2) +
+    labs(x = "Popularity",
+       y = "Frequency",
+       color = "Sub-Genre") +
+  theme_minimal()
+```
+
+A post-teen pop song is most likely to have a high popularity out of all of the sub-genres included in the data. Dance pop is the next most likely to have a high popularity, followed by electro pop and then indie poptimism.
+
+An electro pop song is most likely to have a very low popularity out of all the sub-genres included in the data. Indie poptimism is the next most likely to be very unpopular, followed by post-teen pop and dance pop.
+
+
+
+
