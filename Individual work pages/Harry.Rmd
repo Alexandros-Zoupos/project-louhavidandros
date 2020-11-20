@@ -6,6 +6,10 @@ output: github_document
 ```{r}
 library(tidyverse)
 library(broom)
+library(here)
+```
+```{r}
+Spotify<- read_csv(here('data/Spotify.csv'))
 ```
 
 
@@ -15,6 +19,7 @@ Spotify%>%
   summarise(average=median(mode))
 ```
 
+
 ```{r}
 Spotify_rock <-Spotify%>%
   filter(playlist_genre=="rock")
@@ -22,16 +27,231 @@ Spotify_rock <-Spotify%>%
 ```
 
 ```{r}
+Spotify_rock%>%
+  group_by(mode)%>%
+  summarise(avg_pop=mean(track_popularity))
+```
+
+
+```{r}
+Spotify_rock%>%
+  filter(mode=="0")%>%
+  group_by(key)%>%
+  summarise(avg_pop=mean(track_popularity))
+```
+
+```{r}
+Spotify_rock%>%
+  filter(mode=="1")%>%
+  group_by(key)%>%
+  summarise(avg_pop=mean(track_popularity))
+```
+
+
+
+```{r}
 Spotify%>%
   filter(playlist_genre=="rock")%>%
-  filter(track_popularity>"70")%>%
   summarise(avg_pop=mean(track_popularity),  avg_danceability=mean(danceability), avg_energy=mean(energy), common_mode=median(mode), avg_speechiness= mean(speechiness), avg_acoustic= mean(acousticness), avg_instrumental= mean(instrumentalness), avg_liveness= mean(liveness), avg_valence= mean(valence), avg_tempo= mean(tempo), avg_length= mean(duration_ms))
 ```
 
 ```{r}
 Spotify%>%
   filter(playlist_genre=="rock")%>%
-  filter(track_popularity>"70")%>%
+  filter(track_popularity>=70)%>%
+  summarise(avg_pop=mean(track_popularity),  avg_danceability=mean(danceability), avg_energy=mean(energy), common_mode=median(mode), avg_speechiness= mean(speechiness), avg_acoustic= mean(acousticness), avg_instrumental= mean(instrumentalness), avg_liveness= mean(liveness), avg_valence= mean(valence), avg_tempo= mean(tempo), avg_length= mean(duration_ms))
+```
+
+```{r}
+Spotify_rock %>%
+summarise(min_pop = min(track_popularity), iqr_pop = IQR(track_popularity), med_pop = median(track_popularity), max_pop = max(track_popularity), quantile(track_popularity))
+```
+
+```{r}
+    
+Spotify_rock <- Spotify_rock %>%
+mutate(popularity_level = case_when(
+track_popularity <= 21 ~ "Very Low",
+track_popularity > 21 & track_popularity <= 46 ~ "Low",
+track_popularity > 46 & track_popularity < 63 ~ "Fairly High",
+track_popularity >= 63 & track_popularity <= 100 ~ "High"
+))
+
+```
+
+```{r}
+Spotify_rock %>%
+filter(popularity_level == c("High", "Very Low")) %>%
+ggplot(aes(x = valence, color = popularity_level)) +
+geom_density(adjust = 2) +
+labs(x = "Valence",
+y = "Frequency",
+color = "Popularity Level") +
+theme_minimal()
+```
+
+```{r}
+Spotify_rock %>%
+filter(popularity_level == c("High", "Very Low")) %>%
+ggplot(aes(x = danceability, color = popularity_level)) +
+geom_density(adjust = 2) +
+labs(x = "danceability",
+y = "Frequency",
+color = "Popularity Level") +
+theme_minimal()
+```
+
+```{r}
+Spotify_rock %>%
+filter(popularity_level == c("High", "Very Low")) %>%
+ggplot(aes(x = tempo, color = popularity_level)) +
+geom_density(adjust = 2) +
+labs(x = "Tempo",
+y = "Frequency",
+color = "Popularity Level") +
+theme_minimal()
+```
+
+```{r}
+Spotify_rock %>%
+filter(popularity_level == c("High", "Very Low")) %>%
+ggplot(aes(x = acousticness, color = popularity_level)) +
+geom_density(adjust = 2) +
+labs(x = "Acousticness",
+y = "Frequency",
+color = "Popularity Level") +
+theme_minimal()
+```
+
+
+```{r}
+Spotify_rock %>%
+filter(popularity_level == c("High", "Very Low")) %>%
+ggplot(aes(x = speechiness, color = popularity_level)) +
+geom_density(adjust = 2) +
+labs(x = "Speechiness",
+y = "Frequency",
+color = "Popularity Level") +
+theme_minimal()
+```
+
+```{r}
+Spotify_rock %>%
+filter(popularity_level == c("High", "Very Low")) %>%
+ggplot(aes(x = duration_ms, color = popularity_level)) +
+geom_density(adjust = 2) +
+labs(x = "Duration",
+y = "Frequency",
+color = "Popularity Level") +
+theme_minimal()
+```
+
+```{r}
+Spotify_rock %>%
+filter(popularity_level == c("High", "Very Low")) %>%
+ggplot(aes(x = energy, color = popularity_level)) +
+geom_density(adjust = 2) +
+labs(x = "Energy",
+y = "Frequency",
+color = "Popularity Level") +
+theme_minimal()
+```
+
+```{r}
+Spotify_rock %>%
+filter(popularity_level == c("High", "Very Low")) %>%
+ggplot(aes(x = key, color = popularity_level)) +
+geom_density(adjust = 2) +
+labs(x = "Key",
+y = "Frequency",
+color = "Popularity Level") +
+theme_minimal()
+```
+
+
+```{r}
+Spotify_rock_pop <- Spotify%>%
+  filter(playlist_genre=="rock")%>%
+  filter(track_popularity>63)%>%
   view()
 ```
+
+```{r}
+Spotify_rock %>%
+  
+  count(key, sort = TRUE)%>%
+  slice_max(n,n=5) %>%
+  arrange(key,n)
+  
+  
+```
+
+c = 0, c# = 1, d = 2, d# = 3,E = 4, F = 5, F# = 6, G = 7, G# = 8, A = 9, A# = 10, B = 11
+
+
+
+```{r}
+Spotify_rock %>%
+  filter(mode=="0")%>%
+  group_by(key)%>%
+  ggplot(aes(x=key,y=track_popularity, color=key, fill=key))+
+  geom_col()
+```
+
+```{r}
+Spotify_rock %>%
+  filter(mode=="1")%>%
+  group_by(key)%>%
+  ggplot(aes(x=key, y=track_popularity, color=key, fill=key))+
+  geom_col()
+```
+
+```{r}
+Spotify_rock_pop %>%
+  filter(mode=="0")%>%
+  group_by(key)%>%
+  ggplot(aes(x=key,y=track_popularity, color=key, fill=key))+
+  geom_col()
+```
+
+```{r}
+Spotify_rock_pop %>%
+  filter(mode=="1")%>%
+  group_by(key)%>%
+  ggplot(aes(x=key,y=track_popularity, color=key, fill=key))+
+  geom_col()
+```
+
+```{r}
+Spotify_rock_pop%>%
+  
+  ggplot(aes(x=key))+
+  geom_histogram(binwidth = 0.5)
+  
+```
+
+
+
+```{r}
+Spotify_rock%>%
+  ggplot(aes(x=tempo, y=energy, colour=mode))+
+  geom_point()+
+  geom_smooth()
+```
+
+```{r}
+Spotify_rock_pop%>%
+  ggplot(aes(x=danceability, y=valence, colour=mode))+
+  geom_point()
+```
+
+```{r}
+Spotify_rock_pop%>%
+  ggplot(aes(y=track_popularity,x=valence, colour=mode))+
+  geom_point()
+
+```
+
+
+
 
