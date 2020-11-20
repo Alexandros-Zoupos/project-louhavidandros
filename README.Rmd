@@ -1,6 +1,6 @@
 ---
-title: Project title
-author: by Team name
+title: Exploring the Factors of Song Popularity
+author: by Louhavidandros
 output: github_document
 ---
 

@@ -1,9 +1,6 @@
-[![Check allowed files](https://github.com/ids-s1-20/project-louhavidandros/workflows/Check%20allowed%20files/badge.svg)](https://github.com/ids-s1-20/project-louhavidandros/actions?query=workflow:%22Check%20allowed%20files%22) [![Check presentation renders](https://github.com/ids-s1-20/project-louhavidandros/workflows/Check%20presentation%20renders/badge.svg)](https://github.com/ids-s1-20/project-louhavidandros/actions?query=workflow:%22Check%20presentation%20renders%22) [![Check README renders](https://github.com/ids-s1-20/project-louhavidandros/workflows/Check%20README%20renders/badge.svg)](https://github.com/ids-s1-20/project-louhavidandros/actions?query=workflow:%22Check%20README%20renders%22)
-
-
-Project title
+Exploring the Factors of Song Popularity
 ================
-by Team name
+by Louhavidandros
 
 ## Summary
 
@@ -14,8 +11,8 @@ words. To use the word count addin, select the text you want to count
 the words of (probably this is the Summary section of this document, go
 to Addins, and select the `Word count` addin). This addin counts words
 using two different algorithms, but the results should be similar and as
-long as you’re in the ballpark of 750 words, you’re good! The addin will
-ignore code chunks and only count the words in prose.
+long as you’re in the ballpark of 750 words, you’re good\! The addin
+will ignore code chunks and only count the words in prose.
 
 You can also load your data here and present any analysis results /
 plots, but I strongly urge you to keep that to a minimum (maybe only the
