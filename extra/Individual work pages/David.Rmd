@@ -8,6 +8,7 @@ editor_options:
 ```{r setup, include=FALSE}
 library(tidyverse)
 library(dplyr)
+library(ggridges)
 ```
 
 ```{r load-data}
@@ -31,6 +32,7 @@ pop_songs %>%
 
 ```{r popularity-level}
 pop_songs <- pop_songs %>%
+  filter(playlist_genre == "pop") %>%
   mutate(popularity_level = case_when(
     track_popularity <= 31 ~ "Very Low",
     track_popularity > 31 & track_popularity <= 52 ~ "Low",
@@ -230,6 +232,12 @@ pop_songs %>%
 3. Electropop
 4. Indie
 
+```{r}
+pop_songs %>%
+  ggplot(aes(x = tempo, y = track_popularity))
+```
+
+
 ### Beginning of Nicely Presented Analysis
 
 The quartile values for `track_popularity` were found and these values were used as cut off points to define `popularity_level`, with a song being classified as 'very low', 'low', 'fairly high' and 'high' depending on whether it was higher than any of the quartile values.
@@ -365,6 +373,75 @@ A post-teen pop song is most likely to have a high popularity out of all of the 
 
 An electro pop song is most likely to have a very low popularity out of all the sub-genres included in the data. Indie poptimism is the next most likely to be very unpopular, followed by post-teen pop and dance pop.
 
+*DO RIDGE PLOT OF DISTRIBUTION OF EVERY VARIABLE FOR EACH GENRE*
+
+```{r}
+genre_quratiles <- spotify_songs %>%
+  group_by(playlist_genre) %>%
+  summarise(quantile(track_popularity))
+```
+
+```{r}
+edm_songs <- spotify_songs %>%
+  filter(playlist_genre == "edm") %>%
+  mutate(popularity_level = case_when(
+    track_popularity <= 17 ~ "Very Low",
+    track_popularity > 17 & track_popularity <= 36 ~ "Low",
+    track_popularity > 36 & track_popularity < 51 ~ "Fairly High",
+    track_popularity >= 51 & track_popularity <= 100 ~ "High"
+  )) 
+```
+
+```{r}
+latin_songs <- spotify_songs %>%
+  filter(playlist_genre == "latin") %>%
+  mutate(popularity_level = case_when(
+    track_popularity <= 32 ~ "Very Low",
+    track_popularity > 32 & track_popularity <= 50 ~ "Low",
+    track_popularity > 50 & track_popularity < 67 ~ "Fairly High",
+    track_popularity >= 67 & track_popularity <= 100 ~ "High"
+  ))
+```
+
+```{r}
+rnb_songs <- spotify_songs %>%
+  filter(playlist_genre == "r&b") %>%
+  mutate(popularity_level = case_when(
+    track_popularity <= 20 ~ "Very Low",
+    track_popularity > 20 & track_popularity <= 44 ~ "Low",
+    track_popularity > 44 & track_popularity < 62 ~ "Fairly High",
+    track_popularity >= 62 & track_popularity <= 100 ~ "High"
+  ))
+```
+
+```{r}
+rap_songs <- spotify_songs %>%
+  filter(playlist_genre == "rap") %>%
+  mutate(popularity_level = case_when(
+    track_popularity <= 30 ~ "Very Low",
+    track_popularity > 30 & track_popularity <= 47 ~ "Low",
+    track_popularity > 47 & track_popularity < 60 ~ "Fairly High",
+    track_popularity >= 60 & track_popularity <= 100 ~ "High"
+  )) 
+```
+
+```{r}
+rock_songs <- spotify_songs %>%
+  filter(playlist_genre == "rock") %>%
+  mutate(popularity_level = case_when(
+    track_popularity <= 21 ~ "Very Low",
+    track_popularity > 21 & track_popularity <= 46 ~ "Low",
+    track_popularity > 46 & track_popularity < 63 ~ "Fairly High",
+    track_popularity >= 63 & track_popularity <= 100 ~ "High"
+  )) 
+```
 
 
+
+```{r}
+spotify_songs %>%
+  filter(popularity_level == "High") %>%
+  ggplot(aes(x = valence, y = playlist_genre, fill = playlist_genre, color = playlist_genre)) +
+  geom_density_ridges(alpha = 0.5)
+```
 
