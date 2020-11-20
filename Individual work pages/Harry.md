@@ -152,9 +152,161 @@ Spotify%>%
     ## #   avg_valence <dbl>, avg_tempo <dbl>, avg_length <dbl>
 
 ``` r
+Spotify_rock %>%
+summarise(min_pop = min(track_popularity), iqr_pop = IQR(track_popularity), med_pop = median(track_popularity), max_pop = max(track_popularity), quantile(track_popularity))
+```
+
+    ## # A tibble: 5 x 5
+    ##   min_pop iqr_pop med_pop max_pop `quantile(track_popularity)`
+    ##     <dbl>   <dbl>   <dbl>   <dbl>                        <dbl>
+    ## 1       0      42      46      95                            0
+    ## 2       0      42      46      95                           21
+    ## 3       0      42      46      95                           46
+    ## 4       0      42      46      95                           63
+    ## 5       0      42      46      95                           95
+
+``` r
+Spotify_rock <- Spotify_rock %>%
+mutate(popularity_level = case_when(
+track_popularity <= 21 ~ "Very Low",
+track_popularity > 21 & track_popularity <= 46 ~ "Low",
+track_popularity > 46 & track_popularity < 63 ~ "Fairly High",
+track_popularity >= 63 & track_popularity <= 100 ~ "High"
+))
+```
+
+``` r
+Spotify_rock %>%
+filter(popularity_level == c("High", "Very Low")) %>%
+ggplot(aes(x = valence, color = popularity_level)) +
+geom_density(adjust = 2) +
+labs(x = "Valence",
+y = "Frequency",
+color = "Popularity Level") +
+theme_minimal()
+```
+
+    ## Warning in popularity_level == c("High", "Very Low"): longer object length is
+    ## not a multiple of shorter object length
+
+![](Harry_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+
+``` r
+Spotify_rock %>%
+filter(popularity_level == c("High", "Very Low")) %>%
+ggplot(aes(x = danceability, color = popularity_level)) +
+geom_density(adjust = 2) +
+labs(x = "danceability",
+y = "Frequency",
+color = "Popularity Level") +
+theme_minimal()
+```
+
+    ## Warning in popularity_level == c("High", "Very Low"): longer object length is
+    ## not a multiple of shorter object length
+
+![](Harry_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+
+``` r
+Spotify_rock %>%
+filter(popularity_level == c("High", "Very Low")) %>%
+ggplot(aes(x = tempo, color = popularity_level)) +
+geom_density(adjust = 2) +
+labs(x = "Tempo",
+y = "Frequency",
+color = "Popularity Level") +
+theme_minimal()
+```
+
+    ## Warning in popularity_level == c("High", "Very Low"): longer object length is
+    ## not a multiple of shorter object length
+
+![](Harry_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+
+``` r
+Spotify_rock %>%
+filter(popularity_level == c("High", "Very Low")) %>%
+ggplot(aes(x = acousticness, color = popularity_level)) +
+geom_density(adjust = 2) +
+labs(x = "Acousticness",
+y = "Frequency",
+color = "Popularity Level") +
+theme_minimal()
+```
+
+    ## Warning in popularity_level == c("High", "Very Low"): longer object length is
+    ## not a multiple of shorter object length
+
+![](Harry_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+
+``` r
+Spotify_rock %>%
+filter(popularity_level == c("High", "Very Low")) %>%
+ggplot(aes(x = speechiness, color = popularity_level)) +
+geom_density(adjust = 2) +
+labs(x = "Speechiness",
+y = "Frequency",
+color = "Popularity Level") +
+theme_minimal()
+```
+
+    ## Warning in popularity_level == c("High", "Very Low"): longer object length is
+    ## not a multiple of shorter object length
+
+![](Harry_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
+
+``` r
+Spotify_rock %>%
+filter(popularity_level == c("High", "Very Low")) %>%
+ggplot(aes(x = duration_ms, color = popularity_level)) +
+geom_density(adjust = 2) +
+labs(x = "Duration",
+y = "Frequency",
+color = "Popularity Level") +
+theme_minimal()
+```
+
+    ## Warning in popularity_level == c("High", "Very Low"): longer object length is
+    ## not a multiple of shorter object length
+
+![](Harry_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
+
+``` r
+Spotify_rock %>%
+filter(popularity_level == c("High", "Very Low")) %>%
+ggplot(aes(x = energy, color = popularity_level)) +
+geom_density(adjust = 2) +
+labs(x = "Energy",
+y = "Frequency",
+color = "Popularity Level") +
+theme_minimal()
+```
+
+    ## Warning in popularity_level == c("High", "Very Low"): longer object length is
+    ## not a multiple of shorter object length
+
+![](Harry_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
+
+``` r
+Spotify_rock %>%
+filter(popularity_level == c("High", "Very Low")) %>%
+ggplot(aes(x = key, color = popularity_level)) +
+geom_density(adjust = 2) +
+labs(x = "Key",
+y = "Frequency",
+color = "Popularity Level") +
+theme_minimal()
+```
+
+    ## Warning in popularity_level == c("High", "Very Low"): longer object length is
+    ## not a multiple of shorter object length
+
+![](Harry_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
+
+``` r
 Spotify_rock_pop <- Spotify%>%
   filter(playlist_genre=="rock")%>%
-  filter(track_popularity>70)%>%
+  filter(track_popularity>63)%>%
   view()
 ```
 
@@ -186,7 +338,7 @@ Spotify_rock %>%
   geom_col()
 ```
 
-![](Harry_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+![](Harry_files/figure-gfm/unnamed-chunk-22-1.png)<!-- -->
 
 ``` r
 Spotify_rock %>%
@@ -196,7 +348,7 @@ Spotify_rock %>%
   geom_col()
 ```
 
-![](Harry_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+![](Harry_files/figure-gfm/unnamed-chunk-23-1.png)<!-- -->
 
 ``` r
 Spotify_rock_pop %>%
@@ -206,7 +358,7 @@ Spotify_rock_pop %>%
   geom_col()
 ```
 
-![](Harry_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+![](Harry_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->
 
 ``` r
 Spotify_rock_pop %>%
@@ -216,7 +368,7 @@ Spotify_rock_pop %>%
   geom_col()
 ```
 
-![](Harry_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+![](Harry_files/figure-gfm/unnamed-chunk-25-1.png)<!-- -->
 
 ``` r
 Spotify_rock_pop%>%
@@ -225,7 +377,7 @@ Spotify_rock_pop%>%
   geom_histogram(binwidth = 0.5)
 ```
 
-![](Harry_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
+![](Harry_files/figure-gfm/unnamed-chunk-26-1.png)<!-- -->
 
 ``` r
 Spotify_rock%>%
@@ -236,7 +388,7 @@ Spotify_rock%>%
 
     ## `geom_smooth()` using method = 'gam' and formula 'y ~ s(x, bs = "cs")'
 
-![](Harry_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
+![](Harry_files/figure-gfm/unnamed-chunk-27-1.png)<!-- -->
 
 ``` r
 Spotify_rock_pop%>%
@@ -244,7 +396,7 @@ Spotify_rock_pop%>%
   geom_point()
 ```
 
-![](Harry_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
+![](Harry_files/figure-gfm/unnamed-chunk-28-1.png)<!-- -->
 
 ``` r
 Spotify_rock_pop%>%
@@ -252,4 +404,4 @@ Spotify_rock_pop%>%
   geom_point()
 ```
 
-![](Harry_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
+![](Harry_files/figure-gfm/unnamed-chunk-29-1.png)<!-- -->
