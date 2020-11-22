@@ -455,6 +455,10 @@ all_songs %>%
        fill = "Popularity Level"
        ) +
   guides(color = FALSE) +
+  scale_fill_manual(values = c(
+    "Very Low" = "#008dfd",
+    "High" = "#fd0000"
+  )) +
   theme_minimal()
 ```
 
@@ -468,6 +472,10 @@ all_songs %>%
        fill = "Popularity Level"
        ) +
   guides(color = FALSE) +
+  scale_fill_manual(values = c(
+    "Very Low" = "#008dfd",
+    "High" = "#fd0000"
+  )) +
   theme_minimal()
 ```
 
@@ -481,6 +489,10 @@ all_songs %>%
        fill = "Popularity Level"
        ) +
   guides(color = FALSE) +
+  scale_fill_manual(values = c(
+    "Very Low" = "#008dfd",
+    "High" = "#fd0000"
+  )) +
   theme_minimal()
 ```
 
@@ -494,6 +506,10 @@ all_songs %>%
        fill = "Popularity"
        ) +
   guides(color = FALSE) +
+  scale_fill_manual(values = c(
+    "Very Low" = "#008dfd",
+    "High" = "#fd0000"
+  )) +
   theme_minimal()
 ```
 
@@ -507,6 +523,10 @@ all_songs %>%
        fill = "Popularity"
        ) +
   guides(color = FALSE) +
+  scale_fill_manual(values = c(
+    "Very Low" = "#008dfd",
+    "High" = "#fd0000"
+  )) +
   theme_minimal()
 ```
 
@@ -521,6 +541,10 @@ all_songs %>%
        fill = "Popularity"
        ) +
   guides(color = FALSE) +
+  scale_fill_manual(values = c(
+    "Very Low" = "#008dfd",
+    "High" = "#fd0000"
+  )) +
   theme_minimal()
 ```
 
@@ -534,6 +558,10 @@ all_songs %>%
        fill = "Popularity"
        ) +
   guides(color = FALSE) +
+  scale_fill_manual(values = c(
+    "Very Low" = "#008dfd",
+    "High" = "#fd0000"
+  )) +
   theme_minimal()
 ```
 
@@ -548,6 +576,10 @@ all_songs %>%
        fill = "Popularity"
        ) +
   guides(color = FALSE) +
+  scale_fill_manual(values = c(
+    "Very Low" = "#008dfd",
+    "High" = "#fd0000"
+  )) +
   theme_minimal()
 ```
 
@@ -580,8 +612,8 @@ all_songs %>%
        ) +
   guides(color = FALSE) +
   scale_fill_manual(values = c(
-    "High" = "#008dfd",
-    "Very Low" = "#fd0000"
+    "Very Low" = "#008dfd",
+    "High" = "#fd0000"
   )) +
   theme_minimal()
 ```
