@@ -441,7 +441,7 @@ rock_songs <- spotify_songs %>%
 
 ```{r}
 all_songs <- pop_songs %>%
-  rbind(pop_songs, rock_songs, latin_songs, edm_songs, rap_songs, r_and_b_songs)
+  rbind(pop_songs, rock_songs, latin_songs, edm_songs, rap_songs, rnb_songs)
 ```
 
 
@@ -449,35 +449,65 @@ all_songs <- pop_songs %>%
 all_songs %>%
   filter(popularity_level == "High") %>%
   ggplot(aes(x = valence, y = playlist_genre, fill = playlist_genre, color = playlist_genre)) +
-  geom_density_ridges(alpha = 0.5)
+   geom_density_ridges(alpha = 0.2) +
+  labs(x = "Valence",
+       y = NULL,
+       fill = "Popularity Level"
+       ) +
+  guides(color = FALSE) +
+  theme_minimal()
 ```
 
 ```{r}
 all_songs %>%
   filter(popularity_level == "High") %>%
   ggplot(aes(x = danceability, y = playlist_genre, fill = playlist_genre, color = playlist_genre)) +
-  geom_density_ridges(alpha = 0.5)
+   geom_density_ridges(alpha = 0.2) +
+  labs(x = "Danceability)",
+       y = NULL,
+       fill = "Popularity Level"
+       ) +
+  guides(color = FALSE) +
+  theme_minimal()
 ```
 
 ```{r}
 all_songs %>%
   filter(popularity_level == "High") %>%
   ggplot(aes(x = energy, y = playlist_genre, fill = playlist_genre, color = playlist_genre)) +
-  geom_density_ridges(alpha = 0.5)
+   geom_density_ridges(alpha = 0.2) +
+  labs(x = "Energy",
+       y = NULL,
+       fill = "Popularity Level"
+       ) +
+  guides(color = FALSE) +
+  theme_minimal()
 ```
 
 ```{r}
 all_songs %>%
   filter(popularity_level == "High") %>%
   ggplot(aes(x = key, y = playlist_genre, fill = playlist_genre, color = playlist_genre)) +
-  geom_density_ridges(alpha = 0.5)
+   geom_density_ridges(alpha = 0.2) +
+  labs(x = "Key",
+       y = NULL,
+       fill = "Popularity"
+       ) +
+  guides(color = FALSE) +
+  theme_minimal()
 ```
 
 ```{r}
 all_songs %>%
   filter(popularity_level == "High") %>%
   ggplot(aes(x = acousticness, y = playlist_genre, fill = playlist_genre, color = playlist_genre)) +
-  geom_density_ridges(alpha = 0.5)
+   geom_density_ridges(alpha = 0.2) +
+  labs(x = "Acousticness",
+       y = NULL,
+       fill = "Popularity"
+       ) +
+  guides(color = FALSE) +
+  theme_minimal()
 ```
 
 
@@ -485,7 +515,13 @@ all_songs %>%
 all_songs %>%
   filter(popularity_level == "High") %>%
   ggplot(aes(x = speechiness, y = playlist_genre, fill = playlist_genre, color = playlist_genre)) +
-  geom_density_ridges(alpha = 0.5)
+   geom_density_ridges(alpha = 0.2) +
+  labs(x = "Duration (s)",
+       y = NULL,
+       fill = "Popularity"
+       ) +
+  guides(color = FALSE) +
+  theme_minimal()
 ```
 
 ```{r}
@@ -511,7 +547,7 @@ all_songs %>%
   geom_density_ridges(alpha = 0.2) +
   labs(x = "Duration (s)",
        y = NULL,
-       fill = "Popularity"
+       fill = "Popularity Level"
        ) +
   guides(color = FALSE) +
   theme_minimal()
