@@ -1,0 +1,989 @@
+---
+title: "Alexandros - Rap - Latin "
+output: github_document
+editor_options: 
+  chunk_output_type: console
+---
+```{r load-packages}
+library(tidyverse)
+library(here)
+library(lubridate)
+library(patchwork)
+library(ggridges)
+```
+
+```{r read-data}
+spotify_songs <- read_csv(here('data/Spotify.csv'))
+```
+
+```{r add-levels}
+spotify_songs <- spotify_songs %>%
+mutate(popularity_level = case_when(
+track_popularity <= 31 ~ "Very Low",
+track_popularity > 31 & track_popularity <= 52 ~ "Low",
+track_popularity > 52 & track_popularity <= 68 ~ "Fairly High",
+track_popularity > 68 & track_popularity <= 100 ~ "High"
+)) 
+```
+
+```{r}
+spotify_songs <- spotify_songs %>%
+mutate(rap_popularity_level = case_when(
+track_popularity <= 30 ~ "Very Low",
+track_popularity > 30 & track_popularity <= 47 ~ "Low",
+track_popularity > 47 & track_popularity <= 60 ~ "Fairly High",
+track_popularity > 60 & track_popularity <= 98 ~ "High"
+)) 
+```
+
+
+#PROPER ANALYSIS FOR RAP
+
+```{r isolate-rap}
+rap_songs <- spotify_songs %>%
+  filter(playlist_genre == "rap")
+```
+
+#Summary for rap: 
+```{r summary-statistics-rap}
+rap_songs %>%
+summarise(min_pop = min(track_popularity), iqr_pop = IQR(track_popularity), med_pop = median(track_popularity), max_pop = max(track_popularity), quantile(track_popularity))
+```
+
+#Popularity level:
+
+```{r add-levels-rap}
+rap_songs <- rap_songs %>%
+mutate(popularity_level = case_when(
+track_popularity <= 30 ~ "Very Low",
+track_popularity > 30 & track_popularity <= 47 ~ "Low",
+track_popularity > 47 & track_popularity <= 60 ~ "Fairly High",
+track_popularity > 60 & track_popularity <= 98 ~ "High"
+)) 
+```
+
+#Median values:
+
+```{r median-values}
+rap_songs %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  group_by(popularity_level) %>%
+  summarise(med_dance = median(danceability),
+            med_energy = median(energy),
+            med_tempo = median(tempo),
+            med_duration_s = median(duration_ms)/(1000*60),
+            med_speech = median(speechiness),
+            med_acoustic = median(acousticness)) 
+```
+
+From the above table it seems that popular songs  have a higher danceability, accousticness and tempo. On the other hand, energy and speechiness is a little lower than that of unpopular songs.
+
+#Check popularity of a song with key and mode
+
+```{r popularity-vs-key-for-major-rap}
+key_rap_major <- rap_songs %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  filter(mode == 1) %>%
+  group_by(key) %>%
+  ggplot(aes( x = key)) +
+  geom_histogram(binwidth = 0.5) +
+  facet_wrap(.~ popularity_level) +
+  theme_minimal()
+
+rap_songs %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  filter(mode == 1) %>%
+  group_by(key) %>%
+  ggplot(aes( x = key)) +
+  geom_histogram(binwidth = 0.5) +
+  facet_wrap(.~ popularity_level) +
+  theme_minimal()
+```
+
+```{r popularity-vs-key-for-minor-rap}
+key_rap_minor <- rap_songs %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  filter(mode == 0) %>%
+  group_by(key) %>%
+  ggplot(aes( x = key)) +
+  geom_histogram(binwidth = 0.5) +
+  facet_wrap(.~ popularity_level) +
+  theme_minimal()
+
+rap_songs %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  filter(mode == 0) %>%
+  group_by(key) %>%
+  ggplot(aes( x = key)) +
+  geom_histogram(binwidth = 0.5) +
+  facet_wrap(.~ popularity_level) +
+  theme_minimal()
+```
+
+
+c = 0, c# = 1, d = 2, d# = 3,E = 4, F = 5, F# = 6, G = 7, G# = 8, A = 9, A# = 10, B = 11, NA = -1 
+
+
+#Graphs for each variable
+
+```{r danceability}
+danceability_graph_rap <- rap_songs %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  ggplot(aes(x = danceability, color = popularity_level)) +
+  geom_density(adjust = 2) +
+    labs(x = "Danceability",
+       y = "Frequency",
+       color = "Popularity Level") +
+  theme_minimal()
+```
+
+Songs that have a dancability above 0.75 are more likely to be more highly popular than unpopular. Also the most popular songs have a danceability of 0.8.
+
+
+#Energy
+
+```{r energy}
+rap_songs %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  ggplot(aes(x = energy, color = popularity_level)) +
+  geom_density(adjust = 2) +
+  labs(x = "Energy",
+       y = "Frequency",
+       color = "Popularity Level") +
+  theme_minimal()
+```
+
+If a song has energy between 0.27 and 0.75 it is more likely to have a high popularity than a very low one. On the other hand, if it has an energy outside the above range it is more likely to have a very low popularity level.
+
+#Valence
+
+```{r valence}
+rap_songs %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  ggplot(aes(x = valence, color = popularity_level)) +
+  geom_density(adjust = 2) +
+    labs(x = "Valence",
+       y = "Frequency",
+       color = "Popularity Level") +
+  theme_minimal()
+```
+
+
+From the above graph we can see that rap songs with valence in the range of 0.23 - 0.80 are more likely to have a high popularity level than a very low one.
+
+# Acousticness
+
+```{r acousticness}
+rap_songs %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  ggplot(aes(x = acousticness, color = popularity_level)) +
+  geom_density(adjust = 2) +
+    labs(x = "Acousticness",
+       y = "Frequency",
+       color = "Popularity Level") +
+  theme_minimal()
+```
+
+The distribution shows that a rap sang with high popularity is more likely to have an accousticness between 0.00 and 0.12. On the other hand, if it has a danceability above 0.12 it is more likely to be very unpopular.
+
+
+# Loudness
+
+```{r loudness}
+rap_songs %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  ggplot(aes(x = loudness, color = popularity_level)) +
+  geom_density(adjust = 2) +
+    labs(x = "Loudness",
+       y = "Frequency",
+       color = "Popularity Level") +
+  theme_minimal()
+```
+
+If a song has a loudness higher than -6.8 it is more likely to have a high popularity level.
+
+
+# Duration
+
+```{r duration}
+rap_songs %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  ggplot(aes(x = duration_ms/(1000*60), color = popularity_level)) +
+  geom_density(adjust = 2) +
+    labs(x = "Duration (min)",
+       y = "Frequency",
+       color = "Popularity Level") +
+  theme_minimal()
+```
+
+From the graph we can see that on average a rap song with a duration in the range of 1.5 and 3.5 minutes is more likely to be popular than unpopular.
+
+
+
+
+#PROPER ANALYSIS FOR LATIN
+
+```{r isolate-latin}
+latin_songs <- spotify_songs %>%
+  filter(playlist_genre == "latin")
+```
+
+#Summary for latin: 
+
+```{r summary-statistics-rap-latin}
+latin_songs %>%
+summarise(min_pop = min(track_popularity), iqr_pop = IQR(track_popularity), med_pop = median(track_popularity), max_pop = max(track_popularity), quantile(track_popularity))
+```
+
+#Popularity level latin:
+
+```{r add-levels-latin}
+latin_songs <- latin_songs %>%
+mutate(popularity_level = case_when(
+track_popularity <= 32 ~ "Very Low",
+track_popularity > 32 & track_popularity <= 50 ~ "Low",
+track_popularity > 50 & track_popularity <= 67 ~ "Fairly High",
+track_popularity > 67 & track_popularity <= 100 ~ "High"
+)) 
+```
+
+#Median values latin:
+
+```{r median-values-latin}
+latin_songs %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  group_by(popularity_level) %>%
+  summarise(med_dance = median(danceability),
+            med_energy = median(energy),
+            med_tempo = median(tempo),
+            med_duration_s = median(duration_ms)/(1000*60),
+            med_speech = median(speechiness),
+            med_acoustic = median(acousticness)) 
+```
+
+From the above table we can see that popular latin songs have a higher danceability, speechiness, and accousticness. On the other hand, unpopular latin songs have a higher energy, tempo and a slightly higher duration.
+
+#Check popularity of a song with key and mode
+
+```{r popularity-vs-key-for-major-latin}
+key_latin_major <- latin_songs %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  filter(mode == 1) %>%
+  group_by(key) %>%
+  ggplot(aes( x = key)) +
+  geom_histogram(binwidth = 0.5) +
+  facet_wrap(.~ popularity_level) +
+  theme_minimal()
+
+latin_songs %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  filter(mode == 1) %>%
+  group_by(key) %>%
+  ggplot(aes( x = key)) +
+  geom_histogram(binwidth = 0.5) +
+  facet_wrap(.~ popularity_level) +
+  theme_minimal()
+```
+
+```{r popularity-vs-key-for-minor-latin}
+key_latin_minor <- latin_songs %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  filter(mode == 0) %>%
+  group_by(key) %>%
+  ggplot(aes( x = key)) +
+  geom_histogram(binwidth = 0.5) +
+  facet_wrap(.~ popularity_level) +
+  theme_minimal()
+
+latin_songs %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  filter(mode == 0) %>%
+  group_by(key) %>%
+  ggplot(aes( x = key)) +
+  geom_histogram(binwidth = 0.5) +
+  facet_wrap(.~ popularity_level) +
+  theme_minimal()
+```
+
+
+
+#Graphs for each variable latin
+
+```{r danceability-latin}
+danceability_graph_latin <- latin_songs %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  ggplot(aes(x = danceability, color = popularity_level)) +
+  geom_density(adjust = 2) +
+    labs(x = "Danceability",
+       y = "Frequency",
+       color = "Popularity Level") +
+  theme_minimal()
+```
+
+Latin songs that have a dancability above 0.73 are more likely to be more highly popular than unpopular. Also the most popular songs have a danceability of 0.75.
+
+
+#Energy latin
+
+```{r energy-latin}
+latin_songs %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  ggplot(aes(x = energy, color = popularity_level)) +
+  geom_density(adjust = 2) +
+  labs(x = "Energy",
+       y = "Frequency",
+       color = "Popularity Level") +
+  theme_minimal()
+```
+
+If a song has energy between 0.27 and 0.80 it is more likely to have a high popularity than a very low one. On the other hand, if it has an energy outside the above range it is more likely to have a very low popularity level.
+
+#Valence latin
+
+```{r valence-latin}
+latin_songs %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  ggplot(aes(x = valence, color = popularity_level)) +
+  geom_density(adjust = 2) +
+    labs(x = "Valence",
+       y = "Frequency",
+       color = "Popularity Level") +
+  theme_minimal()
+```
+
+
+From the above graph we can see that latin songs with valence in the range of 0.45 - 0.80 are more likely to have a high popularity level than a very low one.
+
+# Acousticness latin
+
+```{r acousticness-latin}
+latin_songs %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  ggplot(aes(x = acousticness, color = popularity_level)) +
+  geom_density(adjust = 2) +
+    labs(x = "Acousticness",
+       y = "Frequency",
+       color = "Popularity Level") +
+  theme_minimal()
+```
+
+The distribution shows that a latin sang with high popularity is more likely to have an accousticness between 0.00 and 0.13. On the other hand, if it has a danceability above 0.12 it is more likely to be very unpopular.
+
+
+# Loudness latin
+
+```{r loudness-latin}
+latin_songs %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  ggplot(aes(x = loudness, color = popularity_level)) +
+  geom_density(adjust = 2) +
+    labs(x = "Loudness",
+       y = "Frequency",
+       color = "Popularity Level") +
+  theme_minimal()
+```
+
+If a latin song has a loudness higher than -6.8 it is more likely to have a high popularity level.
+
+
+# Duration latin
+
+```{r duration-latin}
+latin_songs %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  ggplot(aes(x = duration_ms/(1000*60), color = popularity_level)) +
+  geom_density(adjust = 2) +
+    labs(x = "Duration (min)",
+       y = "Frequency",
+       color = "Popularity Level") +
+  theme_minimal()
+```
+
+From the graph we can see that on average a latin song with a duration in the range of 2.5 and 3.8 minutes is more likely to be popular than unpopular.
+
+
+#Comparison of Rap and Latin
+
+#Modes and Keys
+
+```{r comparison-keys-mode1}
+key_rap_major / key_latin_major
+```
+
+```{r comparison-keys-mode0}
+key_rap_minor / key_latin_minor
+```
+
+
+#Danceability
+
+```{r comparison-danceability-ridge}
+spotify_songs %>%
+  filter(playlist_genre == c("rap", "latin")) %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  group_by(playlist_genre) %>%
+  ggplot(mapping = aes(x = danceability, y = playlist_genre, colour = popularity_level, fill = popularity_level)) +
+  geom_density_ridges(alpha = 0.25) +
+  theme_minimal() + 
+   scale_fill_viridis_d() + 
+  labs(x = "Danceability",
+       y = NULL)
+```
+
+From the above graph we can see that there is a common range of danceability for the two genres that make a song very popular. This range is between a danceability of 0.75 and 0.90
+
+Takeaway: If a song has a danceability between 0.75-0.90 is more likely to be highly popular in rap and latin
+
+#Energy
+
+```{r comparison-energy-ridge}
+spotify_songs %>%
+  filter(playlist_genre == c("rap", "latin")) %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  group_by(playlist_genre) %>%
+  ggplot(mapping = aes(x = energy, y = playlist_genre, colour = popularity_level, fill = popularity_level)) +
+  geom_density_ridges(alpha = 0.25) +
+  theme_minimal() + 
+   scale_fill_viridis_d() + 
+  labs(x = "Energy",
+       y = NULL)
+```
+
+Common range: 0.45-0.75
+
+Takeaway: If a song has an energy between 0.45-0.75 is more likely to be highly popular in rap and latin
+
+#Valence
+
+```{r comparison-valence-ridge}
+spotify_songs %>%
+  filter(playlist_genre == c("rap", "latin")) %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  group_by(playlist_genre) %>%
+  ggplot(mapping = aes(x = valence, y = playlist_genre, colour = popularity_level, fill = popularity_level)) +
+  geom_density_ridges(alpha = 0.25) +
+  theme_minimal() + 
+   scale_fill_viridis_d() + 
+  labs(x = "Valence",
+       y = NULL)
+```
+
+Common range: 0.0-0.45. HOWEVER in latin if a song has a valence in the range of 0.6-0.7 it is more likely to have a high popularity, which does not happen in rap.
+
+Takeaway: If a song has a valence between 0.0-0.45 is more likely to be highly popular in rap and latin. Only in latin a song with a valence betwen 0.6-0.7 is more likely to be highly popular.
+
+#Acousticness
+
+```{r comparison-accousticness-ridge}
+spotify_songs %>%
+  filter(playlist_genre == c("rap", "latin")) %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  group_by(playlist_genre) %>%
+  ggplot(mapping = aes(x = acousticness, y = playlist_genre, colour = popularity_level, fill = popularity_level)) +
+  geom_density_ridges(alpha = 0.25) +
+  theme_minimal() + 
+   scale_fill_viridis_d() + 
+  labs(x = "Acousticness",
+       y = NULL)
+```
+
+Common range: 0.18-0.62, WITH SMALL difference for rap in the range of 0.42-0.5
+
+Takeaway: If a song has an accousticness between 0.18-0.62 is more likely to be highly popular in rap and latin. EXCEPTION
+
+#Loudness
+
+```{r comparison-loudness-ridge}
+spotify_songs %>%
+  filter(playlist_genre == c("rap", "latin")) %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  group_by(playlist_genre) %>%
+  ggplot(mapping = aes(x = loudness, y = playlist_genre, colour = popularity_level, fill = popularity_level)) +
+  geom_density_ridges(alpha = 0.25) +
+  theme_minimal() + 
+   scale_fill_viridis_d() + 
+  labs(x = "Loudness",
+       y = NULL)
+```
+
+Common range: -7--4. Range is a little small
+
+Takeaway: If a song has a loudness between -7--4 is more likely to be highly popular in rap and latin. 
+
+#Duration
+
+```{r comparison-duration-ridge}
+spotify_songs %>%
+  filter(playlist_genre == c("rap", "latin")) %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  group_by(playlist_genre) %>%
+  ggplot(mapping = aes(x = duration_ms/(1000*60), y = playlist_genre, colour = popularity_level, fill = popularity_level)) +
+  geom_density_ridges(alpha = 0.25) +
+  theme_minimal() + 
+   scale_fill_viridis_d() + 
+  labs(x = "Duration (min)",
+       y = NULL)
+```
+
+Common range: 2.00-3.75
+
+Takeaway: If a song has a loudness between 2.00-3.75 is more likely to be highly popular in rap and latin. 
+
+
+#END OF COMPARISON AND NICE ANALYSIS
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+##RAP
+
+```{r summarry-rap}
+spotify_songs %>%
+filter(playlist_genre == "rap") %>%
+summarise(min_pop = min(track_popularity), iqr_pop = IQR(track_popularity), med_pop = median(track_popularity), max_pop = max(track_popularity), quantile(track_popularity))
+```
+
+
+##Check popularity of a song with instrumentalness
+
+```{r popularity-vs-instrumentalness-rap}
+spotify_songs %>%
+  filter(playlist_genre == "rap") %>%
+  ggplot(aes(y = track_popularity, x = instrumentalness)) +
+  geom_hex() +
+  facet_wrap(.~ popularity_level)
+```
+
+
+##Check popularity of a song with duration
+
+```{r popularity-vs-duration-rap}
+spotify_songs %>%
+  filter(playlist_genre == "rap") %>%
+  mutate(duration_minutes = duration_ms/(1000*60)) %>%
+  ggplot(aes(x = duration_minutes, y = track_popularity)) +
+  geom_point() +
+  geom_smooth() 
+  
+```
+
+```{r most-popular-duration-rap}
+spotify_songs %>%
+  filter(playlist_genre == "rap",track_popularity > 68) %>%
+  summarise(average_duration_rap = mean(duration_ms)/(1000*60))
+  
+```
+ We can see that between 2.5-3.3 there are the most popular songs, which makes sense since very long songs tend not to be so popular.
+ 
+ 
+##Check popularity of a song with tempo
+```{r popularity-vs-tempo-rap}
+spotify_songs %>%
+  filter(playlist_genre == "rap") %>%
+  ggplot(aes(x = tempo, y = track_popularity)) +
+  geom_point() +
+  geom_smooth() 
+```
+
+```{r most-popular-tempo-rap} 
+#CHECK VARIATION
+spotify_songs %>%
+  filter(playlist_genre == "rap",track_popularity > 68) %>%
+  summarise(average_tempo = mean(tempo))
+  
+```
+
+
+##Check popularity of a song with speechiness
+
+```{r popularity-vs-speechiness-rap}
+spotify_songs %>%
+  filter(playlist_genre == "rap") %>%
+  ggplot(aes(y = track_popularity, x = speechiness)) +
+  geom_col() 
+```
+
+```{r popularity-vs-speechiness-by-popularity-lvl-rap}
+spotify_songs %>%
+  filter(playlist_genre == "rap") %>%
+  ggplot(aes(y = track_popularity, x = speechiness)) +
+  geom_col() +
+  facet_wrap(.~ popularity_level)
+```
+
+```{r most-popular-speechnes-lvl-rap}
+spotify_songs %>%
+  filter(playlist_genre == "rap",track_popularity > 68) %>%
+  summarise(average_speechness = mean(speechiness))
+```
+
+
+Most popular songs are below 0.25. "Speechiness detects the presence of spoken words in a track. The more exclusively speech-like the recording (e.g. talk show, audio book, poetry), the closer to 1.0 the attribute value. Values above 0.66 describe tracks that are probably made entirely of spoken words. Values between 0.33 and 0.66 describe tracks that may contain both music and speech, either in sections or layered, including such cases as rap music. Values below 0.33 most likely represent music and other non-speech-like tracks."
+
+##Check popularity of a song with mode
+
+```{r popularity-vs-mode-rap}
+spotify_songs %>%
+  filter(playlist_genre == "rap") %>%
+  ggplot(aes(y = track_popularity,  x = mode)) +
+  geom_col()
+```
+
+```{r popularity-vs-mode-by-popularity-lvl-rap}
+spotify_songs %>%
+  filter(playlist_genre == "rap") %>%
+  ggplot(aes(y = track_popularity,  x = mode)) +
+  geom_col() +
+  facet_wrap(.~ popularity_level)
+```
+
+##Check popularity of a song with danceability
+
+```{r popularity-vs-danceability-rap}
+spotify_songs %>%
+  filter(playlist_genre == "rap") %>%
+  ggplot(aes(y = track_popularity,  x = danceability)) +
+  geom_col() 
+```
+ 
+```{r popularity-vs-danceability-by-popularity-lvl-rap}
+spotify_songs %>%
+  filter(playlist_genre == "rap") %>%
+  ggplot(aes(y = track_popularity,  x = danceability)) +
+  geom_col() +
+  facet_wrap(.~ popularity_level)
+```
+
+```{r most-popular-danceability-rap}
+spotify_songs %>%
+  filter(playlist_genre == "rap",track_popularity > 68) %>%
+  summarise(average_danceability = mean(danceability))
+```
+
+
+##Check popularity of a song with release date
+
+```{r popularity-vs-releasedate-rap}
+spotify_songs %>%
+  filter(playlist_genre == "rap") %>%
+  mutate(release_date = as_date(track_album_release_date)) %>%
+  ggplot(aes(y = track_popularity,  x = release_date)) +
+  geom_col()
+```
+
+##Check popularity of a song with energy
+
+```{r popularity-vs-energy-rap}
+spotify_songs %>%
+  filter(playlist_genre == "rap") %>%
+  ggplot(aes(y = track_popularity,  x = energy)) +
+  geom_col() 
+```
+
+```{r most-popular-energy-rap}
+spotify_songs %>%
+  filter(playlist_genre == "rap",track_popularity > 68) %>%
+  summarise(average_energy = mean(energy))
+```
+
+Seems like most popular are between 0.50 - 0.75. Not sure how useful it is since we don't have good definition of "energy"
+
+
+##Check popularity of a song with valence
+
+```{r popularity-vs-valence-rap}
+spotify_songs %>%
+  filter(playlist_genre == "rap") %>%
+  ggplot(aes(y = track_popularity,  x = valence)) +
+  geom_col()
+```
+
+```{r popularity-vs-valence-by-popularity-lvl-rap}
+spotify_songs %>%
+  filter(playlist_genre == "rap") %>%
+  ggplot(aes(y = track_popularity,  x = valence)) +
+  geom_col() +
+  facet_wrap(.~ popularity_level)
+```
+
+```{r most-popular-valence-rap}
+spotify_songs %>%
+  filter(playlist_genre == "rap",track_popularity > 68) %>%
+  summarise(average_valence = mean(valence))
+```
+
+##Check popularity of a song with liveliness INTERESTING
+
+```{r popularity-vs-livileness-rap}
+spotify_songs %>%
+  filter(playlist_genre == "rap") %>%
+  ggplot(aes(y = track_popularity,  x = liveness)) +
+  geom_col()
+```
+
+```{r most-popular-liveliness-rap}
+spotify_songs %>%
+  filter(playlist_genre == "rap",track_popularity > 68) %>%
+  summarise(average_liveness = mean(liveness))
+```
+##Check popularity of a song with acousticness
+
+```{r popularity-vs-acousticness-rap}
+spotify_songs %>%
+  filter(playlist_genre == "rap") %>% 
+  group_by(popularity_level) %>%
+  summarise(average_acousricness = mean(acousticness))
+```
+
+```{r most-popular-accousticness-rap}
+spotify_songs %>%
+  filter(playlist_genre == "rap",track_popularity > 68) %>%
+  summarise(average_accousticness = mean(acousticness))
+```
+
+
+##LATIN
+
+```{r summarry-latin}
+spotify_songs %>%
+filter(playlist_genre == "latin") %>%
+summarise(min_pop = min(track_popularity), iqr_pop = IQR(track_popularity), med_pop = median(track_popularity), max_pop = max(track_popularity), quantile(track_popularity))
+```
+
+
+##Check popularity of a song with instrumentalness
+
+```{r popularity-vs-instrumentalness-latin}
+spotify_songs %>%
+  filter(playlist_genre == "latin") %>%
+  ggplot(aes(y = track_popularity, x = instrumentalness)) +
+  geom_hex() +
+  facet_wrap(.~ popularity_level)
+```
+
+
+##Check popularity of a song with duration
+
+```{r popularity-vs-duration-latin}
+spotify_songs %>%
+  filter(playlist_genre == "latin") %>%
+  mutate(duration_minutes = duration_ms/(1000*60)) %>%
+  ggplot(aes(x = duration_minutes, y = track_popularity)) +
+  geom_point() +
+  geom_smooth() 
+  
+```
+
+```{r most-popular-duration-latin}
+spotify_songs %>%
+  filter(playlist_genre == "latin",track_popularity > 68) %>%
+  summarise(average_duration_latin = mean(duration_ms)/(1000*60))
+  
+```
+ We can see that between 2.5-3.3 there are the most popular songs, which makes sense since very long songs tend not to be so popular.
+ 
+ 
+##Check popularity of a song with tempo
+```{r popularity-vs-tempo-latin}
+spotify_songs %>%
+  filter(playlist_genre == "latin") %>%
+  ggplot(aes(x = tempo, y = track_popularity)) +
+  geom_point() +
+  geom_smooth() 
+```
+
+```{r most-popular-tempo-latin}
+spotify_songs %>%
+  filter(playlist_genre == "latin",track_popularity > 68) %>%
+  summarise(average_tempo = mean(tempo))
+  
+```
+
+##Check popularity of a song with speechiness
+
+```{r popularity-vs-speechiness-latin}
+spotify_songs %>%
+  filter(playlist_genre == "latin") %>%
+  ggplot(aes(y = track_popularity, x = speechiness)) +
+  geom_col() 
+```
+
+```{r popularity-vs-speechiness-by-popularity-lvl-latin}
+spotify_songs %>%
+  filter(playlist_genre == "latin") %>%
+  ggplot(aes(y = track_popularity, x = speechiness)) +
+  geom_col() +
+  facet_wrap(.~ popularity_level)
+```
+
+
+Most popular songs are below 0.25. "Speechiness detects the presence of spoken words in a track. The more exclusively speech-like the recording (e.g. talk show, audio book, poetry), the closer to 1.0 the attribute value. Values above 0.66 describe tracks that are probably made entirely of spoken words. Values between 0.33 and 0.66 describe tracks that may contain both music and speech, either in sections or layered, including such cases as rap music. Values below 0.33 most likely represent music and other non-speech-like tracks."
+
+##Check popularity of a song with mode
+
+```{r popularity-vs-mode-latin}
+spotify_songs %>%
+  filter(playlist_genre == "latin") %>%
+  ggplot(aes(y = track_popularity,  x = mode)) +
+  geom_col()
+```
+
+```{r popularity-vs-mode-by-popularity-lvl-latin}
+spotify_songs %>%
+  filter(playlist_genre == "latin") %>%
+  ggplot(aes(y = track_popularity,  x = mode)) +
+  geom_col() +
+  facet_wrap(.~ popularity_level)
+```
+
+##Check popularity of a song with danceability
+
+```{r popularity-vs-danceability-latin}
+spotify_songs %>%
+  filter(playlist_genre == "latin") %>%
+  ggplot(aes(y = track_popularity,  x = danceability)) +
+  geom_col() 
+```
+ 
+```{r popularity-vs-danceability-by-popularity-lvl-latin}
+spotify_songs %>%
+  filter(playlist_genre == "latin") %>%
+  ggplot(aes(y = track_popularity,  x = danceability)) +
+  geom_col() +
+  facet_wrap(.~ popularity_level)
+```
+
+```{r most-popular-danceability-latin}
+spotify_songs %>%
+  filter(playlist_genre == "latin",track_popularity > 68) %>%
+  summarise(average_danceability_latin = mean(danceability))
+```
+
+
+##Check popularity of a song with release date
+
+```{r popularity-vs-releasedate-latin}
+spotify_songs %>%
+  filter(playlist_genre == "latin") %>%
+  mutate(release_date = as_date(track_album_release_date)) %>%
+  ggplot(aes(y = track_popularity,  x = release_date)) +
+  geom_col()
+```
+
+##Check popularity of a song with energy
+
+```{r popularity-vs-energy-latin}
+spotify_songs %>%
+  filter(playlist_genre == "latin") %>%
+  ggplot(aes(y = track_popularity,  x = energy)) +
+  geom_col() 
+```
+
+```{r most-popular-energy-latin}
+spotify_songs %>%
+  filter(playlist_genre == "latin",track_popularity > 68) %>%
+  summarise(average_energy_latin = mean(energy))
+```
+Seems like most popular are between 0.50 - 0.75. Not sure how useful it is since we don't have good definition of "energy"
+
+
+##Check popularity of a song with valence
+
+```{r popularity-vs-valence-latin}
+spotify_songs %>%
+  filter(playlist_genre == "latin") %>%
+  ggplot(aes(y = track_popularity,  x = valence)) +
+  geom_col()
+```
+
+```{r popularity-vs-valence-by-popularity-lvl-latin}
+spotify_songs %>%
+  filter(playlist_genre == "latin") %>%
+  ggplot(aes(y = track_popularity,  x = valence)) +
+  geom_col() +
+  facet_wrap(.~ popularity_level)
+```
+
+```{r most-popular-valence-latin}
+spotify_songs %>%
+  filter(playlist_genre == "latin",track_popularity > 68) %>%
+  summarise(average_valence_latin = mean(valence))
+```
+##Check popularity of a song with liveliness INTERESTING
+
+```{r popularity-vs-livileness-latin}
+spotify_songs %>%
+  filter(playlist_genre == "latin") %>%
+  ggplot(aes(y = track_popularity,  x = liveness)) +
+  geom_col()
+```
+
+```{r most-popular-liveliness-latin}
+spotify_songs %>%
+  filter(playlist_genre == "latin",track_popularity > 68) %>%
+  summarise(average_liveness_latin = mean(liveness))
+```
+
+
+##Check popularity of a song with acousticness
+
+```{r popularity-vs-acousticness-latin}
+spotify_songs %>%
+  filter(playlist_genre == "latin") %>% 
+  group_by(popularity_level) %>%
+  summarise(average_acousricness = mean(acousticness))
+```
+
+```{r most-popular-accousticness-latin}
+spotify_songs %>%
+  filter(playlist_genre == "latin",track_popularity > 68) %>%
+  summarise(average_accousticness_latin = mean(acousticness))
+```
+
+
+
+
+
+
+
+
+
+
