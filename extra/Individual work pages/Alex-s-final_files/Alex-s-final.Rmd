@@ -858,114 +858,65 @@ spotify_songs %>%
 
 ###ISSUE: MAKE COMPARISON OF VARIABLES THAT CANNOT BE COMAPRED WITH RIDGE GRAPHS
 
-##Add levels to other genre (rock,edm, r&b):
+##Add levels to each genre and then combine them in one dataset:
 
-#EDM:
-
-```{r isolate-edm}
+```{r}
 edm_songs <- spotify_songs %>%
-  filter(playlist_genre == "edm")
+  filter(playlist_genre == "edm") %>%
+  mutate(popularity_level = case_when(
+    track_popularity <= 17 ~ "Very Low",
+    track_popularity > 17 & track_popularity <= 36 ~ "Low",
+    track_popularity > 36 & track_popularity < 51 ~ "Fairly High",
+    track_popularity >= 51 & track_popularity <= 100 ~ "High"
+  )) 
 ```
 
-#Summary for edm: 
-```{r summary-statistics-edm}
-edm_songs %>%
-summarise(min_pop = min(track_popularity),
-          iqr_pop = IQR(track_popularity), 
-          med_pop = median(track_popularity), 
-          max_pop = max(track_popularity), 
-          quantile(track_popularity))
+```{r}
+latin_songs <- spotify_songs %>%
+  filter(playlist_genre == "latin") %>%
+  mutate(popularity_level = case_when(
+    track_popularity <= 32 ~ "Very Low",
+    track_popularity > 32 & track_popularity <= 50 ~ "Low",
+    track_popularity > 50 & track_popularity < 67 ~ "Fairly High",
+    track_popularity >= 67 & track_popularity <= 100 ~ "High"
+  ))
 ```
 
-#Popularity level:
-
-```{r add-levels-edm}
-edm_songs <- edm_songs %>%
-mutate(popularity_level = case_when(
-track_popularity <= 17 ~ "Very Low",
-track_popularity > 17 & track_popularity <= 36 ~ "Low",
-track_popularity > 36 & track_popularity <= 51 ~ "Fairly High",
-track_popularity > 51 & track_popularity <= 99 ~ "High"
-)) 
-```
-
-#Rock:
-
-```{r isolate-rock}
-rock_songs <- spotify_songs %>%
-  filter(playlist_genre == "rock")
-```
-
-#Summary for rock: 
-```{r summary-statistics-rock}
-rock_songs %>%
-summarise(min_pop = min(track_popularity),
-          iqr_pop = IQR(track_popularity), 
-          med_pop = median(track_popularity), 
-          max_pop = max(track_popularity), 
-          quantile(track_popularity))
-```
-
-#Popularity level:
-
-```{r add-levels-rock}
-rock_songs <- rock_songs %>%
-mutate(popularity_level = case_when(
-track_popularity <= 21 ~ "Very Low",
-track_popularity > 21 & track_popularity <= 46 ~ "Low",
-track_popularity > 46 & track_popularity <= 63 ~ "Fairly High",
-track_popularity > 63 & track_popularity <= 95 ~ "High"
-)) 
-```
-
-#R&b:
-
-```{r isolate-r&b}
+```{r}
 rnb_songs <- spotify_songs %>%
-  filter(playlist_genre == "r&b")
+  filter(playlist_genre == "r&b") %>%
+  mutate(popularity_level = case_when(
+    track_popularity <= 20 ~ "Very Low",
+    track_popularity > 20 & track_popularity <= 44 ~ "Low",
+    track_popularity > 44 & track_popularity < 62 ~ "Fairly High",
+    track_popularity >= 62 & track_popularity <= 100 ~ "High"
+  ))
 ```
 
-#Summary for r&b: 
-```{r summary-statistics-r&b}
-rnb_songs %>%
-summarise(min_pop = min(track_popularity),
-          iqr_pop = IQR(track_popularity), 
-          med_pop = median(track_popularity), 
-          max_pop = max(track_popularity), 
-          quantile(track_popularity))
+```{r}
+rap_songs <- spotify_songs %>%
+  filter(playlist_genre == "rap") %>%
+  mutate(popularity_level = case_when(
+    track_popularity <= 30 ~ "Very Low",
+    track_popularity > 30 & track_popularity <= 47 ~ "Low",
+    track_popularity > 47 & track_popularity < 60 ~ "Fairly High",
+    track_popularity >= 60 & track_popularity <= 100 ~ "High"
+  )) 
 ```
 
-#Popularity level:
-
-```{r add-levels-r&b}
-rnb_songs <- rnb_songs %>%
-mutate(popularity_level = case_when(
-track_popularity <= 20 ~ "Very Low",
-track_popularity > 20 & track_popularity <= 44 ~ "Low",
-track_popularity > 44 & track_popularity <= 62 ~ "Fairly High",
-track_popularity > 62 & track_popularity <= 99 ~ "High"
-)) 
+```{r}
+rock_songs <- spotify_songs %>%
+  filter(playlist_genre == "rock") %>%
+  mutate(popularity_level = case_when(
+    track_popularity <= 21 ~ "Very Low",
+    track_popularity > 21 & track_popularity <= 46 ~ "Low",
+    track_popularity > 46 & track_popularity < 63 ~ "Fairly High",
+    track_popularity >= 63 & track_popularity <= 100 ~ "High"
+  )) 
 ```
 
-
-#POP:
-
-```{r isolate-pop}
+```{r popularity-level}
 pop_songs <- spotify_songs %>%
-  filter(playlist_genre == "pop")
-```
-
-#Summary for pop
-
-```{r summary-statistics-pop}
-pop_songs %>%
-  summarise(min_pop = min(track_popularity), iqr_pop = IQR(track_popularity), med_pop = median(track_popularity), max_pop = max(track_popularity), quantile(track_popularity))
-```
-
-### Popularity Level
-
-```{r add-levels-pop}
-pop_songs <- pop_songs %>%
   filter(playlist_genre == "pop") %>%
   mutate(popularity_level = case_when(
     track_popularity <= 31 ~ "Very Low",
@@ -975,255 +926,116 @@ pop_songs <- pop_songs %>%
   ))
 ```
 
+```{r}
+all_songs <- pop_songs %>%
+  rbind(pop_songs, rock_songs, latin_songs, edm_songs, rap_songs, rnb_songs)
+```
+
+
+
 
 ###Making graphs for each genre of Key vs popularity:
 
-```{r popularity-vs-key-for-major-rap}
-key_rap_major <- rap_songs %>%
+```{r comparison-of-key-major-no-dodge, fig.height=8, fig.width=12}
+all_songs %>%
   filter(popularity_level == c("High", "Very Low")) %>%
   filter(mode == 1) %>%
-  group_by(key) %>%
-  ggplot(aes( x = key, colour = popularity_level, fill = popularity_level)) +
-  geom_histogram(binwidth = 0.5, position = "dodge") +
+  group_by(key, playlist_genre) %>%
+  ggplot(aes( x = key,  fill = popularity_level)) +
+  geom_histogram(binwidth = 0.5) +
+  facet_wrap(~ playlist_genre) +
   theme_minimal() + 
-  labs(title = "Major rap")
-
-
+  labs(title = "Popularity of each key for major modality",
+       x = "Key",
+       fill = "Popularity level") 
 ```
 
-```{r popularity-vs-key-for-minor-rap}
-key_rap_minor <- rap_songs %>%
-  filter(popularity_level == c("High", "Very Low")) %>%
-  filter(mode == 0) %>%
-  group_by(key) %>%
-  ggplot(aes( x = key, colour = popularity_level, fill = popularity_level)) +
-  geom_histogram(binwidth = 0.5, position = "dodge") +
-  theme_minimal() + 
-  labs(title = "Minor rap")
 
-
-```
-
-```{r popularity-vs-key-for-major-rock}
-key_rock_major <- rock_songs %>%
+```{r comparison-of-key-major, fig.height=8, fig.width=12}
+all_songs %>%
   filter(popularity_level == c("High", "Very Low")) %>%
   filter(mode == 1) %>%
-  group_by(key) %>%
-  ggplot(aes( x = key, colour = popularity_level, fill = popularity_level)) +
+  group_by(key, playlist_genre) %>%
+  ggplot(aes( x = key,  fill = popularity_level)) +
   geom_histogram(binwidth = 0.5, position = "dodge") +
+  facet_wrap(~ playlist_genre) +
   theme_minimal() + 
-  labs(title = "Major rock")
-
+  labs(title = "Popularity of each key for major modality",
+       x = "Key",
+       fill = "Popularity level") 
 ```
 
-```{r popularity-vs-key-for-minor-rock}
-key_rock_minor <- rock_songs %>%
+
+From the two graphs above we can see the popularity of each key, as well as the frequency of each popularity level. From the first graph we can see that the keys of 0 and 1 (C, C#) are quite popular for all genres. Depending on the genre tough there are other popular keys as well. For example in rock and pop the key of 9 (A) is popular, which is not the case for the ohter genres.
+
+From the second graph we can compare the popularity level for each key. An interesting observation is that for the key of 0 (C) there are more songs with a high popularity level than a very low. However this is not the case for pop, which has more songs with a very low popularity level in that key. We can also see that the key of 1, for most genres, produces songs with a high popularity level rather than a low one.
+
+```{r comparison-of-key-minor-no-dodge, fig.height=8, fig.width=12}
+all_songs %>%
   filter(popularity_level == c("High", "Very Low")) %>%
   filter(mode == 0) %>%
-  group_by(key) %>%
-  ggplot(aes( x = key, colour = popularity_level, fill = popularity_level)) +
-  geom_histogram(binwidth = 0.5, position = "dodge") +
+  group_by(key, playlist_genre) %>%
+  ggplot(aes( x = key,  fill = popularity_level)) +
+  geom_histogram(binwidth = 0.5) +
+  facet_wrap(~ playlist_genre) +
   theme_minimal() + 
-  labs(title = "Minor rock")
-
+  labs(title = "Popularity of each key for minor modality",
+       x = "Key",
+       fill = "Popularity level") 
 ```
 
-```{r popularity-vs-key-for-major-latin}
-key_latin_major <- latin_songs %>%
-  filter(popularity_level == c("High", "Very Low")) %>%
-  filter(mode == 1) %>%
-  group_by(key) %>%
-  ggplot(aes( x = key, colour = popularity_level, fill = popularity_level)) +
-  geom_histogram(binwidth = 0.5, position = "dodge") +
-  theme_minimal() + 
-  labs(title = "Major latin")
 
-```
-
-```{r popularity-vs-key-for-minor-latin}
-key_latin_minor <- latin_songs %>%
+```{r comparison-of-key-minor, fig.height=8, fig.width=12}
+all_songs %>%
   filter(popularity_level == c("High", "Very Low")) %>%
   filter(mode == 0) %>%
-  group_by(key) %>%
-  ggplot(aes( x = key, colour = popularity_level, fill = popularity_level)) +
+  group_by(key, playlist_genre) %>%
+  ggplot(aes( x = key,  fill = popularity_level)) +
   geom_histogram(binwidth = 0.5, position = "dodge") +
+  facet_wrap(~ playlist_genre) +
   theme_minimal() + 
-  labs(title = "Minor latin")
-
+  labs(title = "Popularity of each key for minor modality",
+       x = "Key",
+       fill = "Popularity level") 
 ```
 
-```{r popularity-vs-key-for-major-edm}
-key_edm_major <- edm_songs %>%
-  filter(popularity_level == c("High", "Very Low")) %>%
-  filter(mode == 1) %>%
-  group_by(key) %>%
-  ggplot(aes( x = key, colour = popularity_level, fill = popularity_level)) +
-  geom_histogram(binwidth = 0.5, position = "dodge") +
-  theme_minimal() + 
-  labs(title = "Major edm")
+For the minor modality things are different. A quite popular key, not the most popular for every genre, is 11 (B). It seems that for minor there is a greater variability of key popularity across each genre. For close genres, such as r&b and rap, we can see similar patterns, such as key of 10 (A#) and 11 being quite popular.
 
+From the second graph, we can see a similar pattern with the major modality, which is that there are more songs with higher popularity level than lower when they are written in the key of 0 and 1. However, this does not happen for all genres, as for example we can see that for rock this si not the case.
 
-```
-
-```{r popularity-vs-key-for-minor-edm}
-key_edm_minor <- edm_songs %>%
-  filter(popularity_level == c("High", "Very Low")) %>%
-  filter(mode == 0) %>%
-  group_by(key) %>%
-  ggplot(aes( x = key, colour = popularity_level, fill = popularity_level)) +
-  geom_histogram(binwidth = 0.5, position = "dodge") +
-  theme_minimal() + 
-  labs(title = "Minor edm")
-
-```
-
-```{r popularity-vs-key-for-major-pop}
-key_pop_major <- pop_songs %>%
-  filter(popularity_level == c("High", "Very Low")) %>%
-  filter(mode == 1) %>%
-  group_by(key) %>%
-  ggplot(aes( x = key, colour = popularity_level, fill = popularity_level)) +
-  geom_histogram(binwidth = 0.5, position = "dodge") +
-  theme_minimal() + 
-  labs(title = "Major pop")
-
-
-```
-
-```{r popularity-vs-key-for-minor-pop}
-key_pop_minor <- pop_songs %>%
-  filter(popularity_level == c("High", "Very Low")) %>%
-  filter(mode == 0) %>%
-  group_by(key) %>%
-  ggplot(aes( x = key, colour = popularity_level, fill = popularity_level)) +
-  geom_histogram(binwidth = 0.5, position = "dodge") +
-  theme_minimal() + 
-  labs(title = "Minor pop")
-
-
-```
 
 c = 0, c# = 1, d = 2, d# = 3,E = 4, F = 5, F# = 6, G = 7, G# = 8, A = 9, A# = 10, B = 11, NA = -1 
-
-#Comparison of mode and keys
-
-```{r comparison-keys-mode1-high}
-(key_rap_major + key_latin_major + key_pop_major) / (key_edm_major + key_rock_major)
-```
-
-```{r comparison-keys-mode-high}
-(key_rap_minor + key_latin_minor + key_pop_minor) / (key_edm_minor + key_rock_minor)
-```
-
-When it comes to major it seems like a common denominator for songs with high popularity across most genres, except rock, is key 1. Also the key of 0 seems pretty popular as well.
-
 
 
 #Comparison of just mode
 
-```{r popularity-vs-mode-rap}
-mode_rap_pop <- rap_songs %>%
+```{r no-dodge, fig.height=8, fig.width=12}
+all_songs %>%
   filter(popularity_level == c("High", "Very Low")) %>%
-  ggplot(aes(y = track_popularity,  x = mode)) +
-  geom_col() + 
-  facet_wrap(.~ popularity_level) +
-  labs(title = "rap") +
-  theme_minimal()
-
-rap_songs %>%
-  filter(popularity_level == c("High", "Very Low")) %>%
-  ggplot(aes(y = track_popularity,  x = mode)) +
-  geom_col() +
-  facet_wrap(.~ popularity_level) +
-  labs(title = "rap") +
-  theme_minimal()
+  group_by(playlist_genre) %>%
+  ggplot(aes( x = mode,  fill = popularity_level)) +
+  geom_histogram(binwidth = 0.5) +
+  facet_wrap(~ playlist_genre) +
+  theme_minimal() +
+  labs(x = "Mode",
+       fill = "Popularity Level")
 ```
 
-```{r popularity-vs-mode-rock}
-mode_rock_pop <- rock_songs %>%
-  filter(popularity_level == c("High", "Very Low")) %>%
-  ggplot(aes(y = track_popularity,  x = mode)) +
-  geom_col() +
-  facet_wrap(.~ popularity_level) +
-  labs(title = "rock",
-       y = NULL) +
-  theme_minimal()
 
-rock_songs %>%
-  filter(popularity_level == c("High", "Very Low")) %>%
-  ggplot(aes(y = track_popularity,  x = mode)) +
-  geom_col() +
-  facet_wrap(.~ popularity_level) +
-  labs(title = "rock",
-       y = NULL) +
-  theme_minimal()
 
+```{r fig.height=8, fig.width=12}
+all_songs %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  group_by(playlist_genre) %>%
+  ggplot(aes( x = mode,  fill = popularity_level)) +
+  geom_histogram(binwidth = 0.5, position = "dodge") +
+  facet_wrap(~ playlist_genre) +
+  theme_minimal() +
+  labs(x = "Mode",
+       fill = "Popularity Level")
 ```
 
-```{r popularity-vs-mode-latin}
-mode_latin_pop <- latin_songs %>%
-  filter(popularity_level == c("High", "Very Low")) %>%
-  ggplot(aes(y = track_popularity,  x = mode)) +
-  geom_col() +
-  facet_wrap(.~ popularity_level) +
-  labs(title = "latin",
-       y = NULL) +
-  theme_minimal()
+From the first graph we can see that songs with mode 1 (major) are more popular for all genres. From the second graph tough, we see that there is not a big difference in popularity level for each mode and genre, which can lead as to the conclusion that mode is not a detrimental factor that makes a song popular or not.
 
-latin_songs %>%
-  filter(popularity_level == c("High", "Very Low")) %>%
-  ggplot(aes(y = track_popularity,  x = mode)) +
-  geom_col() +
-  facet_wrap(.~ popularity_level) +
-  labs(title = "latin",
-       y = NULL) +
-  theme_minimal()
 
-```
-
-```{r popularity-vs-mode-edm}
-mode_edm_pop <- edm_songs %>%
-  filter(popularity_level == c("High", "Very Low")) %>%
-  ggplot(aes(y = track_popularity,  x = mode)) +
-  geom_col() +
-  facet_wrap(.~ popularity_level) +
-  labs(title = "edm") +
-  theme_minimal()
-
-edm_songs %>%
-  filter(popularity_level == c("High", "Very Low")) %>%
-  ggplot(aes(y = track_popularity,  x = mode)) +
-  geom_col() +
-  facet_wrap(.~ popularity_level) +
-  labs(title = "edm") +
-  theme_minimal()
-
-```
-
-```{r popularity-vs-mode-pop}
-mode_pop_pop <- pop_songs %>%
-  filter(popularity_level == c("High", "Very Low")) %>%
-  ggplot(aes(y = track_popularity,  x = mode)) +
-  geom_col() +
-  facet_wrap(.~ popularity_level) +
-  labs(title = "pop",
-       y = NULL) +
-  theme_minimal()
-
-pop_songs %>%
-  filter(popularity_level == c("High", "Very Low")) %>%
-  ggplot(aes(y = track_popularity,  x = mode)) +
-  geom_col() +
-  facet_wrap(.~ popularity_level) +
-  labs(title = "pop",
-       y = NULL) +
-  theme_minimal()
-
-```
-
-```{r comparison-mode, fig.height=10, fig.width=15}
-(mode_rap_pop + mode_latin_pop + mode_pop_pop) / ( mode_edm_pop + mode_rock_pop)
-```
-
-Seems like for all genres mode 1 is more popular for songs with high popularity.
 
