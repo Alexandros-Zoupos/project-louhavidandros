@@ -24,6 +24,27 @@ library(here)
     ## here() starts at /cloud/project
 
 ``` r
+spotify_songs <- read_csv(here("data/Spotify.csv"))
+```
+
+    ## Parsed with column specification:
+    ## cols(
+    ##   .default = col_double(),
+    ##   track_id = col_character(),
+    ##   track_name = col_character(),
+    ##   track_artist = col_character(),
+    ##   track_album_id = col_character(),
+    ##   track_album_name = col_character(),
+    ##   track_album_release_date = col_character(),
+    ##   playlist_name = col_character(),
+    ##   playlist_id = col_character(),
+    ##   playlist_genre = col_character(),
+    ##   playlist_subgenre = col_character()
+    ## )
+
+    ## See spec(...) for full column specifications.
+
+``` r
 Spotify<- read_csv(here('data/Spotify.csv'))
 ```
 
@@ -405,3 +426,124 @@ Spotify_rock_pop%>%
 ```
 
 ![](Harry_files/figure-gfm/unnamed-chunk-29-1.png)<!-- -->
+
+``` r
+Spotify_rock%>%
+  mutate(danceability_energy= danceability*energy)%>%
+  ggplot(aes(x=danceability_energy, y=valence,colour=popularity_level))+
+  geom_point()+
+  geom_smooth()
+```
+
+    ## `geom_smooth()` using method = 'gam' and formula 'y ~ s(x, bs = "cs")'
+
+![](Harry_files/figure-gfm/unnamed-chunk-30-1.png)<!-- -->
+
+``` r
+rap_songs <- spotify_songs %>%
+  filter(playlist_genre == "rap") %>%
+  mutate(popularity_level = case_when(
+    track_popularity <= 30 ~ "Very Low",
+    track_popularity > 30 & track_popularity <= 47 ~ "Low",
+    track_popularity > 47 & track_popularity < 60 ~ "Fairly High",
+    track_popularity >= 60 & track_popularity <= 100 ~ "High"
+  )) 
+```
+
+``` r
+rnb_songs <- spotify_songs %>%
+  filter(playlist_genre == "r&b") %>%
+  mutate(popularity_level = case_when(
+    track_popularity <= 20 ~ "Very Low",
+    track_popularity > 20 & track_popularity <= 44 ~ "Low",
+    track_popularity > 44 & track_popularity < 62 ~ "Fairly High",
+    track_popularity >= 62 & track_popularity <= 100 ~ "High"
+  ))
+```
+
+``` r
+latin_songs <- spotify_songs %>%
+  filter(playlist_genre == "latin") %>%
+  mutate(popularity_level = case_when(
+    track_popularity <= 32 ~ "Very Low",
+    track_popularity > 32 & track_popularity <= 50 ~ "Low",
+    track_popularity > 50 & track_popularity < 67 ~ "Fairly High",
+    track_popularity >= 67 & track_popularity <= 100 ~ "High"
+  ))
+```
+
+``` r
+edm_songs <- spotify_songs %>%
+  filter(playlist_genre == "edm") %>%
+  mutate(popularity_level = case_when(
+    track_popularity <= 17 ~ "Very Low",
+    track_popularity > 17 & track_popularity <= 36 ~ "Low",
+    track_popularity > 36 & track_popularity < 51 ~ "Fairly High",
+    track_popularity >= 51 & track_popularity <= 100 ~ "High"
+  )) 
+```
+
+``` r
+pop_songs <- spotify_songs %>%
+  filter(playlist_genre == "pop") %>%
+  mutate(popularity_level = case_when(
+    track_popularity <= 31 ~ "Very Low",
+    track_popularity > 31 & track_popularity <= 52 ~ "Low",
+    track_popularity > 52 & track_popularity < 68 ~ "Fairly High",
+    track_popularity >= 68 & track_popularity <= 100 ~ "High"
+  ))
+```
+
+``` r
+Spotify_rock%>%
+  mutate(dance_energy_val=danceability*energy*valence)%>%
+  ggplot(aes(x=popularity_level,y=dance_energy_val, colour=popularity_level))+
+  geom_col()
+```
+
+![](Harry_files/figure-gfm/unnamed-chunk-35-1.png)<!-- -->
+
+``` r
+pop_songs%>%
+  mutate(dance_energy_val=danceability*energy*valence)%>%
+  ggplot(aes(x=popularity_level,y=dance_energy_val, colour=popularity_level))+
+  geom_col()
+```
+
+![](Harry_files/figure-gfm/unnamed-chunk-36-1.png)<!-- -->
+
+``` r
+rap_songs%>%
+  mutate(dance_energy_val=danceability*energy*valence)%>%
+  ggplot(aes(x=popularity_level,y=dance_energy_val, colour=popularity_level))+
+  geom_col()
+```
+
+![](Harry_files/figure-gfm/unnamed-chunk-37-1.png)<!-- -->
+
+``` r
+edm_songs%>%
+  mutate(dance_energy_val=danceability*energy*valence)%>%
+  ggplot(aes(x=popularity_level,y=dance_energy_val, colour=popularity_level))+
+  geom_col()
+```
+
+![](Harry_files/figure-gfm/unnamed-chunk-38-1.png)<!-- -->
+
+``` r
+latin_songs%>%
+  mutate(dance_energy_val=danceability*energy*valence)%>%
+  ggplot(aes(x=popularity_level,y=dance_energy_val, colour=popularity_level))+
+  geom_col()
+```
+
+![](Harry_files/figure-gfm/unnamed-chunk-39-1.png)<!-- -->
+
+``` r
+rnb_songs%>%
+  mutate(dance_energy_val=danceability*energy*valence)%>%
+  ggplot(aes(x=popularity_level,y=dance_energy_val, colour=popularity_level))+
+  geom_col()
+```
+
+![](Harry_files/figure-gfm/unnamed-chunk-40-1.png)<!-- -->
