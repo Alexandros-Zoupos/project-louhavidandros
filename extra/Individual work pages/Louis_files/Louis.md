@@ -9,6 +9,7 @@ library(tidyverse)
 library(here)
 library(ggridges)
 library(ggradar)
+library(hexbin)
 spotify_songs <- readr::read_csv(here('data/Spotify.csv'))
 ```
 
@@ -128,5 +129,20 @@ clean_songs %>%
 
 ![](Louis_files/figure-gfm/radar_best_genres-1.png)<!-- -->
 
-Note that the `echo = FALSE` parameter was added to the code chunk to
-prevent printing of the R code that generated the plot.
+``` r
+edm_songs%>%
+  select(c(all_of(feature_names),track_popularity)) %>%
+  pivot_longer(cols = all_of(feature_names)) %>%
+  group_by(name)%>%
+  ggplot(aes(x = value, y = track_popularity)) +
+  geom_hex() +
+  geom_smooth() +
+  facet_wrap(~name, scales = "free")
+```
+
+    ## `geom_smooth()` using method = 'gam' and formula 'y ~ s(x, bs = "cs")'
+
+    ## Warning: Computation failed in `stat_smooth()`:
+    ## x has insufficient unique values to support 10 knots: reduce k.
+
+![](Louis_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->

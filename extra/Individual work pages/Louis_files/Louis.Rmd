@@ -109,8 +109,13 @@ clean_songs %>%
   ggradar(group.point.size = 3, group.line.width = 1, plot.extent.x.sf = 0.8, values.radar = NA)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
-
-```{r find_intersect}
-
+```{r}
+edm_songs%>%
+  select(c(all_of(feature_names),track_popularity)) %>%
+  pivot_longer(cols = all_of(feature_names)) %>%
+  group_by(name)%>%
+  ggplot(aes(x = value, y = track_popularity)) +
+  geom_hex() +
+  geom_smooth() +
+  facet_wrap(~name, scales = "free")
 ```
