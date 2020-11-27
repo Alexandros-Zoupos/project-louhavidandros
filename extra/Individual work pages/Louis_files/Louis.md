@@ -5,6 +5,11 @@ Louis
 ## Setup
 
 ``` r
+devtools::install_github("ricardo-bion/ggradar", 
+                          dependencies = TRUE)
+```
+
+``` r
 library(tidyverse)
 library(here)
 library(ggridges)

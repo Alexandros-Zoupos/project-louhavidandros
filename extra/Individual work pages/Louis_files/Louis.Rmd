@@ -6,6 +6,11 @@ output: github_document
 
 ## Setup
 
+```{r install_ggradar, message = FALSE}
+devtools::install_github("ricardo-bion/ggradar", 
+                          dependencies = TRUE)
+```
+
 ```{r Setup, message = FALSE}
 library(tidyverse)
 library(here)
