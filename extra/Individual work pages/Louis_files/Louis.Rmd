@@ -9,7 +9,9 @@ output: github_document
 ```{r Setup, message = FALSE}
 library(tidyverse)
 library(here)
-
+library(ggridges)
+library(ggradar)
+library(hexbin)
 spotify_songs <- readr::read_csv(here('data/Spotify.csv'))
 ```
 
@@ -19,14 +21,13 @@ edm_songs <- spotify_songs %>%
 
 feature_names <- names(spotify_songs)[12:23]
 
-edm_songs %>%
-  summarise(min_pop = min(track_popularity), iqr_pop = IQR(track_popularity), 
-  med_pop = median(track_popularity), max_pop = max(track_popularity), 
-  quantile(track_popularity))
-
-edm_quartiles = quantile(edm_songs$track_popularity)[2:5]
-  
 ```
+
+```{r clean-dataframe}
+clean_songs <- spotify_songs %>%
+  filter(duplicated(track_name) == FALSE)
+```
+
 ## Including Code
 
 ```{r EDM-test}
@@ -85,13 +86,31 @@ The top 10 seem to have much smoother graphs, meaning more variation
 
 I want to create a way of expressing songs based on their characteristics, I believe it's called a radar chart
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r radar, echo=FALSE}
+edm_songs %>%
+  slice_max(track_popularity, n = 5) %>%
+  group_by(track_name) %>%
+  mutate(track_name = str_c(track_name,' ',toString(track_popularity))) %>%
+  select(track_name, danceability, energy, key, speechiness, acousticness, instrumentalness,
+         liveness, valence) %>%
+  mutate(key = key/12) %>%
+  ggradar(grid.max = 1)
+```
+```{r radar_best_genres}
+clean_songs %>%
+  group_by(playlist_genre) %>%
+  slice_max(track_popularity, n = 1) %>%
+  select(playlist_genre, track_name, playlist_name, track_popularity, feature_names) %>%
+  slice_head() %>%
+  group_by(track_name) %>%
+  mutate(track_name = str_c(track_name,' ',toString(track_popularity))) %>%
+  select(track_name, danceability, energy, speechiness, acousticness,
+         liveness, valence) %>%
+  ggradar(group.point.size = 3, group.line.width = 1, plot.extent.x.sf = 0.8, values.radar = NA)
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
 
-```{r clean-dataframe}
-clean_songs <- spotify_songs %>%
-  filter(duplicated(track_name) == FALSE)
+```{r find_intersect}
+
 ```

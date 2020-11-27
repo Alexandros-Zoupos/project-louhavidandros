@@ -7,7 +7,8 @@ Louis
 ``` r
 library(tidyverse)
 library(here)
-
+library(ggridges)
+library(ggradar)
 spotify_songs <- readr::read_csv(here('data/Spotify.csv'))
 ```
 
@@ -16,24 +17,11 @@ edm_songs <- spotify_songs %>%
   filter(playlist_genre == "edm")
 
 feature_names <- names(spotify_songs)[12:23]
-
-edm_songs %>%
-  summarise(min_pop = min(track_popularity), iqr_pop = IQR(track_popularity), 
-  med_pop = median(track_popularity), max_pop = max(track_popularity), 
-  quantile(track_popularity))
 ```
 
-    ## # A tibble: 5 x 5
-    ##   min_pop iqr_pop med_pop max_pop `quantile(track_popularity)`
-    ##     <dbl>   <dbl>   <dbl>   <dbl>                        <dbl>
-    ## 1       0      34      36      99                            0
-    ## 2       0      34      36      99                           17
-    ## 3       0      34      36      99                           36
-    ## 4       0      34      36      99                           51
-    ## 5       0      34      36      99                           99
-
 ``` r
-edm_quartiles = quantile(edm_songs$track_popularity)[2:5]
+clean_songs <- spotify_songs %>%
+  filter(duplicated(track_name) == FALSE)
 ```
 
 ## Including Code
@@ -117,12 +105,28 @@ The top 10 seem to have much smoother graphs, meaning more variation
 I want to create a way of expressing songs based on their
 characteristics, I believe it’s called a radar chart
 
-![](Louis_files/figure-gfm/pressure-1.png)<!-- -->
+![](Louis_files/figure-gfm/radar-1.png)<!-- -->
+
+``` r
+clean_songs %>%
+  group_by(playlist_genre) %>%
+  slice_max(track_popularity, n = 1) %>%
+  select(playlist_genre, track_name, playlist_name, track_popularity, feature_names) %>%
+  slice_head() %>%
+  group_by(track_name) %>%
+  mutate(track_name = str_c(track_name,' ',toString(track_popularity))) %>%
+  select(track_name, danceability, energy, speechiness, acousticness,
+         liveness, valence) %>%
+  ggradar(group.point.size = 3, group.line.width = 1, plot.extent.x.sf = 0.8, values.radar = NA)
+```
+
+    ## Warning: Removed 1 rows containing missing values (geom_text).
+    
+    ## Warning: Removed 1 rows containing missing values (geom_text).
+    
+    ## Warning: Removed 1 rows containing missing values (geom_text).
+
+![](Louis_files/figure-gfm/radar_best_genres-1.png)<!-- -->
 
 Note that the `echo = FALSE` parameter was added to the code chunk to
 prevent printing of the R code that generated the plot.
-
-``` r
-clean_songs <- spotify_songs %>%
-  filter(duplicated(track_name) == FALSE)
-```
