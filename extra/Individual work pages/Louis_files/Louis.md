@@ -9,6 +9,27 @@ devtools::install_github("ricardo-bion/ggradar",
                           dependencies = TRUE)
 ```
 
+    ## vctrs      (0.3.4 -> 0.3.5) [CRAN]
+    ## pillar     (1.4.6 -> 1.4.7) [CRAN]
+    ## rlang      (0.4.8 -> 0.4.9) [CRAN]
+    ## diffobj    (NA    -> 0.3.2) [CRAN]
+    ## R6         (2.4.1 -> 2.5.0) [CRAN]
+    ## callr      (3.5.0 -> 3.5.1) [CRAN]
+    ## rprojroot  (1.3-2 -> 2.0.2) [CRAN]
+    ## colorspace (1.4-1 -> 2.0-0) [CRAN]
+    ## labeling   (0.3   -> 0.4.2) [CRAN]
+    ## waldo      (NA    -> 0.2.3) [CRAN]
+    ## brio       (NA    -> 1.1.0) [CRAN]
+    ## testthat   (2.3.2 -> 3.0.0) [CRAN]
+    ##      checking for file ‘/tmp/Rtmp9FWy59/remotes30d5ece1d69/ricardo-bion-ggradar-63e5cef/DESCRIPTION’ ...  ✓  checking for file ‘/tmp/Rtmp9FWy59/remotes30d5ece1d69/ricardo-bion-ggradar-63e5cef/DESCRIPTION’
+    ##   ─  preparing ‘ggradar’:
+    ##      checking DESCRIPTION meta-information ...  ✓  checking DESCRIPTION meta-information
+    ##   ─  checking for LF line-endings in source and make files and shell scripts
+    ##   ─  checking for empty or unneeded directories
+    ##   ─  building ‘ggradar_0.2.tar.gz’
+    ##      
+    ## 
+
 ``` r
 library(tidyverse)
 library(here)
