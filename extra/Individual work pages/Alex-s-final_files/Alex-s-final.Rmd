@@ -1051,7 +1051,9 @@ spotify_test <- testing(spotify_split)
 
 ```{r}
 spotify_mod <- linear_reg() %>%
-  set_engine("lm")
+  set_engine("lm") %>%
+  factor(key) %>%
+  factor(mode)
 ```
 
 ```{r}
@@ -1124,3 +1126,4 @@ popularity_fit <- logistic_reg() %>%
   fit(popularity_level ~ . - track_id - track_name - track_artis -track_album_name - track_album_release_date - playlist_name - playlist_id - playlist_subgenre - track_popularity - track_album_id, data = train_data, family = "binomial")
 tidy(popularity_fit)
 ```
+
