@@ -141,6 +141,13 @@ kable(head(rmse), format = "html")
 ```
 
 ---
+#Limitations
+
+- Limited number of songs
+- Problem with `track_popularity` variable
+- Only linear model was tried
+
+---
 
 # Hello World
 
