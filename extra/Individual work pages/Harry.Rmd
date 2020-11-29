@@ -7,6 +7,7 @@ output: github_document
 library(tidyverse)
 library(broom)
 library(here)
+library(dplyr)
 ```
 
 ```{r load-data}
@@ -51,6 +52,18 @@ Spotify_rock%>%
   summarise(avg_pop=mean(track_popularity))
 ```
 
+```{r}
+Spotify_rock_pop%>%
+  filter(mode=="0")%>%
+  group_by(key)%>%
+  summarise(avg_pop=mean(track_popularity))
+```
+```{r}
+Spotify_rock_pop%>%
+  filter(mode=="1")%>%
+  group_by(key)%>%
+  summarise(avg_pop=mean(track_popularity))
+```
 
 
 ```{r}
@@ -152,13 +165,14 @@ theme_minimal()
 
 ```{r}
 Spotify_rock %>%
-filter(popularity_level == c("High", "Very Low")) %>%
-ggplot(aes(x = energy, color = popularity_level)) +
-geom_density(adjust = 2) +
-labs(x = "Energy",
-y = "Frequency",
-color = "Popularity Level") +
-theme_minimal()
+  mutate(danceability_energy= danceability*energy)%>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  ggplot(aes(x = danceability_energy, color = popularity_level)) +
+  geom_density(adjust = 2) +
+  labs(x = "Energy",
+  y = "Frequency",
+  color = "Popularity Level") +
+  theme_minimal()
 ```
 
 ```{r}
@@ -257,13 +271,7 @@ Spotify_rock_pop%>%
 ```
 
 
-```{r}
-Spotify_rock%>%
-  mutate(danceability_energy= danceability*energy)%>%
-  ggplot(aes(x=danceability_energy, y=valence,colour=popularity_level))+
-  geom_point()+
-  geom_smooth()
-```
+
 
 
 
@@ -367,4 +375,151 @@ rnb_songs%>%
   mutate(dance_energy_val=danceability*energy*valence)%>%
   ggplot(aes(x=popularity_level,y=dance_energy_val, colour=popularity_level))+
   geom_col()
+```
+The combination of danceability, valence and energy into one variable shows some interesting results when genres are split into popularity levels. In this case the 3 variables were multiplied together to return a variable that measures how happy, danceable and energetic a song is. As shown in graphs, the songs in the "High" bracket for popularity also had the highest value for this new variable in 4 out of the 6 genres. The 2 genres in which "High" wasn't were R&B and Latin; for Latin however it was a very close second and while the "High" group came last in R&B, this can be explained by the nature of R&B as a genre. In summary while this doesnt explicitly show that the more danceable, energetic and happy the song is the more likely it is to be popular, it does show that popular songs in general, throughout most genres, are more danceable, energetic and happy.
+```{r}
+Spotify_rock%>%
+  mutate(danceability_energy= danceability*energy)%>%
+  ggplot(aes(x=danceability_energy, y=valence,colour=popularity_level))+
+  
+  geom_smooth()
+```
+
+```{r}
+pop_songs%>%
+  mutate(danceability_energy= danceability*energy)%>%
+  ggplot(aes(x=danceability_energy, y=valence,colour=popularity_level))+
+  
+  geom_smooth()
+```
+
+
+```{r}
+rnb_songs%>%
+  mutate(danceability_energy= danceability*energy)%>%
+  ggplot(aes(x=danceability_energy, y=valence,colour=popularity_level))+
+  
+  geom_smooth()
+```
+
+```{r}
+latin_songs%>%
+  mutate(danceability_energy= danceability*energy)%>%
+  ggplot(aes(x=danceability_energy, y=valence,colour=popularity_level))+
+  
+  geom_smooth()
+```
+
+```{r}
+edm_songs%>%
+  mutate(danceability_energy= danceability*energy)%>%
+  ggplot(aes(x=danceability_energy, y=valence,colour=popularity_level))+
+  geom_point()+
+  geom_smooth()
+```
+
+```{r}
+rap_songs%>%
+  mutate(danceability_energy= danceability*energy)%>%
+  ggplot(aes(x=danceability_energy, y=valence,colour=popularity_level))+
+  
+  geom_smooth()
+```
+
+```{r}
+spotify_songs%>%
+  count(track_artist, sort = TRUE)%>%
+  slice_max(n,n=50)
+```
+
+
+
+```{r}
+spotify_songs_count <- spotify_songs%>%
+add_count(track_artist)
+  
+  
+```
+```{r}
+spotify_songs_count<- spotify_songs_count%>%
+  filter(n>=46)
+```
+
+```{r}
+spotify_songs%>%
+  group_by(track_artist)%>%
+  mutate(avg_pop=mean(track_popularity))%>%
+  arrange(desc(avg_pop))%>%
+  filter(duplicated(track_artist)==FALSE)%>%
+  slice_max(n,n=50)
+  
+```
+
+
+```{r}
+spotify_songs_count%>%
+  group_by(track_artist)%>%
+  summarise(track_artist,n,avg_pop=mean(track_popularity),avg_danceability=mean(danceability), avg_energy=mean(energy), common_mode=median(mode), avg_speechiness= mean(speechiness), avg_acoustic= mean(acousticness), avg_instrumental= mean(instrumentalness), avg_liveness= mean(liveness), avg_valence= mean(valence), avg_tempo= mean(tempo), avg_length= mean(duration_ms))%>%
+  filter(duplicated(track_artist)==FALSE)
+```
+
+```{r}
+spotify_songs_count%>%
+  summarise(avg_pop=mean(track_popularity),avg_danceability=mean(danceability), avg_energy=mean(energy), common_mode=median(mode), avg_speechiness= mean(speechiness), avg_acoustic= mean(acousticness), avg_instrumental= mean(instrumentalness), avg_liveness= mean(liveness), avg_valence= mean(valence), avg_tempo= mean(tempo), avg_length= mean(duration_ms))
+```
+
+```{r}
+Spotify%>%
+  summarise(avg_pop=mean(track_popularity),  avg_danceability=mean(danceability), avg_energy=mean(energy), common_mode=median(mode), avg_speechiness= mean(speechiness), avg_acoustic= mean(acousticness), avg_instrumental= mean(instrumentalness), avg_liveness= mean(liveness), avg_valence= mean(valence), avg_tempo= mean(tempo), avg_length= mean(duration_ms))
+```
+
+```{r}
+spotify_songs_count%>%
+  group_by(track_artist)%>%
+  mutate(avg_pop=mean(track_popularity))%>%
+  arrange(desc(avg_pop))%>%
+  filter(duplicated(track_artist)==FALSE)
+  
+```
+
+```{r}
+spotify_songs%>%
+  group_by(track_artist)%>%
+  mutate(avg_pop=mean(track_popularity))%>%
+  arrange(desc(avg_pop))%>%
+  filter(duplicated(track_artist)==FALSE)
+```
+None of the 50 most COMMON artists were in the top 50 most "POPULAR" artists
+
+
+```{r}
+spotify_songs_count %>%
+
+ggplot(aes(x = danceability)) +
+geom_density(adjust = 2) +
+labs(x = "Danceability",
+y = "Frequency") +
+theme_minimal()
+```
+
+```{r}
+spotify_songs%>%
+
+ggplot(aes(x = danceability)) +
+geom_density(adjust = 2) +
+labs(x = "Danceability",
+y = "Frequency") +
+theme_minimal()
+```
+```{r}
+spotify_songs_count%>%
+  group_by(track_artist)%>%
+  count(playlist_genre, sort = TRUE)
+  #filter(duplicated(playlist_genre)==FALSE)
+```
+```{r}
+spotify_songs_count%>%
+  #group_by(track_artist)%>%
+  count(playlist_genre, sort = TRUE)
+  #filter(duplicated(track_artist)==FALSE)
 ```
