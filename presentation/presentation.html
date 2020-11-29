@@ -31,6 +31,53 @@ class: center, middle, inverse, title-slide
 
 
 
+```r
+clean_edm &lt;- clean_full %&gt;%
+  filter(playlist_genre == "edm") %&gt;%
+  mutate(popularity_level = case_when(
+    track_popularity &lt;= 17 ~ "Very Low",
+    track_popularity &gt; 17 &amp; track_popularity &lt;= 35 ~ "Low",
+    track_popularity &gt; 35 &amp; track_popularity &lt; 49 ~ "Fairly High",
+    track_popularity &gt;= 49 &amp; track_popularity &lt;= 100 ~ "High"
+  ))
+
+clean_latin &lt;- clean_full %&gt;%
+  filter(playlist_genre == "latin") %&gt;%
+  mutate(popularity_level = case_when(
+    track_popularity &lt;= 31 ~ "Very Low",
+    track_popularity &gt; 31 &amp; track_popularity &lt;= 48 ~ "Low",
+    track_popularity &gt; 48 &amp; track_popularity &lt; 63 ~ "Fairly High",
+    track_popularity &gt;= 63 &amp; track_popularity &lt;= 100 ~ "High"
+  ))
+
+clean_rnb &lt;- clean_full %&gt;%
+  filter(playlist_genre == "r&amp;b") %&gt;%
+  mutate(popularity_level = case_when(
+    track_popularity &lt;= 21 ~ "Very Low",
+    track_popularity &gt; 21 &amp; track_popularity &lt;= 43 ~ "Low",
+    track_popularity &gt; 43 &amp; track_popularity &lt; 61 ~ "Fairly High",
+    track_popularity &gt;= 61 &amp; track_popularity &lt;= 100 ~ "High"
+  ))
+
+clean_rap &lt;- clean_full %&gt;%
+  filter(playlist_genre == "rap") %&gt;%
+  mutate(popularity_level = case_when(
+    track_popularity &lt;= 30 ~ "Very Low",
+    track_popularity &gt; 30 &amp; track_popularity &lt;= 47 ~ "Low",
+    track_popularity &gt; 47 &amp; track_popularity &lt; 59 ~ "Fairly High",
+    track_popularity &gt;= 59 &amp; track_popularity &lt;= 100 ~ "High"
+  ))
+
+clean_pop &lt;- clean_full %&gt;%
+  filter(playlist_genre == "pop") %&gt;%
+  mutate(popularity_level = case_when(
+    track_popularity &lt;= 30 ~ "Very Low",
+    track_popularity &gt; 30 &amp; track_popularity &lt;= 50 ~ "Low",
+    track_popularity &gt; 50 &amp; track_popularity &lt; 65 ~ "Fairly High",
+    track_popularity &gt;= 65 &amp; track_popularity &lt;= 100 ~ "High"
+  )) 
+```
+
 class: center, middle
 
 ## A statement of the overall goal / research question
