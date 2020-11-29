@@ -21,6 +21,7 @@ library(tidyverse)
 library(tidymodels)
 library(palmerpenguins)
 library(knitr)
+library(here)
 ```
 
 ```{r setup, include=FALSE}
@@ -29,7 +30,33 @@ knitr::opts_chunk$set(fig.retina = 3, dpi = 300, fig.width = 6, fig.asp = 0.618,
 ```
 
 ```{r load-data, include=FALSE}
-# Load your data here
+spotify_songs <- readr::read_csv(here('data/Spotify.csv'))
+```
+
+```{r clean-data, include = FALSE}
+clean_songs <- spotify_songs %>%
+  filter(duplicated(track_name) == FALSE)
+clean_edm <- spotify_songs %>%
+  filter(playlist_genre == "edm") %>%
+  filter(duplicated(track_name) == FALSE)
+clean_rock <- spotify_songs %>%
+  filter(playlist_genre == "rock") %>%
+  filter(duplicated(track_name) == FALSE)
+clean_pop <- spotify_songs %>%
+  filter(playlist_genre == "pop") %>%
+  filter(duplicated(track_name) == FALSE)
+clean_rap <- spotify_songs %>%
+  filter(playlist_genre == "rap") %>%
+  filter(duplicated(track_name) == FALSE)
+clean_rnb <- spotify_songs %>%
+  filter(playlist_genre == "r&b") %>%
+  filter(duplicated(track_name) == FALSE)
+clean_latin <- spotify_songs %>%
+  filter(playlist_genre == "latin") %>%
+  filter(duplicated(track_name) == FALSE)
+clean_full <- spotify_songs%>%
+  group_by(playlist_genre) %>%
+  filter(duplicated(track_name) == FALSE)
 ```
 
 
