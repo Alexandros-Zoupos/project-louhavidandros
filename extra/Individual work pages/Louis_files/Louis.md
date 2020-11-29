@@ -50,6 +50,53 @@ clean_full <- spotify_songs%>%
   filter(duplicated(track_name) == FALSE)
 ```
 
+``` r
+clean_edm <- clean_full %>%
+  filter(playlist_genre == "edm") %>%
+  mutate(popularity_level = case_when(
+    track_popularity <= 17 ~ "Very Low",
+    track_popularity > 17 & track_popularity <= 35 ~ "Low",
+    track_popularity > 35 & track_popularity < 49 ~ "Fairly High",
+    track_popularity >= 49 & track_popularity <= 100 ~ "High"
+  ))
+
+clean_latin <- clean_full %>%
+  filter(playlist_genre == "latin") %>%
+  mutate(popularity_level = case_when(
+    track_popularity <= 31 ~ "Very Low",
+    track_popularity > 31 & track_popularity <= 48 ~ "Low",
+    track_popularity > 48 & track_popularity < 63 ~ "Fairly High",
+    track_popularity >= 63 & track_popularity <= 100 ~ "High"
+  ))
+
+clean_rnb <- clean_full %>%
+  filter(playlist_genre == "r&b") %>%
+  mutate(popularity_level = case_when(
+    track_popularity <= 21 ~ "Very Low",
+    track_popularity > 21 & track_popularity <= 43 ~ "Low",
+    track_popularity > 43 & track_popularity < 61 ~ "Fairly High",
+    track_popularity >= 61 & track_popularity <= 100 ~ "High"
+  ))
+
+clean_rap <- clean_full %>%
+  filter(playlist_genre == "rap") %>%
+  mutate(popularity_level = case_when(
+    track_popularity <= 30 ~ "Very Low",
+    track_popularity > 30 & track_popularity <= 47 ~ "Low",
+    track_popularity > 47 & track_popularity < 59 ~ "Fairly High",
+    track_popularity >= 59 & track_popularity <= 100 ~ "High"
+  ))
+
+clean_pop <- clean_full %>%
+  filter(playlist_genre == "pop") %>%
+  mutate(popularity_level = case_when(
+    track_popularity <= 30 ~ "Very Low",
+    track_popularity > 30 & track_popularity <= 50 ~ "Low",
+    track_popularity > 50 & track_popularity < 65 ~ "Fairly High",
+    track_popularity >= 65 & track_popularity <= 100 ~ "High"
+  )) 
+```
+
 ## Including Code
 
 ``` r
@@ -146,6 +193,8 @@ mean_year_songs <- clean_pop %>%
             danceability_diff = 0, energy_diff = 0, instrumentalness_diff = 0)
 ```
 
+    ## Adding missing grouping variables: `playlist_genre`
+
     ## `summarise()` ungrouping output (override with `.groups` argument)
 
 ``` r
@@ -172,7 +221,7 @@ mean_year_songs %>%
   geom_bar(position = "dodge")
 ```
 
-![](Louis_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+![](Louis_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
 This tracks the correlation of year to year changes of each variable to
 the year to year popularity changes and tallies whether an increase in a

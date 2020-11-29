@@ -12,6 +12,8 @@ output:
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
+editor_options: 
+  chunk_output_type: console
 ---
 
 
@@ -59,6 +61,52 @@ clean_full <- spotify_songs%>%
   filter(duplicated(track_name) == FALSE)
 ```
 
+```{r popularity_level_clean_data}
+clean_edm <- clean_full %>%
+  filter(playlist_genre == "edm") %>%
+  mutate(popularity_level = case_when(
+    track_popularity <= 17 ~ "Very Low",
+    track_popularity > 17 & track_popularity <= 35 ~ "Low",
+    track_popularity > 35 & track_popularity < 49 ~ "Fairly High",
+    track_popularity >= 49 & track_popularity <= 100 ~ "High"
+  ))
+
+clean_latin <- clean_full %>%
+  filter(playlist_genre == "latin") %>%
+  mutate(popularity_level = case_when(
+    track_popularity <= 31 ~ "Very Low",
+    track_popularity > 31 & track_popularity <= 48 ~ "Low",
+    track_popularity > 48 & track_popularity < 63 ~ "Fairly High",
+    track_popularity >= 63 & track_popularity <= 100 ~ "High"
+  ))
+
+clean_rnb <- clean_full %>%
+  filter(playlist_genre == "r&b") %>%
+  mutate(popularity_level = case_when(
+    track_popularity <= 21 ~ "Very Low",
+    track_popularity > 21 & track_popularity <= 43 ~ "Low",
+    track_popularity > 43 & track_popularity < 61 ~ "Fairly High",
+    track_popularity >= 61 & track_popularity <= 100 ~ "High"
+  ))
+
+clean_rap <- clean_full %>%
+  filter(playlist_genre == "rap") %>%
+  mutate(popularity_level = case_when(
+    track_popularity <= 30 ~ "Very Low",
+    track_popularity > 30 & track_popularity <= 47 ~ "Low",
+    track_popularity > 47 & track_popularity < 59 ~ "Fairly High",
+    track_popularity >= 59 & track_popularity <= 100 ~ "High"
+  ))
+
+clean_pop <- clean_full %>%
+  filter(playlist_genre == "pop") %>%
+  mutate(popularity_level = case_when(
+    track_popularity <= 30 ~ "Very Low",
+    track_popularity > 30 & track_popularity <= 50 ~ "Low",
+    track_popularity > 50 & track_popularity < 65 ~ "Fairly High",
+    track_popularity >= 65 & track_popularity <= 100 ~ "High"
+  )) 
+```
 
 class: center, middle
 
@@ -69,6 +117,81 @@ class: center, middle
 class: inverse, center, middle
 
 # Section title
+
+---
+#Slide with messy plot - Alex
+
+- Over 23,000 observations
+
+```{r messy-plot, echo=FALSE}
+clean_songs %>%
+  ggplot(aes(x = tempo, y = track_popularity)) +
+  geom_point() +
+  labs(x = "Tempo (beat per minute)",
+       y = "Track popularity",
+       title = "Track popularity vs tempo") +
+  theme_minimal() +
+  scale_color_viridis_d()
+```
+
+---
+#Slide with linear fit - Alex. Don't forget to remove track popularity when it is added
+
+```{r data-split, echo=FALSE}
+set.seed(666)
+clean_songs_split <- initial_split(clean_songs)
+spotify_train <- training(clean_songs_split)
+spotify_test <- testing(clean_songs_split)
+```
+
+```{r linear-mod, echo=FALSE}
+songs_linear_mod <- linear_reg() %>%
+  set_engine("lm")
+```
+
+```{r songs-recipe, echo=FALSE}
+songs_rec <- recipe(track_popularity ~ ., data = clean_songs) %>%
+  update_role(track_name, new_role = "ID") %>%
+  update_role(track_artist, new_role = "Artist") %>%
+  step_rm(track_id,track_album_id,track_album_name,track_album_release_date,playlist_name,playlist_id,playlist_subgenre) %>%
+  step_dummy(all_nominal(), -c(track_name,track_artist)) %>%
+  step_zv(all_predictors())
+```
+
+```{r workflow, echo=FALSE}
+songs_wflow <- workflow() %>%
+  add_model(songs_linear_mod) %>%
+  add_recipe(songs_rec)
+```
+
+```{r fit-for-training, echo=FALSE}
+songs_fit <- songs_wflow %>%
+  fit(data = spotify_train)
+```
+
+```{r pred-testing, echo=FALSE}
+songs_test_pred <- predict(songs_fit, new_data = spotify_test) %>%
+  bind_cols(spotify_test %>% select(track_popularity, track_name, track_artist))
+
+kable(head(songs_test_pred), format = "html")
+```
+
+```{r rsq-rmse, echo=FALSE}
+rsquared <- rsq(songs_test_pred, truth = track_popularity, estimate = .pred)
+
+kable(head(rsquared), format = "html")
+
+rmse <- rmse(songs_test_pred, truth = track_popularity, estimate = .pred)
+
+kable(head(rmse), format = "html")
+```
+
+---
+#Limitations
+
+- Limited number of songs
+- Problem with `track_popularity` variable
+- Only linear model was tried
 
 ---
 

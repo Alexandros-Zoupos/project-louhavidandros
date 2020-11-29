@@ -29,6 +29,55 @@ class: center, middle, inverse, title-slide
 
 
 
+
+
+```r
+clean_edm &lt;- clean_full %&gt;%
+  filter(playlist_genre == "edm") %&gt;%
+  mutate(popularity_level = case_when(
+    track_popularity &lt;= 17 ~ "Very Low",
+    track_popularity &gt; 17 &amp; track_popularity &lt;= 35 ~ "Low",
+    track_popularity &gt; 35 &amp; track_popularity &lt; 49 ~ "Fairly High",
+    track_popularity &gt;= 49 &amp; track_popularity &lt;= 100 ~ "High"
+  ))
+
+clean_latin &lt;- clean_full %&gt;%
+  filter(playlist_genre == "latin") %&gt;%
+  mutate(popularity_level = case_when(
+    track_popularity &lt;= 31 ~ "Very Low",
+    track_popularity &gt; 31 &amp; track_popularity &lt;= 48 ~ "Low",
+    track_popularity &gt; 48 &amp; track_popularity &lt; 63 ~ "Fairly High",
+    track_popularity &gt;= 63 &amp; track_popularity &lt;= 100 ~ "High"
+  ))
+
+clean_rnb &lt;- clean_full %&gt;%
+  filter(playlist_genre == "r&amp;b") %&gt;%
+  mutate(popularity_level = case_when(
+    track_popularity &lt;= 21 ~ "Very Low",
+    track_popularity &gt; 21 &amp; track_popularity &lt;= 43 ~ "Low",
+    track_popularity &gt; 43 &amp; track_popularity &lt; 61 ~ "Fairly High",
+    track_popularity &gt;= 61 &amp; track_popularity &lt;= 100 ~ "High"
+  ))
+
+clean_rap &lt;- clean_full %&gt;%
+  filter(playlist_genre == "rap") %&gt;%
+  mutate(popularity_level = case_when(
+    track_popularity &lt;= 30 ~ "Very Low",
+    track_popularity &gt; 30 &amp; track_popularity &lt;= 47 ~ "Low",
+    track_popularity &gt; 47 &amp; track_popularity &lt; 59 ~ "Fairly High",
+    track_popularity &gt;= 59 &amp; track_popularity &lt;= 100 ~ "High"
+  ))
+
+clean_pop &lt;- clean_full %&gt;%
+  filter(playlist_genre == "pop") %&gt;%
+  mutate(popularity_level = case_when(
+    track_popularity &lt;= 30 ~ "Very Low",
+    track_popularity &gt; 30 &amp; track_popularity &lt;= 50 ~ "Low",
+    track_popularity &gt; 50 &amp; track_popularity &lt; 65 ~ "Fairly High",
+    track_popularity &gt;= 65 &amp; track_popularity &lt;= 100 ~ "High"
+  )) 
+```
+
 class: center, middle
 
 ## A statement of the overall goal / research question
@@ -38,6 +87,116 @@ class: center, middle
 class: inverse, center, middle
 
 # Section title
+
+---
+#Slide with messy plot - Alex
+
+- Over 23,000 observations
+
+&lt;img src="presentation_files/figure-html/messy-plot-1.png" width="80%" /&gt;
+
+---
+#Slide with linear fit - Alex. Don't forget to remove track popularity when it is added
+
+
+
+
+
+
+
+
+
+
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; .pred &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; track_popularity &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; track_name &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; track_artist &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 47.20333 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 60 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Call You Mine - Keanu Silva Remix &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; The Chainsmokers &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 46.18834 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 69 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Post Malone (feat. RANI) - GATTÜSO Remix &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Sam Feldt &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 44.49431 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 68 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; SOS - Laidback Luke Tribute Remix / Radio Edit &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Avicii &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 46.46700 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 62 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Don't Leave Me Alone (feat. Anne-Marie) - EDX's Indian Summer Remix &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; David Guetta &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 46.30905 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 70 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Slow Dance (feat. Ava Max) - Sam Feldt Remix &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; AJ Mitchell &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 46.44196 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 63 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Hold Me While You Wait - Steve Void Remix &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Lewis Capaldi &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; .metric &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; .estimator &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; .estimate &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; rsq &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; standard &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0923458 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; .metric &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; .estimator &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; .estimate &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; rmse &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; standard &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 22.49317 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+#Limitations
+
+- Limited number of songs
+- Problem with `track_popularity` variable
+- Only linear model was tried
 
 ---
 
