@@ -45,7 +45,9 @@ clean_rnb <- spotify_songs %>%
 clean_latin <- spotify_songs %>%
   filter(playlist_genre == "latin") %>%
   filter(duplicated(track_name) == FALSE)
-clean_full <- rbind(clean_edm, clean_latin, clean_pop, clean_rap,  clean_rnb, clean_rock)
+clean_full <- spotify_songs%>%
+  group_by(playlist_genre) %>%
+  filter(duplicated(track_name) == FALSE)
 ```
 
 ## Including Code
@@ -130,3 +132,48 @@ I want to create a way of expressing songs based on their
 characteristics, I believe it’s called a radar chart
 
 ![](Louis_files/figure-gfm/radar-1.png)<!-- -->
+
+``` r
+mean_year_songs <- clean_pop %>%
+  mutate(track_album_release_year = as.integer(str_sub(track_album_release_date, end = 4)))%>%
+  select(track_album_release_year, track_popularity, danceability, energy, speechiness, acousticness, instrumentalness,
+         liveness) %>%
+  group_by(track_album_release_year) %>%
+  summarise(acousticness = mean(acousticness), danceability = mean(danceability), 
+            energy = mean(energy), instrumentalness = mean(instrumentalness), 
+            liveness = mean(liveness), speechiness = mean(speechiness),
+            popularity = mean(track_popularity), popularity_diff = 0,acousticness_diff = 0,
+            danceability_diff = 0, energy_diff = 0, instrumentalness_diff = 0)
+```
+
+    ## `summarise()` ungrouping output (override with `.groups` argument)
+
+``` r
+x <- 1
+repeat{
+  x <- x + 1
+  mean_year_songs$popularity_diff[x] <- (mean_year_songs$popularity[x] - mean_year_songs$popularity[x-1])/100
+  mean_year_songs$acousticness_diff[x] <- mean_year_songs$acousticness[x] - mean_year_songs$acousticness[x-1]
+  mean_year_songs$danceability_diff[x] <- mean_year_songs$danceability[x] - mean_year_songs$danceability[x-1]
+  mean_year_songs$energy_diff[x] <- mean_year_songs$energy[x] - mean_year_songs$energy[x-1]
+  mean_year_songs$instrumentalness_diff[x] <- mean_year_songs$instrumentalness[x] - mean_year_songs$instrumentalness[x-1]
+  if(x==nrow(mean_year_songs)){break
+    }
+}
+```
+
+``` r
+mean_year_songs %>%
+  filter(track_album_release_year > 1965) %>%
+  select(track_album_release_year,popularity_diff,acousticness_diff,danceability_diff,energy_diff,instrumentalness_diff) %>%
+  pivot_longer(cols = c(acousticness_diff, danceability_diff, energy_diff, instrumentalness_diff)) %>%
+  group_by(name) %>%
+  ggplot(aes(x = name, fill = value * popularity_diff > 0)) +
+  geom_bar(position = "dodge")
+```
+
+![](Louis_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+
+This tracks the correlation of year to year changes of each variable to
+the year to year popularity changes and tallies whether an increase in a
+variable happened at the same time as an increase in popularity.
