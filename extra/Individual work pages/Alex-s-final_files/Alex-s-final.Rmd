@@ -10,6 +10,7 @@ library(here)
 library(lubridate)
 library(patchwork)
 library(ggridges)
+library(tidymodels)
 ```
 
 ```{r read-data}
@@ -1037,5 +1038,89 @@ all_songs %>%
 
 From the first graph we can see that songs with mode 1 (major) are more popular for all genres. From the second graph tough, we see that there is not a big difference in popularity level for each mode and genre, which can lead as to the conclusion that mode is not a detrimental factor that makes a song popular or not.
 
+###Attempt to fit model
+
+##Linear model
+
+```{r}
+set.seed(1122)
+spotify_split <- initial_split(all_songs)
+spotify_train <- training(spotify_split)
+spotify_test <- testing(spotify_split)
+```
+
+```{r}
+spotify_mod <- linear_reg() %>%
+  set_engine("lm")
+```
+
+```{r}
+spotify_rec <- recipe(track_popularity ~ ., data = spotify_train) %>%
+  update_role(track_name, new_role = "id") %>%
+  update_role(track_artist, new_role = "artist") %>%
+  step_rm(track_id,track_album_id,track_album_name,track_album_release_date,playlist_name,playlist_id,playlist_subgenre,popularity_level) %>%
+  step_dummy(all_nominal(), -c(track_name,track_artist)) %>%
+  step_zv(all_predictors())
+```
+
+```{r}
+spotify_wflow <- workflow() %>%
+  add_model(spotify_mod) %>%
+  add_recipe(spotify_rec)
+```
+
+```{r}
+spotify_fit <- spotify_wflow %>%
+  fit(data = spotify_train)
+
+tidy(spotify_fit)
+```
+
+```{r}
+set.seed(345)
+folds <- vfold_cv(spotify_train, v = 5)
+folds
+```
+
+```{r}
+set.seed(456)
+spotify_fit_rs <- spotify_wflow %>%
+  fit_resamples(folds)
+
+collect_metrics(spotify_fit_rs)
+```
 
 
+```{r}
+spotify_test_pred <- predict(spotify_fit, new_data = spotify_test) %>%
+  bind_cols(spotify_test %>% select(track_popularity, track_name, track_artist))
+
+rsq(spotify_test_pred, truth = track_popularity, estimate = .pred)
+rmse(spotify_test_pred, truth = track_popularity, estimate = .pred)
+```
+
+
+##Logistic regression with High pop or lwo
+
+```{r}
+songs_for_logreg <- all_songs %>%
+  filter(popularity_level %in% c("High", "Low")) %>%
+    factor(popularity_level)
+```
+
+
+```{r}
+set.seed(1116)
+
+popularity_split <- initial_split(songs_for_logreg, prop = 0.80)
+
+train_data <- training(popularity_split)
+test_data  <- testing(popularity_split)
+```
+
+```{r}
+popularity_fit <- logistic_reg() %>%
+  set_engine("glm") %>%
+  fit(popularity_level ~ . - track_id - track_name - track_artis -track_album_name - track_album_release_date - playlist_name - playlist_id - playlist_subgenre - track_popularity - track_album_id, data = train_data, family = "binomial")
+tidy(popularity_fit)
+```

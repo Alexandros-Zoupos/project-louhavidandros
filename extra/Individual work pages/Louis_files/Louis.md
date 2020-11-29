@@ -5,35 +5,49 @@ Louis
 ## Setup
 
 ``` r
+devtools::install_github("ricardo-bion/ggradar", 
+                          dependencies = TRUE)
+```
+
+``` r
 library(tidyverse)
 library(here)
-
+library(ggridges)
+library(ggradar)
+library(hexbin)
 spotify_songs <- readr::read_csv(here('data/Spotify.csv'))
 ```
 
 ``` r
 edm_songs <- spotify_songs %>%
   filter(playlist_genre == "edm")
-
 feature_names <- names(spotify_songs)[12:23]
-
-edm_songs %>%
-  summarise(min_pop = min(track_popularity), iqr_pop = IQR(track_popularity), 
-  med_pop = median(track_popularity), max_pop = max(track_popularity), 
-  quantile(track_popularity))
 ```
 
-    ## # A tibble: 5 x 5
-    ##   min_pop iqr_pop med_pop max_pop `quantile(track_popularity)`
-    ##     <dbl>   <dbl>   <dbl>   <dbl>                        <dbl>
-    ## 1       0      34      36      99                            0
-    ## 2       0      34      36      99                           17
-    ## 3       0      34      36      99                           36
-    ## 4       0      34      36      99                           51
-    ## 5       0      34      36      99                           99
-
 ``` r
-edm_quartiles = quantile(edm_songs$track_popularity)[2:5]
+clean_songs <- spotify_songs %>%
+  filter(duplicated(track_name) == FALSE)
+clean_edm <- spotify_songs %>%
+  filter(playlist_genre == "edm") %>%
+  filter(duplicated(track_name) == FALSE)
+clean_rock <- spotify_songs %>%
+  filter(playlist_genre == "rock") %>%
+  filter(duplicated(track_name) == FALSE)
+clean_pop <- spotify_songs %>%
+  filter(playlist_genre == "pop") %>%
+  filter(duplicated(track_name) == FALSE)
+clean_rap <- spotify_songs %>%
+  filter(playlist_genre == "rap") %>%
+  filter(duplicated(track_name) == FALSE)
+clean_rnb <- spotify_songs %>%
+  filter(playlist_genre == "r&b") %>%
+  filter(duplicated(track_name) == FALSE)
+clean_latin <- spotify_songs %>%
+  filter(playlist_genre == "latin") %>%
+  filter(duplicated(track_name) == FALSE)
+clean_full <- spotify_songs%>%
+  group_by(playlist_genre) %>%
+  filter(duplicated(track_name) == FALSE)
 ```
 
 ## Including Code
@@ -117,12 +131,49 @@ The top 10 seem to have much smoother graphs, meaning more variation
 I want to create a way of expressing songs based on their
 characteristics, I believe it’s called a radar chart
 
-![](Louis_files/figure-gfm/pressure-1.png)<!-- -->
-
-Note that the `echo = FALSE` parameter was added to the code chunk to
-prevent printing of the R code that generated the plot.
+![](Louis_files/figure-gfm/radar-1.png)<!-- -->
 
 ``` r
-clean_songs <- spotify_songs %>%
-  filter(duplicated(track_name) == FALSE)
+mean_year_songs <- clean_pop %>%
+  mutate(track_album_release_year = as.integer(str_sub(track_album_release_date, end = 4)))%>%
+  select(track_album_release_year, track_popularity, danceability, energy, speechiness, acousticness, instrumentalness,
+         liveness) %>%
+  group_by(track_album_release_year) %>%
+  summarise(acousticness = mean(acousticness), danceability = mean(danceability), 
+            energy = mean(energy), instrumentalness = mean(instrumentalness), 
+            liveness = mean(liveness), speechiness = mean(speechiness),
+            popularity = mean(track_popularity), popularity_diff = 0,acousticness_diff = 0,
+            danceability_diff = 0, energy_diff = 0, instrumentalness_diff = 0)
 ```
+
+    ## `summarise()` ungrouping output (override with `.groups` argument)
+
+``` r
+x <- 1
+repeat{
+  x <- x + 1
+  mean_year_songs$popularity_diff[x] <- (mean_year_songs$popularity[x] - mean_year_songs$popularity[x-1])/100
+  mean_year_songs$acousticness_diff[x] <- mean_year_songs$acousticness[x] - mean_year_songs$acousticness[x-1]
+  mean_year_songs$danceability_diff[x] <- mean_year_songs$danceability[x] - mean_year_songs$danceability[x-1]
+  mean_year_songs$energy_diff[x] <- mean_year_songs$energy[x] - mean_year_songs$energy[x-1]
+  mean_year_songs$instrumentalness_diff[x] <- mean_year_songs$instrumentalness[x] - mean_year_songs$instrumentalness[x-1]
+  if(x==nrow(mean_year_songs)){break
+    }
+}
+```
+
+``` r
+mean_year_songs %>%
+  filter(track_album_release_year > 1965) %>%
+  select(track_album_release_year,popularity_diff,acousticness_diff,danceability_diff,energy_diff,instrumentalness_diff) %>%
+  pivot_longer(cols = c(acousticness_diff, danceability_diff, energy_diff, instrumentalness_diff)) %>%
+  group_by(name) %>%
+  ggplot(aes(x = name, fill = value * popularity_diff > 0)) +
+  geom_bar(position = "dodge")
+```
+
+![](Louis_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+
+This tracks the correlation of year to year changes of each variable to
+the year to year popularity changes and tallies whether an increase in a
+variable happened at the same time as an increase in popularity.
