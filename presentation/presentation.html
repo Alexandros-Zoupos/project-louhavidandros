@@ -78,7 +78,7 @@ clean_pop &lt;- clean_full %&gt;%
   )) 
 
 clean_rock &lt;- clean_full %&gt;%
-  filter(playlist_genre == "pop") %&gt;%
+  filter(playlist_genre == "rock") %&gt;%
   mutate(popularity_level = case_when(
     track_popularity &lt;= 24 ~ "Very Low",
     track_popularity &gt; 24 &amp; track_popularity &lt;= 45 ~ "Low",
@@ -209,9 +209,54 @@ class: inverse, center, middle
 
 ---
 
+# Ridge plots
+
+
+---
+# Valence Ridge Plot
+
+```
+## Warning in popularity_level == c("High", "Very Low"): longer object length is
+## not a multiple of shorter object length
+
+## Warning in popularity_level == c("High", "Very Low"): longer object length is
+## not a multiple of shorter object length
+```
+
+```
+## Picking joint bandwidth of 0.0571
+```
+
+&lt;img src="presentation_files/figure-html/Valence Ridge-1.png" width="80%" /&gt;
+---
+# Danceability Ridges Plot
+
+
+```
+## Warning in popularity_level == c("High", "Very Low"): longer object length is
+## not a multiple of shorter object length
+
+## Warning in popularity_level == c("High", "Very Low"): longer object length is
+## not a multiple of shorter object length
+```
+
+```
+## Picking joint bandwidth of 0.0319
+```
+
+&lt;img src="presentation_files/figure-html/Danceability Ridges-1.png" width="80%" /&gt;
+---
+
 # Multiple Variable Analysis
 
 &lt;img src="presentation_files/figure-html/pop multi-variable graph-1.png" width="80%" /&gt;
+---
+
+# Multiple Variable analysis part 2
+
+&lt;img src="presentation_files/figure-html/Multiple Variable analysis part 2-1.png" width="80%" /&gt;
+
+
 
 # Hello World
 
@@ -305,7 +350,7 @@ glance(model)
 - goes here
 ]
 .pull-right[
-&lt;img src="presentation_files/figure-html/unnamed-chunk-1-1.png" width="100%" /&gt;
+&lt;img src="presentation_files/figure-html/unnamed-chunk-2-1.png" width="100%" /&gt;
 ]
 
 ---

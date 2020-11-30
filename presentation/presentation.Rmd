@@ -25,6 +25,7 @@ library(palmerpenguins)
 library(knitr)
 library(here)
 library(patchwork)
+library(ggridges)
 ```
 
 ```{r setup, include=FALSE}
@@ -109,7 +110,7 @@ clean_pop <- clean_full %>%
   )) 
 
 clean_rock <- clean_full %>%
-  filter(playlist_genre == "pop") %>%
+  filter(playlist_genre == "rock") %>%
   mutate(popularity_level = case_when(
     track_popularity <= 24 ~ "Very Low",
     track_popularity > 24 & track_popularity <= 45 ~ "Low",
@@ -205,6 +206,50 @@ kable(head(rmse), format = "html")
 
 ---
 
+# Ridge plots
+
+```{r,echo=FALSE}
+songs_ridges <- rbind(clean_edm, clean_latin, clean_pop, clean_rap, clean_rnb, clean_rock)
+```
+---
+# Valence Ridge Plot
+```{r Valence Ridge, echo=FALSE}
+songs_ridges %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  ggplot(aes(x = valence, y = playlist_genre, fill = popularity_level, color = popularity_level)) +
+   geom_density_ridges(alpha = 0.2) +
+  labs(x = "Valence",
+       y = NULL,
+       fill = "Popularity Level"
+       ) +
+  guides(color = FALSE) +
+  scale_fill_manual(values = c(
+    "Very Low" = "#008dfd",
+    "High" = "#fd0000"
+  )) +
+  theme_minimal()
+```
+---
+# Danceability Ridges Plot
+
+```{r Danceability Ridges, echo=FALSE}
+songs_ridges %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  ggplot(aes(x = danceability, y = playlist_genre, fill = popularity_level, color = popularity_level)) +
+   geom_density_ridges(alpha = 0.2) +
+  labs(x = "Danceability",
+       y = NULL,
+       fill = "Popularity Level"
+       ) +
+  guides(color = FALSE) +
+  scale_fill_manual(values = c(
+    "Very Low" = "#008dfd",
+    "High" = "#fd0000"
+  )) +
+  theme_minimal()
+```
+---
+
 # Multiple Variable Analysis
 
 ```{r pop multi-variable graph, echo=FALSE}
@@ -251,6 +296,35 @@ mvg_rock <- clean_rock%>%
 
  (mvg_edm | mvg_rap)/(mvg_pop | mvg_rock)
 ```
+---
+
+# Multiple Variable analysis part 2
+
+```{r Multiple Variable analysis part 2, echo=FALSE}
+mvg_latin <- clean_latin%>%
+  mutate(dance_energy_val=danceability*energy*valence)%>%
+  ggplot(aes(x=popularity_level,y=dance_energy_val, colour=popularity_level))+
+  geom_col()+
+  labs(
+    title = "Latin",
+    y="Count",
+    x="Popularity Level")+
+  theme(legend.position = "none")
+
+mvg_rnb <- clean_rnb%>%
+  mutate(dance_energy_val=danceability*energy*valence)%>%
+  ggplot(aes(x=popularity_level,y=dance_energy_val, colour=popularity_level))+
+  geom_col()+
+  labs(
+    title = "R&B",
+    y="Count",
+    x="Popularity Level")+
+  theme(legend.position = "none")
+
+mvg_rnb+mvg_latin
+```
+
+
 
 # Hello World
 
