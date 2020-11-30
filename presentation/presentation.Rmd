@@ -40,30 +40,13 @@ spotify_songs <- readr::read_csv(here('data/Spotify.csv'))
 ```{r clean-data, include = FALSE}
 clean_songs <- spotify_songs %>%
   filter(duplicated(track_name) == FALSE)
-clean_edm <- spotify_songs %>%
-  filter(playlist_genre == "edm") %>%
-  filter(duplicated(track_name) == FALSE)
-clean_rock <- spotify_songs %>%
-  filter(playlist_genre == "rock") %>%
-  filter(duplicated(track_name) == FALSE)
-clean_pop <- spotify_songs %>%
-  filter(playlist_genre == "pop") %>%
-  filter(duplicated(track_name) == FALSE)
-clean_rap <- spotify_songs %>%
-  filter(playlist_genre == "rap") %>%
-  filter(duplicated(track_name) == FALSE)
-clean_rnb <- spotify_songs %>%
-  filter(playlist_genre == "r&b") %>%
-  filter(duplicated(track_name) == FALSE)
-clean_latin <- spotify_songs %>%
-  filter(playlist_genre == "latin") %>%
-  filter(duplicated(track_name) == FALSE)
+
 clean_full <- spotify_songs%>%
   group_by(playlist_genre) %>%
   filter(duplicated(track_name) == FALSE)
 ```
 
-```{r popularity_level_clean_data}
+```{r popularity_level_clean_data, include=FALSE}
 clean_edm <- clean_full %>%
   filter(playlist_genre == "edm") %>%
   mutate(popularity_level = case_when(
@@ -260,21 +243,20 @@ songs_ridges %>%
 - R&B: Highest likelihood of popularity in lower optimal range
 ---
 
-<<<<<<< HEAD
+
 # Ridge plots continued
 
 ```{r,echo=FALSE}
 songs_ridges <- rbind(clean_edm, clean_latin, clean_pop, clean_rap, clean_rnb, clean_rock)
 ```
 ---
-=======
->>>>>>> 0f7fe7fd0dfcebb2a5f0f7f846691d7956095414
+
 # Valence Ridge Plot
 ```{r Valence Ridge, echo=FALSE, warning= FALSE}
 songs_ridges %>%
   filter(popularity_level == c("High", "Very Low")) %>%
   ggplot(aes(x = valence, y = playlist_genre, fill = popularity_level, color = popularity_level)) +
-   geom_density_ridges(alpha = 0.2, bandwidth=0.0571) +
+   geom_density_ridges(alpha = 0.2, bandwidth=0.085) +
   labs(x = "Valence",
        y = NULL,
        fill = "Popularity Level"
@@ -293,7 +275,7 @@ songs_ridges %>%
 songs_ridges %>%
   filter(popularity_level == c("High", "Very Low")) %>%
   ggplot(aes(x = energy, y = playlist_genre, fill = popularity_level, color = popularity_level)) +
-   geom_density_ridges(alpha = 0.2, bandwidth= 0.0409) +
+   geom_density_ridges(alpha = 0.2, bandwidth= 0.07) +
   labs(x = "Energy",
        y = NULL,
        fill = "Popularity Level"
@@ -314,7 +296,7 @@ songs_ridges %>%
 songs_ridges%>%
 filter(popularity_level == c("High", "Very Low")) %>%
   ggplot(aes(x = speechiness, y = playlist_genre, fill = popularity_level, color = popularity_level)) +
-   geom_density_ridges(alpha = 0.2, bandwidth=0.0159) +
+   geom_density_ridges(alpha = 0.2, bandwidth=0.03) +
   labs(x = "Speechiness",
        y = NULL,
        fill = "Popularity"
@@ -334,7 +316,7 @@ filter(popularity_level == c("High", "Very Low")) %>%
 songs_ridges %>%
   filter(popularity_level == c("High", "Very Low")) %>%
   ggplot(aes(x = acousticness, y = playlist_genre, fill = popularity_level, color = popularity_level)) +
-   geom_density_ridges(alpha = 0.2, bandwidth=0.0382) +
+   geom_density_ridges(alpha = 0.2, bandwidth=0.05) +
   labs(x = "Acousticness",
        y = NULL,
        fill = "Popularity"
@@ -354,7 +336,7 @@ songs_ridges %>%
 songs_ridges %>%
   filter(popularity_level == c("High", "Very Low")) %>%
   ggplot(aes(x = liveness, y = playlist_genre, fill = popularity_level, color = popularity_level)) +
-   geom_density_ridges(alpha = 0.2, bandwidth=0.0299) +
+   geom_density_ridges(alpha = 0.2, bandwidth=0.04) +
   labs(x = "Liveness",
        y = NULL,
        fill = "Popularity"
@@ -372,9 +354,9 @@ songs_ridges %>%
 
 ```{r Tempo Ridge, echo=FALSE, warning=FALSE}
 songs_ridges %>%
-  filter(popularity_level == c("High", "Very Low")) %>%
+  filter(popularity_level %in% c("High", "Very Low")) %>%
   ggplot(aes(x = tempo, y = playlist_genre, fill = popularity_level, color = popularity_level)) +
-   geom_density_ridges(alpha = 0.2, bandwidth=5.82) +
+   geom_density_ridges(alpha = 0.2, bandwidth=10) +
   labs(x = "Tempo (Bpm)",
        y = NULL,
        fill = "Popularity"
@@ -395,7 +377,7 @@ songs_ridges %>%
   filter(popularity_level == c("High", "Very Low")) %>%
   group_by(popularity_level) %>%
   ggplot(aes(x = duration_ms/1000, y = playlist_genre, fill = popularity_level, color = popularity_level)) +
-  geom_density_ridges(alpha = 0.2, bandwidth=12) +
+  geom_density_ridges(alpha = 0.2, bandwidth=20) +
   labs(x = "Duration (s)",
        y = NULL,
        fill = "Popularity Level"
@@ -415,7 +397,7 @@ songs_ridges %>%
 songs_ridges %>%
   filter(popularity_level == c("High", "Very Low")) %>%
   ggplot(aes(x = instrumentalness, y = playlist_genre, fill = popularity_level, color = popularity_level)) +
-   geom_density_ridges(alpha = 0.2, bandwidth=0.00797) +
+   geom_density_ridges(alpha = 0.2, bandwidth=0.05) +
   labs(x = "Instrumentalness",
        y = NULL,
        fill = "Popularity"

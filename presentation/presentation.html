@@ -31,63 +31,6 @@ class: center, middle, inverse, title-slide
 
 
 
-```r
-clean_edm &lt;- clean_full %&gt;%
-  filter(playlist_genre == "edm") %&gt;%
-  mutate(popularity_level = case_when(
-    track_popularity &lt;= 17 ~ "Very Low",
-    track_popularity &gt; 17 &amp; track_popularity &lt;= 35 ~ "Low",
-    track_popularity &gt; 35 &amp; track_popularity &lt; 49 ~ "Fairly High",
-    track_popularity &gt;= 49 &amp; track_popularity &lt;= 100 ~ "High"
-  ))
-
-clean_latin &lt;- clean_full %&gt;%
-  filter(playlist_genre == "latin") %&gt;%
-  mutate(popularity_level = case_when(
-    track_popularity &lt;= 31 ~ "Very Low",
-    track_popularity &gt; 31 &amp; track_popularity &lt;= 48 ~ "Low",
-    track_popularity &gt; 48 &amp; track_popularity &lt; 63 ~ "Fairly High",
-    track_popularity &gt;= 63 &amp; track_popularity &lt;= 100 ~ "High"
-  ))
-
-clean_rnb &lt;- clean_full %&gt;%
-  filter(playlist_genre == "r&amp;b") %&gt;%
-  mutate(popularity_level = case_when(
-    track_popularity &lt;= 21 ~ "Very Low",
-    track_popularity &gt; 21 &amp; track_popularity &lt;= 43 ~ "Low",
-    track_popularity &gt; 43 &amp; track_popularity &lt; 61 ~ "Fairly High",
-    track_popularity &gt;= 61 &amp; track_popularity &lt;= 100 ~ "High"
-  ))
-
-clean_rap &lt;- clean_full %&gt;%
-  filter(playlist_genre == "rap") %&gt;%
-  mutate(popularity_level = case_when(
-    track_popularity &lt;= 30 ~ "Very Low",
-    track_popularity &gt; 30 &amp; track_popularity &lt;= 47 ~ "Low",
-    track_popularity &gt; 47 &amp; track_popularity &lt; 59 ~ "Fairly High",
-    track_popularity &gt;= 59 &amp; track_popularity &lt;= 100 ~ "High"
-  ))
-
-clean_pop &lt;- clean_full %&gt;%
-  filter(playlist_genre == "pop") %&gt;%
-  mutate(popularity_level = case_when(
-    track_popularity &lt;= 30 ~ "Very Low",
-    track_popularity &gt; 30 &amp; track_popularity &lt;= 50 ~ "Low",
-    track_popularity &gt; 50 &amp; track_popularity &lt; 65 ~ "Fairly High",
-    track_popularity &gt;= 65 &amp; track_popularity &lt;= 100 ~ "High"
-  )) 
-
-clean_rock &lt;- clean_full %&gt;%
-  filter(playlist_genre == "rock") %&gt;%
-  mutate(popularity_level = case_when(
-    track_popularity &lt;= 24 ~ "Very Low",
-    track_popularity &gt; 24 &amp; track_popularity &lt;= 45 ~ "Low",
-    track_popularity &gt; 45 &amp; track_popularity &lt; 61 ~ "Fairly High",
-    track_popularity &gt;= 61 &amp; track_popularity &lt;= 100 ~ "High"
-  )) 
-
-songs_ridges &lt;- rbind(clean_rock, clean_rnb, clean_rap, clean_pop, clean_latin, clean_edm)
-```
 
 class: center, middle
 
@@ -265,13 +208,12 @@ class: inverse, center, middle
 - R&amp;B: Highest likelihood of popularity in lower optimal range
 ---
 
-<<<<<<< HEAD
+
 # Ridge plots continued
 
 
 ---
-=======
->>>>>>> 0f7fe7fd0dfcebb2a5f0f7f846691d7956095414
+
 # Valence Ridge Plot
 &lt;img src="presentation_files/figure-html/Valence Ridge-1.png" width="80%" /&gt;
 ---
@@ -413,7 +355,7 @@ glance(model)
 - goes here
 ]
 .pull-right[
-&lt;img src="presentation_files/figure-html/unnamed-chunk-1-1.png" width="100%" /&gt;
+&lt;img src="presentation_files/figure-html/unnamed-chunk-2-1.png" width="100%" /&gt;
 ]
 
 ---
