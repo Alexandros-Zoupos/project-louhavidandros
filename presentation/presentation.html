@@ -211,6 +211,7 @@ class: inverse, center, middle
 
 ---
 
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
 # Popularity Level
 
 - A new approach was taken by first finding the quartile values for every genre, and then categorising every song's popularity as either "High", "Fairly High", "Low", or "Very Low" depending on which quartile it fell into.
@@ -251,12 +252,56 @@ class: inverse, center, middle
 - EDM: negligible impact
 - Rock, Rap, Pop, Latin: High danceability more likely to be popular
 - R&amp;B: Highest likelihood of popularity in lower optimal range
+---
 
+# Ridge plots
+
+
+---
+# Valence Ridge Plot
+
+```
+## Warning in popularity_level == c("High", "Very Low"): longer object length is
+## not a multiple of shorter object length
+
+## Warning in popularity_level == c("High", "Very Low"): longer object length is
+## not a multiple of shorter object length
+```
+
+```
+## Picking joint bandwidth of 0.0571
+```
+
+&lt;img src="presentation_files/figure-html/Valence Ridge-1.png" width="80%" /&gt;
+---
+# Danceability Ridges Plot
+
+
+```
+## Warning in popularity_level == c("High", "Very Low"): longer object length is
+## not a multiple of shorter object length
+
+## Warning in popularity_level == c("High", "Very Low"): longer object length is
+## not a multiple of shorter object length
+```
+
+```
+## Picking joint bandwidth of 0.0319
+```
+
+&lt;img src="presentation_files/figure-html/Danceability Ridges-1.png" width="80%" /&gt;
 ---
 
 # Multiple Variable Analysis
 
 &lt;img src="presentation_files/figure-html/pop multi-variable graph-1.png" width="80%" /&gt;
+---
+
+# Multiple Variable analysis part 2
+
+&lt;img src="presentation_files/figure-html/Multiple Variable analysis part 2-1.png" width="80%" /&gt;
+
+
 
 # Hello World
 
@@ -350,7 +395,7 @@ glance(model)
 - goes here
 ]
 .pull-right[
-&lt;img src="presentation_files/figure-html/unnamed-chunk-1-1.png" width="100%" /&gt;
+&lt;img src="presentation_files/figure-html/unnamed-chunk-2-1.png" width="100%" /&gt;
 ]
 
 ---
