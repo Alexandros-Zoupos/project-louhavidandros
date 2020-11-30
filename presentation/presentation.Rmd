@@ -1,7 +1,7 @@
 ---
 title: "Exploring the factors of song popularity"
 subtitle: "Using TidyTuesdays Spotify dataset"
-author: "Louhavidandros <br> Alexandros Zoupos, David Aiton, Louis Parker"
+author: "Louhavidandros <br> Alexandros Zoupos, David Aiton, Louis Parker, Harry Rushworth"
 institute: "University of Edinburgh"
 date: "`r Sys.Date()`"
 output:
@@ -24,6 +24,7 @@ library(tidymodels)
 library(palmerpenguins)
 library(knitr)
 library(here)
+library(patchwork)
 ```
 
 ```{r setup, include=FALSE}
@@ -203,6 +204,53 @@ kable(head(rmse), format = "html")
 - Only linear model was tried
 
 ---
+
+# Multiple Variable Analysis
+
+```{r pop multi-variable graph, echo=FALSE}
+mvg_pop <- clean_pop%>%
+  mutate(dance_energy_val=danceability*energy*valence)%>%
+  ggplot(aes(x=popularity_level,y=dance_energy_val, colour=popularity_level))+
+  geom_col()+
+  labs(
+    title = "Pop",
+    y="Count",
+    x="Popularity Level")+
+  theme(legend.position = "none")
+
+mvg_edm <- clean_edm%>%
+  mutate(dance_energy_val=danceability*energy*valence)%>%
+  ggplot(aes(x=popularity_level,y=dance_energy_val, colour=popularity_level))+
+  geom_col()+
+  labs(
+    title = "EDM",
+    y="Count",
+    x="Popularity Level")+
+  theme(legend.position = "none")
+
+mvg_rap <- clean_rap %>%
+  mutate(dance_energy_val=danceability*energy*valence)%>%
+  ggplot(aes(x=popularity_level,y=dance_energy_val, colour=popularity_level))+
+  geom_col()+
+  labs(
+    title = "Rap",
+    y="Count",
+    x="Popularity Level")+
+  theme(legend.position = "none")
+
+mvg_rock <- clean_rock%>%
+  mutate(dance_energy_val=danceability*energy*valence)%>%
+  ggplot(aes(x=popularity_level,y=dance_energy_val, colour=popularity_level))+
+  geom_col()+
+  labs(
+    title = "Rock",
+    y="Count",
+    x="Popularity Level")+
+  theme(legend.position = "none")
+  
+
+ (mvg_edm | mvg_rap)/(mvg_pop | mvg_rock)
+```
 
 # Hello World
 
