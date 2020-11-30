@@ -24,6 +24,8 @@ library(tidymodels)
 library(palmerpenguins)
 library(knitr)
 library(here)
+library(patchwork)
+library(ggridges)
 ```
 
 ```{r setup, include=FALSE}
@@ -106,6 +108,17 @@ clean_pop <- clean_full %>%
     track_popularity > 50 & track_popularity < 65 ~ "Fairly High",
     track_popularity >= 65 & track_popularity <= 100 ~ "High"
   )) 
+
+clean_rock <- clean_full %>%
+  filter(playlist_genre == "rock") %>%
+  mutate(popularity_level = case_when(
+    track_popularity <= 24 ~ "Very Low",
+    track_popularity > 24 & track_popularity <= 45 ~ "Low",
+    track_popularity > 45 & track_popularity < 61 ~ "Fairly High",
+    track_popularity >= 61 & track_popularity <= 100 ~ "High"
+  )) 
+
+all_clean <- rbind(clean_rock, clean_rnb, clean_rap, clean_pop, clean_latin, clean_edm)
 ```
 
 class: center, middle
@@ -194,6 +207,105 @@ kable(head(rmse), format = "html")
 - Only linear model was tried
 
 ---
+
+# Popularity Level
+
+- A new approach was taken by first finding the quartile values for every genre, and then categorising every song's popularity as either "High", "Fairly High", "Low", or "Very Low" depending on which quartile it fell into.
+
+```{r quartile-example, highlight.output = c(6, 11), echo=FALSE, warning=FALSE}
+clean_full %>%
+  group_by(playlist_genre) %>%
+  summarise(quartiles = quantile(track_popularity))
+```
+
+---
+
+# Density Plot
+ -- Optimal Range = range of danceability values where the red line is higher than the blue
+```{r density-plot-example, echo = FALSE}
+clean_pop %>%
+    filter(popularity_level == c("High", "Very Low")) %>%
+  ggplot(aes(x = danceability, color = popularity_level)) +
+  geom_density(adjust = 2) +
+    labs(x = "Danceability",
+       y = "Frequency",
+       color = "Popularity Level") +
+  theme_minimal()
+```
+
+---
+
+# Ridge Plot
+```{r ridge-plot-example, echo=FALSE, warning= FALSE}
+all_clean %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  ggplot(aes(x = danceability, y = playlist_genre, fill = popularity_level, color = popularity_level)) +
+   geom_density_ridges(alpha = 0.2, bandwidth = 0.045) +
+  labs(x = "Danceability",
+       y = NULL,
+       fill = "Popularity Level",
+       title = "Distibution of Danceability Across Genres",
+       subtitle = "Grouped by Most and Least Popular Songs"
+       ) +
+  guides(color = FALSE) +
+  scale_fill_manual(values = c(
+    "Very Low" = "#008dfd",
+    "High" = "#fd0000"
+  )) +
+  theme_minimal()
+```
+- EDM: negligible impact
+- Rock, Rap, Pop, Latin: High danceability more likely to be popular
+- R&B: Highest likelihood of popularity in lower optimal range
+
+---
+
+# Multiple Variable Analysis
+
+```{r pop multi-variable graph, echo=FALSE}
+mvg_pop <- clean_pop%>%
+  mutate(dance_energy_val=danceability*energy*valence)%>%
+  ggplot(aes(x=popularity_level,y=dance_energy_val, colour=popularity_level))+
+  geom_col()+
+  labs(
+    title = "Pop",
+    y="Count",
+    x="Popularity Level")+
+  theme(legend.position = "none")
+
+mvg_edm <- clean_edm%>%
+  mutate(dance_energy_val=danceability*energy*valence)%>%
+  ggplot(aes(x=popularity_level,y=dance_energy_val, colour=popularity_level))+
+  geom_col()+
+  labs(
+    title = "EDM",
+    y="Count",
+    x="Popularity Level")+
+  theme(legend.position = "none")
+
+mvg_rap <- clean_rap %>%
+  mutate(dance_energy_val=danceability*energy*valence)%>%
+  ggplot(aes(x=popularity_level,y=dance_energy_val, colour=popularity_level))+
+  geom_col()+
+  labs(
+    title = "Rap",
+    y="Count",
+    x="Popularity Level")+
+  theme(legend.position = "none")
+
+mvg_rock <- clean_rock%>%
+  mutate(dance_energy_val=danceability*energy*valence)%>%
+  ggplot(aes(x=popularity_level,y=dance_energy_val, colour=popularity_level))+
+  geom_col()+
+  labs(
+    title = "Rock",
+    y="Count",
+    x="Popularity Level")+
+  theme(legend.position = "none")
+  
+
+ (mvg_edm | mvg_rap)/(mvg_pop | mvg_rock)
+```
 
 # Hello World
 
