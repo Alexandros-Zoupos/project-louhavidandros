@@ -212,7 +212,7 @@ kable(head(rmse), format = "html")
 
 - A new approach was taken by first finding the quartile values for every genre, and then categorising every song's popularity as either "High", "Fairly High", "Low", or "Very Low" depending on which quartile it fell into.
 
-```{r quartile-example, highlight.output = c(6, 11), echo=FALSE, warning=FALSE}
+```{r quartile-example, highlight.output = c(6, 11), echo=FALSE, warning=FALSE, message=FALSE}
 quartile_table <- clean_full %>%
   group_by(playlist_genre) %>%
   summarise(quartiles = quantile(track_popularity))
