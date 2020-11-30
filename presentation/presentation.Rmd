@@ -1,7 +1,7 @@
 ---
 title: "Exploring the factors of song popularity"
 subtitle: "Using TidyTuesdays Spotify dataset"
-author: "Louhavidandros <br> Alexandros Zoupos, David Aiton, Louis Parker"
+author: "Louhavidandros <br> Alexandros Zoupos, David Aiton, Harry Rushworth and Louis Parker"
 institute: "University of Edinburgh"
 date: "`r Sys.Date()`"
 output:

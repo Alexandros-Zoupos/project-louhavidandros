@@ -142,7 +142,10 @@ Not only do we gather that on average rock is the least danceable, but we can al
 
 After having looked at individual variables, we explored a combination of variables. The combination of danceability, valence and energy into one variable shows some interesting results when genres are split into popularity levels. In this case the 3 variables were multiplied together to return a variable that measures how happy, danceable and energetic a song is. As shown in graphs, the songs in the "High" bracket for popularity also had the highest value for this new variable in 4 out of the 6 genres. The 2 genres in which "High" wasn't were R&B and Latin; for Latin however it was a very close second and while the "High" group came last in R&B, this can be explained by the nature of R&B as a genre. In summary while this doesn’t explicitly show that the more danceable, energetic and happy the song is the more likely it is to be popular, it does show that popular songs in general, throughout most genres, are more danceable, energetic and happy.
 
-Finally we decided to explore how the trends of popular songs have changed over time. The data was split into decades and the median values of the numeric variables for high popularity songs were calculated and displayed on radar plots. The median values were all divided
+Finally we decided to explore how the trends of popular songs have changed over time. Models were fitted to predict each numeric variable using the song release date as the explanatory variable to see whether there was any relationship between when a song was released and the level of a certain variable it had.
+
+
+
 
 
 
