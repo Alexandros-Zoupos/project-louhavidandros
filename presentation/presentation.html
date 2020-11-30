@@ -86,7 +86,7 @@ clean_rock &lt;- clean_full %&gt;%
     track_popularity &gt;= 61 &amp; track_popularity &lt;= 100 ~ "High"
   )) 
 
-all_clean &lt;- rbind(clean_rock, clean_rnb, clean_rap, clean_pop, clean_latin, clean_edm)
+songs_ridges &lt;- rbind(clean_rock, clean_rnb, clean_rap, clean_pop, clean_latin, clean_edm)
 ```
 
 class: center, middle
@@ -211,33 +211,44 @@ class: inverse, center, middle
 
 ---
 
-&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
 # Popularity Level
 
 - A new approach was taken by first finding the quartile values for every genre, and then categorising every song's popularity as either "High", "Fairly High", "Low", or "Very Low" depending on which quartile it fell into.
 
-
-```
-## `summarise()` regrouping output by 'playlist_genre' (override with `.groups` argument)
-```
-
-```
-## # A tibble: 30 x 2
-## # Groups:   playlist_genre [6]
-##    playlist_genre quartiles
-##    &lt;chr&gt;              &lt;dbl&gt;
-##  1 edm                    0
-*##  2 edm                   17
-##  3 edm                   35
-##  4 edm                   49
-##  5 edm                   99
-##  6 latin                  0
-*##  7 latin                 31
-##  8 latin                 48
-##  9 latin                 63
-## 10 latin                 98
-## # … with 20 more rows
-```
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; playlist_genre &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; quartiles &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; edm &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; edm &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 17 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; edm &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 35 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; edm &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 49 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; edm &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 99 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; latin &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
 
 ---
 
@@ -254,10 +265,13 @@ class: inverse, center, middle
 - R&amp;B: Highest likelihood of popularity in lower optimal range
 ---
 
+<<<<<<< HEAD
 # Ridge plots continued
 
 
 ---
+=======
+>>>>>>> 0f7fe7fd0dfcebb2a5f0f7f846691d7956095414
 # Valence Ridge Plot
 &lt;img src="presentation_files/figure-html/Valence Ridge-1.png" width="80%" /&gt;
 ---
@@ -399,7 +413,7 @@ glance(model)
 - goes here
 ]
 .pull-right[
-&lt;img src="presentation_files/figure-html/unnamed-chunk-2-1.png" width="100%" /&gt;
+&lt;img src="presentation_files/figure-html/unnamed-chunk-1-1.png" width="100%" /&gt;
 ]
 
 ---
