@@ -260,15 +260,14 @@ songs_ridges %>%
 - R&B: Highest likelihood of popularity in lower optimal range
 ---
 
-<<<<<<< HEAD
+
 # Ridge plots continued
 
 ```{r,echo=FALSE}
 songs_ridges <- rbind(clean_edm, clean_latin, clean_pop, clean_rap, clean_rnb, clean_rock)
 ```
 ---
-=======
->>>>>>> 0f7fe7fd0dfcebb2a5f0f7f846691d7956095414
+
 # Valence Ridge Plot
 ```{r Valence Ridge, echo=FALSE, warning= FALSE}
 songs_ridges %>%
