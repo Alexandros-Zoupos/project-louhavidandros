@@ -523,3 +523,22 @@ spotify_songs_count%>%
   count(playlist_genre, sort = TRUE)
   #filter(duplicated(track_artist)==FALSE)
 ```
+```{r edm multi-variable graph, echo=FALSE }
+mvg_edm <- clean_edm%>%
+  mutate(dance_energy_val=danceability*energy*valence)%>%
+  ggplot(aes(x=popularity_level,y=dance_energy_val, colour=popularity_level))+
+  geom_col()
+mvg_edm
+```
+
+```{r rap multi-variable graph, echo=FALSE}
+mvg_rap <- clean_rap%>%
+  mutate(dance_energy_val=danceability*energy*valence)%>%
+  ggplot(aes(x=popularity_level,y=dance_energy_val, colour=popularity_level))+
+  geom_col()
+mvg_rap
+```
+
+```{r multi-variable graph, echo=FALSE}
+(mvg_edm | mvg_rap)/mvg_pop
+```
