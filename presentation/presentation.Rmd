@@ -259,18 +259,18 @@ all_clean %>%
 - R&B: Highest likelihood of popularity in lower optimal range
 ---
 
-# Ridge plots
+# Ridge plots continued
 
 ```{r,echo=FALSE}
 songs_ridges <- rbind(clean_edm, clean_latin, clean_pop, clean_rap, clean_rnb, clean_rock)
 ```
 ---
 # Valence Ridge Plot
-```{r Valence Ridge, echo=FALSE}
+```{r Valence Ridge, echo=FALSE, warning= FALSE}
 songs_ridges %>%
   filter(popularity_level == c("High", "Very Low")) %>%
   ggplot(aes(x = valence, y = playlist_genre, fill = popularity_level, color = popularity_level)) +
-   geom_density_ridges(alpha = 0.2) +
+   geom_density_ridges(alpha = 0.2, bandwidth=0.0571) +
   labs(x = "Valence",
        y = NULL,
        fill = "Popularity Level"
@@ -283,16 +283,17 @@ songs_ridges %>%
   theme_minimal()
 ```
 ---
-# Danceability Ridges Plot
+# Energy Ridges Plot
 
-```{r Danceability Ridges, echo=FALSE}
+```{r Energy Ridges, echo=FALSE, warning=FALSE}
 songs_ridges %>%
   filter(popularity_level == c("High", "Very Low")) %>%
-  ggplot(aes(x = danceability, y = playlist_genre, fill = popularity_level, color = popularity_level)) +
-   geom_density_ridges(alpha = 0.2) +
-  labs(x = "Danceability",
+  ggplot(aes(x = energy, y = playlist_genre, fill = popularity_level, color = popularity_level)) +
+   geom_density_ridges(alpha = 0.2, bandwidth= 0.0409) +
+  labs(x = "Energy",
        y = NULL,
-       fill = "Popularity Level")  +
+       fill = "Popularity Level"
+       ) +
   guides(color = FALSE) +
   scale_fill_manual(values = c(
     "Very Low" = "#008dfd",
@@ -302,6 +303,127 @@ songs_ridges %>%
 
 ```
 ---
+
+# Speechiness Ridge Plot
+
+```{r Speechiness Ridge, echo=FALSE,warning=FALSE}
+songs_ridges%>%
+filter(popularity_level == c("High", "Very Low")) %>%
+  ggplot(aes(x = speechiness, y = playlist_genre, fill = popularity_level, color = popularity_level)) +
+   geom_density_ridges(alpha = 0.2, bandwidth=0.0159) +
+  labs(x = "Speechiness",
+       y = NULL,
+       fill = "Popularity"
+       ) +
+  guides(color = FALSE) +
+  scale_fill_manual(values = c(
+    "Very Low" = "#008dfd",
+    "High" = "#fd0000"
+  )) +
+  theme_minimal()
+```
+---
+
+# Acousticness Ridge Plot
+
+```{r Acousticness Ridge, echo=FALSE, warning=FALSE}
+songs_ridges %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  ggplot(aes(x = acousticness, y = playlist_genre, fill = popularity_level, color = popularity_level)) +
+   geom_density_ridges(alpha = 0.2, bandwidth=0.0382) +
+  labs(x = "Acousticness",
+       y = NULL,
+       fill = "Popularity"
+       ) +
+  guides(color = FALSE) +
+  scale_fill_manual(values = c(
+    "Very Low" = "#008dfd",
+    "High" = "#fd0000"
+  )) +
+  theme_minimal()
+```
+---
+
+# Liveness Ridge Plot
+
+```{r Liveness Ridge, echo=FALSE, warning=FALSE}
+songs_ridges %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  ggplot(aes(x = liveness, y = playlist_genre, fill = popularity_level, color = popularity_level)) +
+   geom_density_ridges(alpha = 0.2, bandwidth=0.0299) +
+  labs(x = "Liveness",
+       y = NULL,
+       fill = "Popularity"
+       ) +
+  guides(color = FALSE) +
+  scale_fill_manual(values = c(
+    "Very Low" = "#008dfd",
+    "High" = "#fd0000"
+  )) +
+  theme_minimal()
+```
+---
+
+# Tempo Ridge Plot
+
+```{r Tempo Ridge, echo=FALSE, warning=FALSE}
+songs_ridges %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  ggplot(aes(x = tempo, y = playlist_genre, fill = popularity_level, color = popularity_level)) +
+   geom_density_ridges(alpha = 0.2, bandwidth=5.82) +
+  labs(x = "Tempo (Bpm)",
+       y = NULL,
+       fill = "Popularity"
+       ) +
+  guides(color = FALSE) +
+  scale_fill_manual(values = c(
+    "Very Low" = "#008dfd",
+    "High" = "#fd0000"
+  )) +
+  theme_minimal()
+```
+---
+
+# Duration Ridge Plot
+
+```{r Duration Ridge, echo=FALSE, warning=FALSE}
+songs_ridges %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  group_by(popularity_level) %>%
+  ggplot(aes(x = duration_ms/1000, y = playlist_genre, fill = popularity_level, color = popularity_level)) +
+  geom_density_ridges(alpha = 0.2, bandwidth=12) +
+  labs(x = "Duration (s)",
+       y = NULL,
+       fill = "Popularity Level"
+       ) +
+  guides(color = FALSE) +
+  scale_fill_manual(values = c(
+    "Very Low" = "#008dfd",
+    "High" = "#fd0000"
+  )) +
+  theme_minimal()
+```
+---
+
+# Instrumentalness Ridge Plot
+
+```{r Instrumentalness Ridge, echo=FALSE,warning=FALSE}
+songs_ridges %>%
+  filter(popularity_level == c("High", "Very Low")) %>%
+  ggplot(aes(x = instrumentalness, y = playlist_genre, fill = popularity_level, color = popularity_level)) +
+   geom_density_ridges(alpha = 0.2, bandwidth=0.00797) +
+  labs(x = "Instrumentalness",
+       y = NULL,
+       fill = "Popularity"
+       ) +
+  guides(color = FALSE) +
+  scale_fill_manual(values = c(
+    "Very Low" = "#008dfd",
+    "High" = "#fd0000"
+  )) +
+  theme_minimal()
+```
+
 
 # Multiple Variable Analysis
 
