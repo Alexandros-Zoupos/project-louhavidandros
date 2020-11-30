@@ -28,12 +28,12 @@ library(patchwork)
 library(ggridges)
 ```
 
-```{r setup, include=FALSE}
+```{r setup, include = FALSE}
 # For better figure resolution
 knitr::opts_chunk$set(fig.retina = 3, dpi = 300, fig.width = 6, fig.asp = 0.618, out.width = "80%")
 ```
 
-```{r load-data, include=FALSE}
+```{r load-data, include = FALSE}
 spotify_songs <- readr::read_csv(here('data/Spotify.csv'))
 ```
 
@@ -41,12 +41,12 @@ spotify_songs <- readr::read_csv(here('data/Spotify.csv'))
 clean_songs <- spotify_songs %>%
   filter(duplicated(track_name) == FALSE)
 
-clean_full <- spotify_songs%>%
+clean_full <- spotify_songs %>%
   group_by(playlist_genre) %>%
   filter(duplicated(track_name) == FALSE)
 ```
 
-```{r popularity_level_clean_data, include=FALSE}
+```{r popularity_level_clean_data, include = FALSE}
 clean_edm <- clean_full %>%
   filter(playlist_genre == "edm") %>%
   mutate(popularity_level = case_when(
@@ -115,11 +115,11 @@ class: inverse, center, middle
 # Section title
 
 ---
-#Slide with messy plot - Alex
+# Slide with messy plot - Alex
 
 - Over 23,000 observations
 
-```{r messy-plot, echo=FALSE}
+```{r messy-plot, echo = FALSE}
 clean_songs %>%
   ggplot(aes(x = tempo, y = track_popularity)) +
   geom_point() +
@@ -131,21 +131,21 @@ clean_songs %>%
 ```
 
 ---
-#Slide with linear fit - Alex. Don't forget to remove track popularity when it is added
+# Slide with linear fit - Alex. Don't forget to remove track popularity when it is added
 
-```{r data-split, echo=FALSE}
+```{r data-split, echo = FALSE}
 set.seed(666)
 clean_songs_split <- initial_split(clean_songs)
 spotify_train <- training(clean_songs_split)
 spotify_test <- testing(clean_songs_split)
 ```
 
-```{r linear-mod, echo=FALSE}
+```{r linear-mod, echo = FALSE}
 songs_linear_mod <- linear_reg() %>%
   set_engine("lm")
 ```
 
-```{r songs-recipe, echo=FALSE}
+```{r songs-recipe, echo = FALSE}
 songs_rec <- recipe(track_popularity ~ ., data = clean_songs) %>%
   update_role(track_name, new_role = "ID") %>%
   update_role(track_artist, new_role = "Artist") %>%
@@ -154,25 +154,25 @@ songs_rec <- recipe(track_popularity ~ ., data = clean_songs) %>%
   step_zv(all_predictors())
 ```
 
-```{r workflow, echo=FALSE}
+```{r workflow, echo = FALSE}
 songs_wflow <- workflow() %>%
   add_model(songs_linear_mod) %>%
   add_recipe(songs_rec)
 ```
 
-```{r fit-for-training, echo=FALSE}
+```{r fit-for-training, echo = FALSE}
 songs_fit <- songs_wflow %>%
   fit(data = spotify_train)
 ```
 
-```{r pred-testing, echo=FALSE}
+```{r pred-testing, echo = FALSE}
 songs_test_pred <- predict(songs_fit, new_data = spotify_test) %>%
   bind_cols(spotify_test %>% select(track_popularity, track_name, track_artist))
 
 kable(head(songs_test_pred), format = "html")
 ```
 
-```{r rsq-rmse, echo=FALSE}
+```{r rsq-rmse, echo = FALSE}
 rsquared <- rsq(songs_test_pred, truth = track_popularity, estimate = .pred)
 
 kable(head(rsquared), format = "html")
@@ -183,7 +183,7 @@ kable(head(rmse), format = "html")
 ```
 
 ---
-#Limitations
+# Limitations
 
 - Limited number of songs
 - Problem with `track_popularity` variable
@@ -195,7 +195,7 @@ kable(head(rmse), format = "html")
 
 - A new approach was taken by first finding the quartile values for every genre, and then categorising every song's popularity as either "High", "Fairly High", "Low", or "Very Low" depending on which quartile it fell into.
 
-```{r quartile-example, highlight.output = c(6, 11), echo=FALSE, warning=FALSE, message=FALSE}
+```{r quartile-example, highlight.output = c(6, 11), echo = FALSE, warning = FALSE, message = FALSE}
 quartile_table <- clean_full %>%
   group_by(playlist_genre) %>%
   summarise(quartiles = quantile(track_popularity))
@@ -205,11 +205,11 @@ kable(head(quartile_table), format = "html")
 
 ---
 
-# Density Plot
+# Danceability Density Plot - Pop
  -- Optimal Range = range of danceability values where the red line is higher than the blue
 ```{r density-plot-example, echo = FALSE}
 clean_pop %>%
-    filter(popularity_level == c("High", "Very Low")) %>%
+    filter(popularity_level %in% c("High", "Very Low")) %>%
   ggplot(aes(x = danceability, color = popularity_level)) +
   geom_density(adjust = 2) +
     labs(x = "Danceability",
@@ -220,10 +220,10 @@ clean_pop %>%
 
 ---
 
-# Ridge Plot
-```{r ridge-plot-example, echo=FALSE, warning= FALSE}
+# Danceability Ridge Plot
+```{r ridge-plot-example, echo = FALSE, warning = FALSE}
 songs_ridges %>%
-  filter(popularity_level == c("High", "Very Low")) %>%
+  filter(popularity_level %in% c("High", "Very Low")) %>%
   ggplot(aes(x = danceability, y = playlist_genre, fill = popularity_level, color = popularity_level)) +
    geom_density_ridges(alpha = 0.2, bandwidth = 0.045) +
   labs(x = "Danceability",
@@ -243,20 +243,12 @@ songs_ridges %>%
 - R&B: Highest likelihood of popularity in lower optimal range
 ---
 
-
-# Ridge plots continued
-
-```{r,echo=FALSE}
-songs_ridges <- rbind(clean_edm, clean_latin, clean_pop, clean_rap, clean_rnb, clean_rock)
-```
----
-
 # Valence Ridge Plot
-```{r Valence Ridge, echo=FALSE, warning= FALSE}
+```{r Valence Ridge, echo = FALSE, warning = FALSE}
 songs_ridges %>%
-  filter(popularity_level == c("High", "Very Low")) %>%
+  filter(popularity_level %in% c("High", "Very Low")) %>%
   ggplot(aes(x = valence, y = playlist_genre, fill = popularity_level, color = popularity_level)) +
-   geom_density_ridges(alpha = 0.2, bandwidth=0.085) +
+   geom_density_ridges(alpha = 0.2, bandwidth = 0.085) +
   labs(x = "Valence",
        y = NULL,
        fill = "Popularity Level"
@@ -271,11 +263,11 @@ songs_ridges %>%
 ---
 # Energy Ridges Plot
 
-```{r Energy Ridges, echo=FALSE, warning=FALSE}
+```{r Energy Ridges, echo = FALSE, warning = FALSE}
 songs_ridges %>%
-  filter(popularity_level == c("High", "Very Low")) %>%
+  filter(popularity_level %in% c("High", "Very Low")) %>%
   ggplot(aes(x = energy, y = playlist_genre, fill = popularity_level, color = popularity_level)) +
-   geom_density_ridges(alpha = 0.2, bandwidth= 0.07) +
+   geom_density_ridges(alpha = 0.2, bandwidth = 0.07) +
   labs(x = "Energy",
        y = NULL,
        fill = "Popularity Level"
@@ -292,14 +284,14 @@ songs_ridges %>%
 
 # Speechiness Ridge Plot
 
-```{r Speechiness Ridge, echo=FALSE,warning=FALSE}
-songs_ridges%>%
-filter(popularity_level == c("High", "Very Low")) %>%
+```{r Speechiness Ridge, echo = FALSE, warning = FALSE}
+songs_ridges %>%
+filter(popularity_level %in% c("High", "Very Low")) %>%
   ggplot(aes(x = speechiness, y = playlist_genre, fill = popularity_level, color = popularity_level)) +
-   geom_density_ridges(alpha = 0.2, bandwidth=0.03) +
+   geom_density_ridges(alpha = 0.2, bandwidth = 0.04) +
   labs(x = "Speechiness",
        y = NULL,
-       fill = "Popularity"
+       fill = "Popularity Level"
        ) +
   guides(color = FALSE) +
   scale_fill_manual(values = c(
@@ -312,14 +304,14 @@ filter(popularity_level == c("High", "Very Low")) %>%
 
 # Acousticness Ridge Plot
 
-```{r Acousticness Ridge, echo=FALSE, warning=FALSE}
+```{r Acousticness Ridge, echo = FALSE, warning = FALSE}
 songs_ridges %>%
-  filter(popularity_level == c("High", "Very Low")) %>%
+  filter(popularity_level %in% c("High", "Very Low")) %>%
   ggplot(aes(x = acousticness, y = playlist_genre, fill = popularity_level, color = popularity_level)) +
-   geom_density_ridges(alpha = 0.2, bandwidth=0.05) +
+   geom_density_ridges(alpha = 0.2, bandwidth = 0.05) +
   labs(x = "Acousticness",
        y = NULL,
-       fill = "Popularity"
+       fill = "Popularity Level"
        ) +
   guides(color = FALSE) +
   scale_fill_manual(values = c(
@@ -332,14 +324,14 @@ songs_ridges %>%
 
 # Liveness Ridge Plot
 
-```{r Liveness Ridge, echo=FALSE, warning=FALSE}
+```{r Liveness Ridge, echo = FALSE, warning = FALSE}
 songs_ridges %>%
-  filter(popularity_level == c("High", "Very Low")) %>%
+  filter(popularity_level %in% c("High", "Very Low")) %>%
   ggplot(aes(x = liveness, y = playlist_genre, fill = popularity_level, color = popularity_level)) +
-   geom_density_ridges(alpha = 0.2, bandwidth=0.04) +
+   geom_density_ridges(alpha = 0.2, bandwidth = 0.045) +
   labs(x = "Liveness",
        y = NULL,
-       fill = "Popularity"
+       fill = "Popularity Level"
        ) +
   guides(color = FALSE) +
   scale_fill_manual(values = c(
@@ -352,14 +344,14 @@ songs_ridges %>%
 
 # Tempo Ridge Plot
 
-```{r Tempo Ridge, echo=FALSE, warning=FALSE}
+```{r Tempo Ridge, echo = FALSE, warning = FALSE}
 songs_ridges %>%
   filter(popularity_level %in% c("High", "Very Low")) %>%
   ggplot(aes(x = tempo, y = playlist_genre, fill = popularity_level, color = popularity_level)) +
-   geom_density_ridges(alpha = 0.2, bandwidth=10) +
+   geom_density_ridges(alpha = 0.2, bandwidth = 10) +
   labs(x = "Tempo (Bpm)",
        y = NULL,
-       fill = "Popularity"
+       fill = "Popularity Level"
        ) +
   guides(color = FALSE) +
   scale_fill_manual(values = c(
@@ -372,12 +364,12 @@ songs_ridges %>%
 
 # Duration Ridge Plot
 
-```{r Duration Ridge, echo=FALSE, warning=FALSE}
+```{r Duration Ridge, echo = FALSE, warning = FALSE}
 songs_ridges %>%
-  filter(popularity_level == c("High", "Very Low")) %>%
+  filter(popularity_level %in% c("High", "Very Low")) %>%
   group_by(popularity_level) %>%
   ggplot(aes(x = duration_ms/1000, y = playlist_genre, fill = popularity_level, color = popularity_level)) +
-  geom_density_ridges(alpha = 0.2, bandwidth=20) +
+  geom_density_ridges(alpha = 0.2, bandwidth = 20) +
   labs(x = "Duration (s)",
        y = NULL,
        fill = "Popularity Level"
@@ -393,14 +385,14 @@ songs_ridges %>%
 
 # Instrumentalness Ridge Plot
 
-```{r Instrumentalness Ridge, echo=FALSE,warning=FALSE}
+```{r Instrumentalness Ridge, echo = FALSE, warning = FALSE}
 songs_ridges %>%
-  filter(popularity_level == c("High", "Very Low")) %>%
+  filter(popularity_level %in% c("High", "Very Low")) %>%
   ggplot(aes(x = instrumentalness, y = playlist_genre, fill = popularity_level, color = popularity_level)) +
-   geom_density_ridges(alpha = 0.2, bandwidth=0.05) +
+   geom_density_ridges(alpha = 0.2, bandwidth = 0.06) +
   labs(x = "Instrumentalness",
        y = NULL,
-       fill = "Popularity"
+       fill = "Popularity Level"
        ) +
   guides(color = FALSE) +
   scale_fill_manual(values = c(
@@ -413,45 +405,45 @@ songs_ridges %>%
 
 # Multiple Variable Analysis
 
-```{r pop multi-variable graph, echo=FALSE}
-mvg_pop <- clean_pop%>%
-  mutate(dance_energy_val=danceability*energy*valence)%>%
-  ggplot(aes(x=popularity_level,y=dance_energy_val, colour=popularity_level))+
-  geom_col()+
+```{r pop multi-variable graph, echo = FALSE}
+mvg_pop <- clean_pop %>%
+  mutate(dance_energy_val = danceability*energy*valence) %>%
+  ggplot(aes(x = popularity_level, y = dance_energy_val, colour = popularity_level)) +
+  geom_col() +
   labs(
     title = "Pop",
-    y="Count",
-    x="Popularity Level")+
+    y = "Count",
+    x = "Popularity Level") +
   theme(legend.position = "none")
 
-mvg_edm <- clean_edm%>%
-  mutate(dance_energy_val=danceability*energy*valence)%>%
-  ggplot(aes(x=popularity_level,y=dance_energy_val, colour=popularity_level))+
-  geom_col()+
+mvg_edm <- clean_edm %>%
+  mutate(dance_energy_val = danceability*energy*valence) %>%
+  ggplot(aes(x = popularity_level, y = dance_energy_val, colour = popularity_level)) +
+  geom_col() +
   labs(
     title = "EDM",
-    y="Count",
-    x="Popularity Level")+
+    y = "Count",
+    x = "Popularity Level") +
   theme(legend.position = "none")
 
 mvg_rap <- clean_rap %>%
-  mutate(dance_energy_val=danceability*energy*valence)%>%
-  ggplot(aes(x=popularity_level,y=dance_energy_val, colour=popularity_level))+
-  geom_col()+
+  mutate(dance_energy_val = danceability*energy*valence) %>%
+  ggplot(aes(x = popularity_level, y = dance_energy_val, colour = popularity_level)) +
+  geom_col() +
   labs(
     title = "Rap",
-    y="Count",
-    x="Popularity Level")+
+    y = "Count",
+    x = "Popularity Level") +
   theme(legend.position = "none")
 
-mvg_rock <- clean_rock%>%
-  mutate(dance_energy_val=danceability*energy*valence)%>%
-  ggplot(aes(x=popularity_level,y=dance_energy_val, colour=popularity_level))+
-  geom_col()+
+mvg_rock <- clean_rock %>%
+  mutate(dance_energy_val = danceability*energy*valence) %>%
+  ggplot(aes(x = popularity_level,y = dance_energy_val, colour = popularity_level)) +
+  geom_col() +
   labs(
     title = "Rock",
-    y="Count",
-    x="Popularity Level")+
+    y = "Count",
+    x = "Popularity Level") +
   theme(legend.position = "none")
   
 
@@ -461,25 +453,25 @@ mvg_rock <- clean_rock%>%
 
 # Multiple Variable analysis part 2
 
-```{r Multiple Variable analysis part 2, echo=FALSE}
-mvg_latin <- clean_latin%>%
-  mutate(dance_energy_val=danceability*energy*valence)%>%
-  ggplot(aes(x=popularity_level,y=dance_energy_val, colour=popularity_level))+
-  geom_col()+
+```{r Multiple Variable analysis part 2, echo = FALSE}
+mvg_latin <- clean_latin  %>%
+  mutate(dance_energy_val = danceability*energy*valence) %>%
+  ggplot(aes(x = popularity_level, y = dance_energy_val, colour = popularity_level)) +
+  geom_col() +
   labs(
     title = "Latin",
-    y="Count",
-    x="Popularity Level")+
+    y = "Count",
+    x = "Popularity Level") +
   theme(legend.position = "none")
 
-mvg_rnb <- clean_rnb%>%
-  mutate(dance_energy_val=danceability*energy*valence)%>%
-  ggplot(aes(x=popularity_level,y=dance_energy_val, colour=popularity_level))+
-  geom_col()+
+mvg_rnb <- clean_rnb %>%
+  mutate(dance_energy_val = danceability*energy*valence)  %>%
+  ggplot(aes(x = popularity_level, y = dance_energy_val, colour = popularity_level)) +
+  geom_col() +
   labs(
     title = "R&B",
-    y="Count",
-    x="Popularity Level")+
+    y = "Count",
+    x = "Popularity Level") +
   theme(legend.position = "none")
 
 mvg_rnb+mvg_latin
