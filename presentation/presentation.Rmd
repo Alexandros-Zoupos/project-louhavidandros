@@ -106,6 +106,15 @@ clean_pop <- clean_full %>%
     track_popularity > 50 & track_popularity < 65 ~ "Fairly High",
     track_popularity >= 65 & track_popularity <= 100 ~ "High"
   )) 
+
+clean_rock <- clean_full %>%
+  filter(playlist_genre == "pop") %>%
+  mutate(popularity_level = case_when(
+    track_popularity <= 24 ~ "Very Low",
+    track_popularity > 24 & track_popularity <= 45 ~ "Low",
+    track_popularity > 45 & track_popularity < 61 ~ "Fairly High",
+    track_popularity >= 61 & track_popularity <= 100 ~ "High"
+  )) 
 ```
 
 class: center, middle
