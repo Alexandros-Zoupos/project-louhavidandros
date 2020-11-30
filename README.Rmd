@@ -4,7 +4,7 @@ author: by Louhavidandros
 output: github_document
 ---
 
-```{r load-packages, echo = FALSE}
+```{r load-packages, echo = FALSE, include = FALSE}
 library(tidyverse)
 library(dplyr)
 library(ggridges)
@@ -12,7 +12,7 @@ library(fmsb)
 library(ggradar)
 ```
 
-```{r load-data, echo= FALSE}
+```{r load-data, echo= FALSE, include = FALSE}
 spotify_songs <- read_csv(here::here("data/Spotify.csv"))
 ```
 
@@ -42,7 +42,7 @@ clean_full <- spotify_songs%>%
   filter(duplicated(track_name) == FALSE)
 ```
 
-```{r popularity_level_clean_data}
+```{r popularity_level_clean_data, include = FALSE}
 clean_edm <- clean_full %>%
   filter(playlist_genre == "edm") %>%
   mutate(popularity_level = case_when(
