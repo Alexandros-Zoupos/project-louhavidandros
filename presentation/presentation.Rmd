@@ -115,9 +115,6 @@ class: inverse, center, middle
 # Section title
 
 ---
-# Slide with messy plot - Alex
-
-- Over 23,000 observations
 
 ```{r messy-plot, echo = FALSE}
 clean_songs %>%
@@ -130,8 +127,9 @@ clean_songs %>%
   scale_color_viridis_d()
 ```
 
+- Over 23,000 observations
 ---
-# Slide with linear fit - Alex. Don't forget to remove track popularity when it is added
+
 
 ```{r data-split, echo = FALSE}
 set.seed(666)
@@ -164,6 +162,7 @@ songs_wflow <- workflow() %>%
 songs_fit <- songs_wflow %>%
   fit(data = spotify_train)
 ```
+Track popularity predicted by model vs actual track popularity
 
 ```{r pred-testing, echo = FALSE}
 songs_test_pred <- predict(songs_fit, new_data = spotify_test) %>%
@@ -171,6 +170,8 @@ songs_test_pred <- predict(songs_fit, new_data = spotify_test) %>%
 
 kable(head(songs_test_pred), format = "html")
 ```
+
+R squared (rsq) and root mean square error (rmse) of model
 
 ```{r rsq-rmse, echo = FALSE}
 rsquared <- rsq(songs_test_pred, truth = track_popularity, estimate = .pred)
@@ -185,10 +186,22 @@ kable(head(rmse), format = "html")
 ---
 # Limitations
 
-- Limited number of songs
-- Problem with `track_popularity` variable
-- Only linear model was tried
+- Limited number of songs, only 5,000 songs were in the data set
 
+--
+
+
+- `track_popularity` variable does not take into account the popularity that songs had at the time they were released
+
+--
+
+
+- Only a linear model between the `track_popularity` and the other variables was tried
+
+--
+
+
+- Some songs may have been categorized in the wrong genre
 ---
 
 # Popularity Level
@@ -485,6 +498,10 @@ mvg_rnb+mvg_latin
 
 - Make sure to commit and push all resulting files to your GitHub repo
 
+---
+# Thank you for listening
+
+You can find the slides of this presentation here: put link. 
 ---
 
 class: inverse, middle, center
