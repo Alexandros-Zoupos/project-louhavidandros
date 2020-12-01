@@ -1,5 +1,5 @@
 ---
-title: "Exploring the factors of song popularity"
+title: "Exploring the Factors of Song Popularity"
 subtitle: "Using TidyTuesdays Spotify dataset"
 author: "Louhavidandros <br> Alexandros Zoupos, David Aiton, Harry Rushworth and Louis Parker"
 institute: "University of Edinburgh"
@@ -274,7 +274,7 @@ songs_ridges %>%
   theme_minimal()
 ```
 ---
-# Energy Ridges Plot
+# Energy Ridge Plot
 
 ```{r energy-ridges, echo = FALSE}
 songs_ridges %>%
