@@ -118,13 +118,14 @@ class: inverse, center, middle
 
 ```{r messy-plot, echo = FALSE}
 clean_songs %>%
-  ggplot(aes(x = tempo, y = track_popularity)) +
-  geom_point() +
-  labs(x = "Tempo (beat per minute)",
-       y = "Track popularity",
-       title = "Track popularity vs tempo") +
-  theme_minimal() +
-  scale_color_viridis_d()
+ggplot(aes(x = speechiness, y = track_popularity)) +
+geom_point() +
+geom_smooth() +
+labs(x = "Speechiness",
+y = "Track popularity",
+title = "Track popularity vs tempo") +
+theme_minimal() +
+scale_color_viridis_d()
 ```
 
 - Over 23,000 observations
@@ -490,13 +491,30 @@ mvg_rnb <- clean_rnb %>%
 mvg_rnb+mvg_latin
 ```
 
+---
 
+# Changes in Trends Over Time
 
-# Hello World
+```{r, include = FALSE}
+clean_pop %>%
+  mutate(track_album_release_year = as.integer(str_sub(track_album_release_date, end = 4))) %>%
+  filter(track_album_release_year >= 1970) %>%
+  group_by(track_album_release_year) %>%
+  summarise(acousticness = mean(acousticness), danceability = mean(danceability), energy = mean(energy),
+            instrumentalness = mean(instrumentalness), liveness = mean(liveness), 
+            speechiness = mean(speechiness), popularity = mean(track_popularity)/100) %>%
+  pivot_longer(cols = c(danceability, energy, speechiness, acousticness, instrumentalness,
+         liveness, popularity)) %>%
+  ggplot(aes(x = track_album_release_year, y = value, colour = name)) +
+  geom_point()+
+  geom_smooth() +
+  theme_minimal() +
+  facet_wrap(~name)
+```
 
-- Click the `Knit` button to compile your presentation
+---
+#The models for the variables
 
-- Make sure to commit and push all resulting files to your GitHub repo
 
 ---
 # Thank you for listening
