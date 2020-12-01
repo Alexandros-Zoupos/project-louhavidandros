@@ -38,6 +38,28 @@ class: center, middle
 
 ---
 
+
+```r
+clean_full &lt;- spotify_songs %&gt;%
+  group_by(playlist_genre) %&gt;%
+  filter(duplicated(track_name) == FALSE)
+
+clean_rock &lt;- clean_full %&gt;%
+  filter(playlist_genre == "rock") %&gt;%
+  mutate(popularity_level = case_when(
+    track_popularity &lt;= 24 ~ "Very Low",
+    track_popularity &gt; 24 &amp; track_popularity &lt;= 45 ~ "Low",
+    track_popularity &gt; 45 &amp; track_popularity &lt; 61 ~ "Fairly High",
+    track_popularity &gt;= 61 &amp; track_popularity &lt;= 100 ~ "High"
+  )) 
+
+songs_ridges &lt;- rbind(clean_rock, clean_rnb, clean_rap, clean_pop, clean_latin, clean_edm)
+```
+
+github: rfordatascience/tidytuesday
+
+---
+
 class: inverse, center, middle
 
 # Section title
@@ -287,7 +309,7 @@ R squared (rsq) and root mean square error (rmse) of model
 ```
 ## parsnip model object
 ## 
-## Fit time:  3ms 
+## Fit time:  2ms 
 ## 
 ## Call:
 ## stats::lm(formula = danceability ~ track_album_release_year, 
