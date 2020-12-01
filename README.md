@@ -14,7 +14,10 @@ popularity. Our goal was to explore every genre of music in the data set
 and see for each genre how the numerical variables affected a song’s
 popularity; once we had this we then wanted to compare this across the
 genres to see whether they had different factors that contributed to
-making songs popular.
+making songs popular. Finally we planned to look at how the
+characteristics of popular songs have changed over time, and to predict
+what characteristics a popular song might have if it was released next
+year.
 
 Prior to conducting any analysis the data set was cleaned as best we
 could by filtering for each genre and removing all repeated songs (there
@@ -23,15 +26,16 @@ a given genre). This way songs could appear multiple times if their
 genre is ambiguous, but repeats will not impact the analysis of one
 genre by itself.
 
-To begin with, we did some very general analysis and looked at which
-genres and subgenres of music were the most popular overall, we then
-decided to do a genre by genre analysis of each variable by creating
-scatter plots with a `geom_smooth` line, as well as a linear model which
-would use every numerical variable as an explanatory variable to try and
-predict track popularity. The scatter plots were unsuccessful however,
-and the linear model we produced had an R squared value of 0.09 and an
-rmse value of 22.5 which are clearly undesirable values when searching
-for a correlation.
+To begin with, we decided to do a genre by genre analysis of each
+variable by creating scatter plots with a `geom_smooth` line, as well as
+a linear model which would use every numerical variable as an
+explanatory variable to try and predict track popularity. The scatter
+plots were unsuccessful however, and the linear model we produced had an
+R squared value of 0.09 and an rmse value of 22.5 which means that
+either the model does not explain the variable and another type of model
+should have been used, or that the variables may not explain the data
+well. However, since we have not learned other models we decided to
+examine in further detail the second case.
 
 ## Density and Ridge Plots
 
@@ -54,46 +58,38 @@ for song popularity, as this is where if you picked a pop song at random
 you would have a higher chance of it being very popular than being very
 unpopular.
 
-These density graphs were made for every variable for each genre and
-once these were created and we found which variables had interesting
-information, we used ridge plots to be able to compare the distributions
-across genres. For example:
-
-    ## Warning in popularity_level == c("High", "Very Low"): longer object length is
-    ## not a multiple of shorter object length
-    
-    ## Warning in popularity_level == c("High", "Very Low"): longer object length is
-    ## not a multiple of shorter object length
+Ridge plots were made where each row was a density plot for a certain
+variable and all genres were stacked on top of each other so that
+comparisons could be made. For example:
 
 ![](README_files/figure-gfm/ridge-plot-1.png)<!-- -->
 
-Not only do we gather that on average rock is the least danceable, but
-we can also see the variation in the optimal range for each genre; in
-all genres except edm, there is a threshold above which you are in the
-optimal range for danceability. This threshold is highest in R\&B,
-however there is another optimal range which is at a much lower value
-but has a greater likelihood of a song being popular. In rap, pop, latin
-and rock however a higher danceability will result in a higher
-likelihood of a song being popular. In EDM, danceability has a
-negligible effect on the likelihood of a song being popular. These
-graphs were made for every variable which showed useful information.
+We can see that rock is on average the least danceable as its
+distribution appears to have been shifted to the left. Danceability has
+a negligible effect on the likelihood of popularity for EDM music, and
+only a very small effect for R\&B. For pop, rap and latin and rock
+however, a high danceability leads to a higher likelihood of a song
+being popular.
+
+These graphs were made for every variable which showed useful
+information.
 
 ## Multiple Variable Analysis
 
 After having looked at individual variables, we explored a combination
-of variables. The combination of danceability, valence and energy into
-one variable shows some interesting results when genres are split into
-popularity levels. In this case the 3 variables were multiplied together
-to return a variable that measures how happy, danceable and energetic a
-song is. As shown in graphs, the songs in the “High” bracket for
-popularity also had the highest value for this new variable in 4 out of
-the 6 genres. The 2 genres in which “High” wasn’t were R\&B and Latin;
-for Latin however it was a very close second and while the “High” group
-came last in R\&B, this can be explained by the nature of R\&B as a
-genre. In summary while this doesn’t explicitly show that the more
-danceable, energetic and happy the song is the more likely it is to be
-popular, it does show that popular songs in general, throughout most
-genres, are more danceable, energetic and happy.
+of variables; The combination of danceability, valence and energy into
+one variable showed some interesting results.
+
+![](README_files/figure-gfm/pop-multiple-variable-analysis-1-1.png)<!-- -->
+
+![](README_files/figure-gfm/multiple-variable-analysis-2-1.png)<!-- -->
+
+As shown in graphs, the songs in the “High” bracket for popularity also
+had the highest value for this new variable in 4 out of the 6 genres.
+The 2 genres in which “High” wasn’t were R\&B and Latin; for Latin
+however it was a very close second. This shows that popular songs in
+general, throughout most genres, are more danceable, energetic and
+happy.
 
 ## Changes in Trends Over Time
 
@@ -102,6 +98,30 @@ changed over time. Models were fitted to predict each numeric variable
 using the song release date as the explanatory variable to see whether
 there was any relationship between when a song was released and the
 level of a certain variable it had.
+
+## Conclusion
+
+Whilst we did not achieve our goal by the expected means, we
+successfully identified many characteristics which would give a song the
+highest likelihood of it being popular. For example, a song with a
+duration between 180-220 seconds has a much higher chance of being
+popular in all genres except rock.
+
+## Evaluation
+
+We did our best to make the data set as appropriate as possible, however
+there were a few problems with our data set which we could not change
+and that may have lead to inaccuracies in our result:
+
+The dataset contained roughly 28,000 songs, a small fraction of the
+songs released in the past 50 years.
+
+Old songs released long before Spotify was released have their
+popularity judged by modern standards rather than the standards of their
+time.
+
+The data categorized a song’s genre based on the genre of the playlist
+it was in which lead to some song’s genres being mislabeled.
 
 Write-up of your project and findings go here. Think of this as the text
 of your presentation. The length should be roughly 5 minutes when read
