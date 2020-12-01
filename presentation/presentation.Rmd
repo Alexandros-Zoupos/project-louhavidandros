@@ -195,7 +195,7 @@ kable(head(rmse), format = "html")
 
 - A new approach was taken by first finding the quartile values for every genre, and then categorising every song's popularity as either "High", "Fairly High", "Low", or "Very Low" depending on which quartile it fell into.
 
-```{r quartile-example, highlight.output = c(6, 11), echo = FALSE, warning = FALSE, message = FALSE}
+```{r quartile-example, highlight.output = c(6, 11), echo = FALSE, message = FALSE}
 quartile_table <- clean_full %>%
   group_by(playlist_genre) %>%
   summarise(quartiles = quantile(track_popularity))
@@ -221,7 +221,7 @@ clean_pop %>%
 ---
 
 # Danceability Ridge Plot
-```{r ridge-plot-example, echo = FALSE, warning = FALSE}
+```{r ridge-plot-example, echo = FALSE}
 songs_ridges %>%
   filter(popularity_level %in% c("High", "Very Low")) %>%
   ggplot(aes(x = danceability, y = playlist_genre, fill = popularity_level, color = popularity_level)) +
@@ -244,7 +244,7 @@ songs_ridges %>%
 ---
 
 # Valence Ridge Plot
-```{r Valence Ridge, echo = FALSE, warning = FALSE}
+```{r Valence Ridge, echo = FALSE}
 songs_ridges %>%
   filter(popularity_level %in% c("High", "Very Low")) %>%
   ggplot(aes(x = valence, y = playlist_genre, fill = popularity_level, color = popularity_level)) +
@@ -263,7 +263,7 @@ songs_ridges %>%
 ---
 # Energy Ridges Plot
 
-```{r Energy Ridges, echo = FALSE, warning = FALSE}
+```{r Energy Ridges, echo = FALSE}
 songs_ridges %>%
   filter(popularity_level %in% c("High", "Very Low")) %>%
   ggplot(aes(x = energy, y = playlist_genre, fill = popularity_level, color = popularity_level)) +
@@ -284,8 +284,8 @@ songs_ridges %>%
 
 # Speechiness Ridge Plot
 
-```{r Speechiness Ridge, echo = FALSE, warning = FALSE}
-songs_ridges %>%
+```{r Speechiness Ridge, echo = FALSE}
+songs_ridges  %>%
 filter(popularity_level %in% c("High", "Very Low")) %>%
   ggplot(aes(x = speechiness, y = playlist_genre, fill = popularity_level, color = popularity_level)) +
    geom_density_ridges(alpha = 0.2, bandwidth = 0.04) +
@@ -304,7 +304,7 @@ filter(popularity_level %in% c("High", "Very Low")) %>%
 
 # Acousticness Ridge Plot
 
-```{r Acousticness Ridge, echo = FALSE, warning = FALSE}
+```{r Acousticness Ridge, echo = FALSE}
 songs_ridges %>%
   filter(popularity_level %in% c("High", "Very Low")) %>%
   ggplot(aes(x = acousticness, y = playlist_genre, fill = popularity_level, color = popularity_level)) +
