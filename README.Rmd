@@ -86,11 +86,12 @@ all_clean <- clean_rock %>%
 
 We chose to use the `spotify_songs` which gets its data from the `spotifyr`package, whose data comes from Spotify. The data set contains `r nrow(spotify_songs)` observations each of which is a song, and `r ncol(spotify_songs)` variables, which range from information about the song such as name, artist and genre as well as a number of numerical variables which each look at aspects of the songs character such as its energy, its danceability or its popularity. 
 Our goal was to explore every genre of music in the data set and see for each genre how the numerical variables affected a song's popularity; once we had this we then wanted to compare this across the genres to see whether they had different factors that contributed to making songs popular.
+Finally we planned to look at how the characteristics of popular songs have changed over time, and to predict what characteristics a popular song might have if it was released next year.
 
 Prior to conducting any analysis the data set was cleaned as best we could by filtering for each genre and removing all repeated songs (there were just shy of 5000 songs which appeared in more than one playlist in a given genre). This way songs could appear multiple times if their genre is ambiguous, but repeats will not impact the analysis of one genre by itself.
 
 To begin with, we did some very general analysis and looked at which genres and subgenres of music were the most popular overall, we then decided to do a genre by genre analysis of each variable by creating scatter plots with a `geom_smooth` line, as well as a linear model which would use every numerical variable as an explanatory variable to try and predict track popularity. 
-The scatter plots were unsuccessful however, and the linear model we produced had an R squared value of 0.09 and an rmse value of 22.5 which  means that either the model does not explain the variable and another type of model should have been used, or that the variables may not explain the data well. However, since we have not learned other models we decided to examine in further detail the second case.
+The scatter plots were unsuccessful however, and the linear model we produced had an R squared value of 0.09 and an rmse value of 22.5 which means that either the model does not explain the variable and another type of model should have been used, or that the variables may not explain the data well. However, since we have not learned other models we decided to examine in further detail the second case.
 
 ## Density and Ridge Plots
 
@@ -144,7 +145,9 @@ After having looked at individual variables, we explored a combination of variab
 
 Finally we decided to explore how the trends of popular songs have changed over time. Models were fitted to predict each numeric variable using the song release date as the explanatory variable to see whether there was any relationship between when a song was released and the level of a certain variable it had.
 
+## Conclusion
 
+Whilst we did not achieve our goal by the expected means, we successfully identified many characteristics which would give a song the highest likelihood of it being popular. For example, a song with a duration between 180-220 seconds has a much higher chance of being popular in all genres except rock. 
 
 
 
