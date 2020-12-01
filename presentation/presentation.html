@@ -4,7 +4,7 @@
     <title>Exploring the factors of song popularity</title>
     <meta charset="utf-8" />
     <meta name="author" content="Louhavidandros   Alexandros Zoupos, David Aiton, Harry Rushworth and Louis Parker" />
-    <meta name="date" content="2020-11-30" />
+    <meta name="date" content="2020-12-01" />
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link href="libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
   </head>
@@ -16,7 +16,7 @@ class: center, middle, inverse, title-slide
 ## Using TidyTuesdays Spotify dataset
 ### Louhavidandros <br> Alexandros Zoupos, David Aiton, Harry Rushworth and Louis Parker
 ### University of Edinburgh
-### 2020-11-30
+### 2020-12-01
 
 ---
 
@@ -43,14 +43,11 @@ class: inverse, center, middle
 # Section title
 
 ---
-# Slide with messy plot - Alex
-
-- Over 23,000 observations
 
 &lt;img src="presentation_files/figure-html/messy-plot-1.png" width="80%" /&gt;
 
+- Over 23,000 observations
 ---
-# Slide with linear fit - Alex. Don't forget to remove track popularity when it is added
 
 
 
@@ -61,6 +58,8 @@ class: inverse, center, middle
 
 
 
+
+Track popularity predicted by model vs actual track popularity
 
 &lt;table&gt;
  &lt;thead&gt;
@@ -111,6 +110,8 @@ class: inverse, center, middle
 &lt;/tbody&gt;
 &lt;/table&gt;
 
+R squared (rsq) and root mean square error (rmse) of model
+
 &lt;table&gt;
  &lt;thead&gt;
   &lt;tr&gt;
@@ -148,10 +149,22 @@ class: inverse, center, middle
 ---
 # Limitations
 
-- Limited number of songs
-- Problem with `track_popularity` variable
-- Only linear model was tried
+- Limited number of songs, only 5,000 songs were in the data set
 
+--
+
+
+- `track_popularity` variable does not take into account the popularity that songs had at the time they were released
+
+--
+
+
+- Only a linear model between the `track_popularity` and the other variables was tried
+
+--
+
+
+- Some songs may have been categorized in the wrong genre
 ---
 
 # Popularity Level
@@ -263,6 +276,10 @@ class: inverse, center, middle
 
 - Make sure to commit and push all resulting files to your GitHub repo
 
+---
+# Thank you for listening
+
+You can find the slides of this presentation here: put link. 
 ---
 
 class: inverse, middle, center
