@@ -277,10 +277,34 @@ R squared (rsq) and root mean square error (rmse) of model
 
 # Changes in Trends Over Time
 
-
+&lt;img src="presentation_files/figure-html/Timeline-1.png" width="80%" /&gt;
 
 ---
 #The models for the variables
+
+
+
+```
+## parsnip model object
+## 
+## Fit time:  3ms 
+## 
+## Call:
+## stats::lm(formula = danceability ~ track_album_release_year, 
+##     data = data)
+## 
+## Coefficients:
+##              (Intercept)  track_album_release_year  
+##                -4.235720                  0.002433
+```
+
+```
+## # A tibble: 1 x 12
+##   r.squared adj.r.squared  sigma statistic p.value    df logLik   AIC   BIC
+##       &lt;dbl&gt;         &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1     0.468         0.457 0.0389      43.1 3.11e-8     1   94.2 -182. -177.
+## # … with 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;
+```
 
 
 ---
@@ -373,7 +397,7 @@ glance(model)
 - goes here
 ]
 .pull-right[
-&lt;img src="presentation_files/figure-html/unnamed-chunk-2-1.png" width="100%" /&gt;
+&lt;img src="presentation_files/figure-html/unnamed-chunk-1-1.png" width="100%" /&gt;
 ]
 
 ---
