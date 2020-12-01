@@ -10,6 +10,7 @@ library(dplyr)
 library(ggridges)
 library(fmsb)
 library(ggradar)
+library(patchwork)
 ```
 
 ```{r load-data, include = FALSE}
@@ -112,7 +113,8 @@ clean_pop %>%
 
 This graph shows the distribution of danceability levels of pop songs in the highest and lowest popularity brackets. The range of values where the red line is higher than the blue was defined as the optimal range for song popularity, as this is where if you picked a pop song at random you would have a higher chance of it being very popular than being very unpopular. 
 
-These density graphs were made for every variable for each genre and once these were created and we found which variables had interesting information, we used ridge plots to be able to compare the distributions across genres. For example:
+Ridge plots were made where each row was a density plot for a certain variable and all genres were stacked on top of each other so that comparisons could be made.
+For example:
 
 ```{r ridge-plot, echo = FALSE}
 all_clean %>%
@@ -136,10 +138,86 @@ all_clean %>%
   theme_minimal()
 ```
 
-Not only do we gather that on average rock is the least danceable, but we can also see the variation in the optimal range for each genre; in all genres except edm, there is a threshold above which you are in the optimal range for danceability. This threshold is highest in R&B, however there is another optimal range which is at a much lower value but has a greater likelihood of a song being popular. In rap, pop, latin and rock however a higher danceability will result in a higher likelihood of a song being popular. In EDM, danceability has a negligible effect on the likelihood of a song being popular. These graphs were made for every variable which showed useful information.
+We can see that rock is on average the least danceable as its distribution appears to have been shifted to the left.
+Danceability has a negligible effect on the likelihood of popularity for EDM music, and only a very small effect for R&B. For pop, rap and latin  and rock however, a high danceability leads to a higher likelihood of a song being popular.
+
+These graphs were made for every variable which showed useful information.
 
 ## Multiple Variable Analysis
-After having looked at individual variables, we explored a combination of variables; The combination of danceability, valence and energy into one variable showed some interesting results. As shown in graphs, the songs in the "High" bracket for popularity also had the highest value for this new variable in 4 out of the 6 genres. The 2 genres in which "High" wasn't were R&B and Latin; for Latin however it was a very close second. This shows that popular songs in general, throughout most genres, are more danceable, energetic and happy.
+
+After having looked at individual variables, we explored a combination of variables; The combination of danceability, valence and energy into one variable showed some interesting results.
+
+```{r pop-multiple-variable-analysis-1, echo = FALSE}
+mvg_pop <- clean_pop %>%
+  mutate(dance_energy_val = danceability*energy*valence) %>%
+  ggplot(aes(x = popularity_level, y = dance_energy_val, colour = popularity_level)) +
+  geom_col() +
+  labs(
+    title = "Pop",
+    y = "Count",
+    x = "Popularity Level") +
+  theme(legend.position = "none")
+
+mvg_edm <- clean_edm %>%
+  mutate(dance_energy_val = danceability*energy*valence) %>%
+  ggplot(aes(x = popularity_level, y = dance_energy_val, colour = popularity_level)) +
+  geom_col() +
+  labs(
+    title = "EDM",
+    y = "Count",
+    x = "Popularity Level") +
+  theme(legend.position = "none")
+
+mvg_rap <- clean_rap %>%
+  mutate(dance_energy_val = danceability*energy*valence) %>%
+  ggplot(aes(x = popularity_level, y = dance_energy_val, colour = popularity_level)) +
+  geom_col() +
+  labs(
+    title = "Rap",
+    y = "Count",
+    x = "Popularity Level") +
+  theme(legend.position = "none")
+
+mvg_rock <- clean_rock %>%
+  mutate(dance_energy_val = danceability*energy*valence) %>%
+  ggplot(aes(x = popularity_level,y = dance_energy_val, colour = popularity_level)) +
+  geom_col() +
+  labs(
+    title = "Rock",
+    y = "Count",
+    x = "Popularity Level") +
+  theme(legend.position = "none")
+  
+
+ (mvg_edm | mvg_rap)/(mvg_pop | mvg_rock)
+```
+
+
+```{r multiple-variable-analysis-2, echo = FALSE}
+mvg_latin <- clean_latin  %>%
+  mutate(dance_energy_val = danceability*energy*valence) %>%
+  ggplot(aes(x = popularity_level, y = dance_energy_val, colour = popularity_level)) +
+  geom_col() +
+  labs(
+    title = "Latin",
+    y = "Count",
+    x = "Popularity Level") +
+  theme(legend.position = "none")
+
+mvg_rnb <- clean_rnb %>%
+  mutate(dance_energy_val = danceability*energy*valence)  %>%
+  ggplot(aes(x = popularity_level, y = dance_energy_val, colour = popularity_level)) +
+  geom_col() +
+  labs(
+    title = "R&B",
+    y = "Count",
+    x = "Popularity Level") +
+  theme(legend.position = "none")
+
+mvg_rnb+mvg_latin
+```
+
+ As shown in graphs, the songs in the "High" bracket for popularity also had the highest value for this new variable in 4 out of the 6 genres. The 2 genres in which "High" wasn't were R&B and Latin; for Latin however it was a very close second. This shows that popular songs in general, throughout most genres, are more danceable, energetic and happy.
 
 ## Changes in Trends Over Time
 
