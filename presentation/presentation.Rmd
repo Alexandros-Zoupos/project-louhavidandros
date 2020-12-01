@@ -46,7 +46,7 @@ clean_full <- spotify_songs %>%
   filter(duplicated(track_name) == FALSE)
 ```
 
-```{r popularity_level_clean_data, include = FALSE}
+```{r popularity-level-clean-data, include = FALSE}
 clean_edm <- clean_full %>%
   filter(playlist_genre == "edm") %>%
   mutate(popularity_level = case_when(
@@ -208,7 +208,7 @@ kable(head(rmse), format = "html")
 
 - A new approach was taken by first finding the quartile values for every genre, and then categorising every song's popularity as either "High", "Fairly High", "Low", or "Very Low" depending on which quartile it fell into.
 
-```{r quartile-example, highlight.output = c(6, 11), echo = FALSE, message = FALSE}
+```{r quartile-example, echo = FALSE, message = FALSE}
 quartile_table <- clean_full %>%
   group_by(playlist_genre) %>%
   summarise(quartiles = quantile(track_popularity))
@@ -219,7 +219,7 @@ kable(head(quartile_table), format = "html")
 ---
 
 # Danceability Density Plot - Pop
- -- Optimal Range = range of danceability values where the red line is higher than the blue
+- Optimal Range = range of danceability values where the red line is higher than the blue
 ```{r density-plot-example, echo = FALSE}
 clean_pop %>%
     filter(popularity_level %in% c("High", "Very Low")) %>%
@@ -257,7 +257,7 @@ songs_ridges %>%
 ---
 
 # Valence Ridge Plot
-```{r Valence Ridge, echo = FALSE}
+```{r valence-ridge, echo = FALSE}
 songs_ridges %>%
   filter(popularity_level %in% c("High", "Very Low")) %>%
   ggplot(aes(x = valence, y = playlist_genre, fill = popularity_level, color = popularity_level)) +
@@ -276,7 +276,7 @@ songs_ridges %>%
 ---
 # Energy Ridges Plot
 
-```{r Energy Ridges, echo = FALSE}
+```{r energy-ridges, echo = FALSE}
 songs_ridges %>%
   filter(popularity_level %in% c("High", "Very Low")) %>%
   ggplot(aes(x = energy, y = playlist_genre, fill = popularity_level, color = popularity_level)) +
@@ -297,7 +297,7 @@ songs_ridges %>%
 
 # Speechiness Ridge Plot
 
-```{r Speechiness Ridge, echo = FALSE}
+```{r speechiness-ridge, echo = FALSE}
 songs_ridges  %>%
 filter(popularity_level %in% c("High", "Very Low")) %>%
   ggplot(aes(x = speechiness, y = playlist_genre, fill = popularity_level, color = popularity_level)) +
@@ -317,7 +317,7 @@ filter(popularity_level %in% c("High", "Very Low")) %>%
 
 # Acousticness Ridge Plot
 
-```{r Acousticness Ridge, echo = FALSE}
+```{r acousticness-ridge, echo = FALSE}
 songs_ridges %>%
   filter(popularity_level %in% c("High", "Very Low")) %>%
   ggplot(aes(x = acousticness, y = playlist_genre, fill = popularity_level, color = popularity_level)) +
@@ -337,7 +337,7 @@ songs_ridges %>%
 
 # Liveness Ridge Plot
 
-```{r Liveness Ridge, echo = FALSE, warning = FALSE}
+```{r liveness-ridge, echo = FALSE}
 songs_ridges %>%
   filter(popularity_level %in% c("High", "Very Low")) %>%
   ggplot(aes(x = liveness, y = playlist_genre, fill = popularity_level, color = popularity_level)) +
@@ -357,7 +357,7 @@ songs_ridges %>%
 
 # Tempo Ridge Plot
 
-```{r Tempo Ridge, echo = FALSE, warning = FALSE}
+```{r tempo-ridge, echo = FALSE}
 songs_ridges %>%
   filter(popularity_level %in% c("High", "Very Low")) %>%
   ggplot(aes(x = tempo, y = playlist_genre, fill = popularity_level, color = popularity_level)) +
@@ -377,7 +377,7 @@ songs_ridges %>%
 
 # Duration Ridge Plot
 
-```{r Duration Ridge, echo = FALSE, warning = FALSE}
+```{r duration-ridge, echo = FALSE}
 songs_ridges %>%
   filter(popularity_level %in% c("High", "Very Low")) %>%
   group_by(popularity_level) %>%
@@ -398,7 +398,7 @@ songs_ridges %>%
 
 # Instrumentalness Ridge Plot
 
-```{r Instrumentalness Ridge, echo = FALSE, warning = FALSE}
+```{r instrumentalness-ridge, echo = FALSE}
 songs_ridges %>%
   filter(popularity_level %in% c("High", "Very Low")) %>%
   ggplot(aes(x = instrumentalness, y = playlist_genre, fill = popularity_level, color = popularity_level)) +
@@ -418,7 +418,7 @@ songs_ridges %>%
 
 # Multiple Variable Analysis
 
-```{r pop multi-variable graph, echo = FALSE}
+```{r pop-multiple-variable-analysis-1, echo = FALSE}
 mvg_pop <- clean_pop %>%
   mutate(dance_energy_val = danceability*energy*valence) %>%
   ggplot(aes(x = popularity_level, y = dance_energy_val, colour = popularity_level)) +
@@ -466,7 +466,7 @@ mvg_rock <- clean_rock %>%
 
 # Multiple Variable analysis part 2
 
-```{r Multiple Variable analysis part 2, echo = FALSE}
+```{r multiple-variable-analysis-2, echo = FALSE}
 mvg_latin <- clean_latin  %>%
   mutate(dance_energy_val = danceability*energy*valence) %>%
   ggplot(aes(x = popularity_level, y = dance_energy_val, colour = popularity_level)) +

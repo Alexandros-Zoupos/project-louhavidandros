@@ -6,7 +6,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-```{r load-packages, message = FALSE}
+```{r load-packages, include = FALSE, message = FALSE}
 library(tidyverse)
 library(here)
 ```
@@ -24,7 +24,7 @@ The songs are from the top 20 playlists from the top 4 sub-genres from the top 6
 spotify_songs <- read_csv(here('data/Spotify.csv'))
 ```
 
-```{r glimpse-data}
+```{r glimpse-data, include = FALSE}
 glimpse(spotify_songs)
 ```
 
@@ -32,26 +32,31 @@ glimpse(spotify_songs)
 
 Since the aim of the project is to examine what aspects make a song popular the response variable will always be the popularity of a song (`track_popularity`). Each genre of music will be studied separately, using all the numeric variables as well as the artist of each song. The comparison groups are the genres of music.
 
-```{r first-look}
+```{r first-look, echo = FALSE}
 spotify_songs %>%
-  count(playlist_genre)
+  count(playlist_genre, sort = TRUE)
 ```
 
-```{r popularity-plot}
+```{r popularity-plot, echo = FALSE, message = FALSE}
 spotify_songs %>%
   group_by(playlist_genre) %>%
-  summarise(min_pop = min(track_popularity), mean_pop = mean(track_popularity), max_pop = max(track_popularity)) %>%
+  summarise(min_pop = min(track_popularity),
+            mean_pop = mean(track_popularity),
+            max_pop = max(track_popularity)) %>%
   ggplot(aes(x = mean_pop, y = playlist_genre, fill = playlist_genre)) + 
-  geom_col() + theme_minimal() + 
-  labs(title = "Average Popularity of Each Genre", x = "Mean Popularity", y = NULL) +
+  geom_col() +
+  theme_minimal() + 
+  labs(title = "Average Popularity of Each Genre",
+       x = "Mean Popularity",
+       y = NULL) +
   guides(fill = FALSE)
 ```
 
-From the plot we can see that on average, pop music is the most popular and Latin music is close behind (possibly from large quantities of listeners from Spanish-speaking countries). Electronic Dance Music is the least popular on average. 
+From the plot we can see that on average, pop music is the most popular and Latin music is close behind. Electronic Dance Music is the least popular on average. 
 
-The goal of our project is to examine what makes a song popular and whether it changes in each genre. Therefore, we will examine the different variables and how they affect popularity in each genre, comparing the genres against one another to find differences. The statistical methods we aim to use will be multiple forms of graphs, mainly scatter and bar plots. The graphs will involve the popularity of a song compared to the characteristics, mentioned in the introduction. 
+The goal of our project is to examine what makes a song popular and whether it changes in each genre. Therefore, we will examine the different variables and how they affect popularity in each genre, comparing the genres against one another to find differences. The statistical methods we aim to use will be multiple forms of graphs, mainly scatter plots, bar plots and density curves. The graphs will involve the popularity of a song compared to the characteristics, mentioned in the introduction. 
 
-We have a lot of numerical data to use so we will aim to get as much useful data onto our graphs as possible. We may also use histograms for some specific cases such as grouping songs by length. We also plan on using `summarize()` to show condensed data while making comparisons between variables. One specific idea we have is grouping songs by `mode` (whether the song is in a major or minor key) and calculating their mean popularity to observe any difference. Lastly, radar graphs might be used to examine and compare the average characteristics of each genre. 
+We have a lot of numerical data to use so we will aim to get as much useful data onto our graphs as possible. We may also use histograms for some specific cases such as grouping songs by length. We also plan on using `summarise()` to show condensed data while making comparisons between variables. One specific idea we have is grouping songs by `mode` (whether the song is in a major or minor key) and calculating their mean popularity to observe any difference. Lastly, a timeline of sorts is to be made to see the change in characteristics of songs over time. 
 
-If the results were to support our hypothesis, we would expect different characteristics making a song popular in each genre. For example, the radar graphs would take on noticeably different shapes.
+If the results were to support our hypothesis, we would expect different characteristics making a song popular in each genre. For example, the density plots would show a different distribution for different genres.
 

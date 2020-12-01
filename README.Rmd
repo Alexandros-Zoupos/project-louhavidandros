@@ -4,7 +4,7 @@ author: by Louhavidandros
 output: github_document
 ---
 
-```{r load-packages, echo = FALSE, include = FALSE}
+```{r load-packages, include = FALSE}
 library(tidyverse)
 library(dplyr)
 library(ggridges)
@@ -12,32 +12,14 @@ library(fmsb)
 library(ggradar)
 ```
 
-```{r load-data, echo= FALSE, include = FALSE}
+```{r load-data, include = FALSE}
 spotify_songs <- read_csv(here::here("data/Spotify.csv"))
 ```
 
 ```{r clean-data, include = FALSE}
 clean_songs <- spotify_songs %>%
   filter(duplicated(track_name) == FALSE)
-clean_edm <- spotify_songs %>%
-  filter(playlist_genre == "edm") %>%
-  filter(duplicated(track_name) == FALSE)
-clean_rock <- spotify_songs %>%
-  filter(playlist_genre == "rock") %>%
-  filter(duplicated(track_name) == FALSE)
-clean_pop <- spotify_songs %>%
-  filter(playlist_genre == "pop") %>%
-  filter(duplicated(track_name) == FALSE)
-clean_rap <- spotify_songs %>%
-  filter(playlist_genre == "rap") %>%
-  filter(duplicated(track_name) == FALSE)
-clean_rnb <- spotify_songs %>%
-  filter(playlist_genre == "r&b") %>%
-  filter(duplicated(track_name) == FALSE)
-clean_latin <- spotify_songs %>%
-  filter(playlist_genre == "latin") %>%
-  filter(duplicated(track_name) == FALSE)
-clean_full <- spotify_songs%>%
+clean_full <- spotify_songs %>%
   group_by(playlist_genre) %>%
   filter(duplicated(track_name) == FALSE)
 ```
@@ -116,9 +98,9 @@ Consequently, we changed the way we were approaching the problem. To begin with,
 For every genre we then looked at only the "High" and "Very Low" brackets of popularity, and for each variable we created a density plot that showed what values were most frequent in each popularity level. For example:
 
 
-```{r pop-density-example, echo=FALSE}
+```{r pop-density-example, echo = FALSE}
 clean_pop %>%
-  filter(popularity_level == c("High", "Very Low")) %>%
+  filter(popularity_level %in% c("High", "Very Low")) %>%
   ggplot(aes(x = danceability, color = popularity_level)) +
   geom_density(adjust = 2) +
     labs(x = "Danceability",
@@ -131,9 +113,9 @@ This graph shows the distribution of danceability levels of pop songs in the hig
 
 These density graphs were made for every variable for each genre and once these were created and we found which variables had interesting information, we used ridge plots to be able to compare the distributions across genres. For example:
 
-```{r ridge-plot, echo=FALSE}
+```{r ridge-plot, echo = FALSE}
 all_clean %>%
-  filter(popularity_level == c("High", "Very Low")) %>%
+  filter(popularity_level %in% c("High", "Very Low")) %>%
   ggplot(aes(x = danceability,
              y = playlist_genre,
              fill = popularity_level,
