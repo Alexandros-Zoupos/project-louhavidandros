@@ -495,16 +495,16 @@ mvg_rnb+mvg_latin
 
 # Changes in Trends Over Time
 
-```{r, include = FALSE}
-clean_pop %>%
+```{r Timeline, echo = FALSE, message = FALSE}
+songs_ridges %>%
+  filter(popularity_level == "High") %>%
   mutate(track_album_release_year = as.integer(str_sub(track_album_release_date, end = 4))) %>%
   filter(track_album_release_year >= 1970) %>%
   group_by(track_album_release_year) %>%
-  summarise(acousticness = mean(acousticness), danceability = mean(danceability), energy = mean(energy),
-            instrumentalness = mean(instrumentalness), liveness = mean(liveness), 
-            speechiness = mean(speechiness), popularity = mean(track_popularity)/100) %>%
-  pivot_longer(cols = c(danceability, energy, speechiness, acousticness, instrumentalness,
-         liveness, popularity)) %>%
+  summarise(acousticness = mean(acousticness), danceability = mean(danceability), energy = mean(energy), liveness = mean(liveness), 
+            speechiness = mean(speechiness), valence = mean(valence)) %>%
+  pivot_longer(cols = c(danceability, energy, speechiness, acousticness,
+         liveness, valence)) %>%
   ggplot(aes(x = track_album_release_year, y = value, colour = name)) +
   geom_point()+
   geom_smooth() +
@@ -514,6 +514,28 @@ clean_pop %>%
 
 ---
 #The models for the variables
+```{r create_summary_years, include = FALSE}
+mean_year_songs <- songs_ridges %>%
+  filter(popularity_level == "High") %>%
+  mutate(track_album_release_year = as.integer(str_sub(track_album_release_date, end = 4)))%>%
+  filter(track_album_release_year >= 1970) %>%
+  select(track_album_release_year, track_popularity, danceability, energy, 
+         speechiness, acousticness, instrumentalness, liveness) %>%
+  group_by(track_album_release_year) %>%
+  summarise(acousticness = mean(acousticness), danceability = mean(danceability), 
+            energy = mean(energy), instrumentalness = mean(instrumentalness), 
+            liveness = mean(liveness), speechiness = mean(speechiness), popularity = mean(track_popularity))
+```
+
+```{r models, echo = FALSE}
+linear_reg() %>%
+  set_engine("lm") %>%
+  fit(danceability ~ track_album_release_year, data = mean_year_songs)
+linear_reg() %>%
+  set_engine("lm") %>%
+  fit(danceability ~ track_album_release_year, data = mean_year_songs) %>%
+  glance()
+```
 
 
 ---
