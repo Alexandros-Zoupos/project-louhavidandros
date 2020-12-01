@@ -90,7 +90,7 @@ Our goal was to explore every genre of music in the data set and see for each ge
 Prior to conducting any analysis the data set was cleaned as best we could by filtering for each genre and removing all repeated songs (there were just shy of 5000 songs which appeared in more than one playlist in a given genre). This way songs could appear multiple times if their genre is ambiguous, but repeats will not impact the analysis of one genre by itself.
 
 To begin with, we did some very general analysis and looked at which genres and subgenres of music were the most popular overall, we then decided to do a genre by genre analysis of each variable by creating scatter plots with a `geom_smooth` line, as well as a linear model which would use every numerical variable as an explanatory variable to try and predict track popularity. 
-The scatter plots were unsuccessful however, and the linear model we produced had an R squared value of 0.09 and an rmse value of 22.5 which are clearly undesirable values when searching for a correlation.
+The scatter plots were unsuccessful however, and the linear model we produced had an R squared value of 0.09 and an rmse value of 22.5 which  means that either the model does not explain the variable and another type of model should have been used, or that the variables may not explain the data well. However, since we have not learned other models we decided to examine in further detail the second case.
 
 ## Density and Ridge Plots
 
