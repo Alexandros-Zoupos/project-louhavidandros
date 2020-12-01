@@ -139,7 +139,7 @@ all_clean %>%
 Not only do we gather that on average rock is the least danceable, but we can also see the variation in the optimal range for each genre; in all genres except edm, there is a threshold above which you are in the optimal range for danceability. This threshold is highest in R&B, however there is another optimal range which is at a much lower value but has a greater likelihood of a song being popular. In rap, pop, latin and rock however a higher danceability will result in a higher likelihood of a song being popular. In EDM, danceability has a negligible effect on the likelihood of a song being popular. These graphs were made for every variable which showed useful information.
 
 ## Multiple Variable Analysis
-After having looked at individual variables, we explored a combination of variables. The combination of danceability, valence and energy into one variable shows some interesting results when genres are split into popularity levels. In this case the 3 variables were multiplied together to return a variable that measures how happy, danceable and energetic a song is. As shown in graphs, the songs in the "High" bracket for popularity also had the highest value for this new variable in 4 out of the 6 genres. The 2 genres in which "High" wasn't were R&B and Latin; for Latin however it was a very close second and while the "High" group came last in R&B, this can be explained by the nature of R&B as a genre. In summary while this doesn’t explicitly show that the more danceable, energetic and happy the song is the more likely it is to be popular, it does show that popular songs in general, throughout most genres, are more danceable, energetic and happy.
+After having looked at individual variables, we explored a combination of variables; The combination of danceability, valence and energy into one variable showed some interesting results. As shown in graphs, the songs in the "High" bracket for popularity also had the highest value for this new variable in 4 out of the 6 genres. The 2 genres in which "High" wasn't were R&B and Latin; for Latin however it was a very close second. This shows that popular songs in general, throughout most genres, are more danceable, energetic and happy.
 
 ## Changes in Trends Over Time
 
@@ -148,6 +148,15 @@ Finally we decided to explore how the trends of popular songs have changed over 
 ## Conclusion
 
 Whilst we did not achieve our goal by the expected means, we successfully identified many characteristics which would give a song the highest likelihood of it being popular. For example, a song with a duration between 180-220 seconds has a much higher chance of being popular in all genres except rock. 
+
+## Evaluation
+We did our best to make the data set as appropriate as possible, however there were a few problems with our data set which we could not change and that may have lead to inaccuracies in our result:
+
+The dataset contained roughly 28,000 songs, a small fraction of the songs released in the past 50 years.
+
+Old songs released long before Spotify was released have their popularity judged by modern standards rather than the standards of their time.
+
+The data categorized a song's genre based on the genre of the playlist it was in which lead to some song's genres being mislabeled. 
 
 
 
