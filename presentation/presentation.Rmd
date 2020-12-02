@@ -529,15 +529,15 @@ mean_year_songs <- songs_ridges %>%
             liveness = mean(liveness), speechiness = mean(speechiness), popularity = mean(track_popularity))
 ```
 
+##Danceablility:
 ```{r models, echo = FALSE}
-linear_reg() %>%
-  set_engine("lm") %>%
-  fit(danceability ~ track_album_release_year, data = mean_year_songs)
-linear_reg() %>%
+model <- linear_reg() %>%
   set_engine("lm") %>%
   fit(danceability ~ track_album_release_year, data = mean_year_songs) %>%
-  glance()
+  tidy()
+kable(head(model), format = "html")
 ```
+- r.squared is 0.4681, noticably larger than our first value.
 
 ---
 #The next best song of 2021

@@ -36,30 +36,6 @@ class: center, middle
 
 ## A statement of the overall goal / research question
 
----
-
-
-```r
-clean_full &lt;- spotify_songs %&gt;%
-  group_by(playlist_genre) %&gt;%
-  filter(duplicated(track_name) == FALSE)
-
-clean_rock &lt;- clean_full %&gt;%
-  filter(playlist_genre == "rock") %&gt;%
-  mutate(popularity_level = case_when(
-    track_popularity &lt;= 24 ~ "Very Low",
-    track_popularity &gt; 24 &amp; track_popularity &lt;= 45 ~ "Low",
-    track_popularity &gt; 45 &amp; track_popularity &lt; 61 ~ "Fairly High",
-    track_popularity &gt;= 61 &amp; track_popularity &lt;= 100 ~ "High"
-  )) 
-
-songs_ridges &lt;- rbind(clean_rock, clean_rnb, clean_rap, clean_pop, clean_latin, clean_edm)
-```
-
-github: rfordatascience/tidytuesday
-
----
-
 class: inverse, center, middle
 
 # Section title
@@ -300,28 +276,35 @@ R squared (rsq) and root mean square error (rmse) of model
 #The models for the variables
 
 
-
-```
-## parsnip model object
-## 
-## Fit time:  1ms 
-## 
-## Call:
-## stats::lm(formula = danceability ~ track_album_release_year, 
-##     data = data)
-## 
-## Coefficients:
-##              (Intercept)  track_album_release_year  
-##                -4.235720                  0.002433
-```
-
-```
-## # A tibble: 1 x 12
-##   r.squared adj.r.squared  sigma statistic p.value    df logLik   AIC   BIC
-##       &lt;dbl&gt;         &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1     0.468         0.457 0.0389      43.1 3.11e-8     1   94.2 -182. -177.
-## # … with 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;
-```
+##Danceablility:
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; p.value &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -4.2357195 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.7390889 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -5.731001 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6e-07 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; track_album_release_year &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0024329 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0003705 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6.567214 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0e+00 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+- r.squared is 0.4681, noticably larger than our first value.
 
 ---
 #The next best song of 2021
