@@ -263,7 +263,9 @@ songs_ridges %>%
    geom_density_ridges(alpha = 0.2, bandwidth = 0.085) +
   labs(x = "Valence",
        y = NULL,
-       fill = "Popularity Level"
+       fill = "Popularity Level",
+       title = "Distibution of Valence Across Genres",
+       subtitle = "Grouped by Most and Least Popular Songs"
        ) +
   guides(color = FALSE) +
   scale_fill_manual(values = c(
@@ -282,7 +284,9 @@ songs_ridges %>%
    geom_density_ridges(alpha = 0.2, bandwidth = 0.07) +
   labs(x = "Energy",
        y = NULL,
-       fill = "Popularity Level"
+       fill = "Popularity Level",
+       title = "Distibution of Energy Across Genres",
+       subtitle = "Grouped by Most and Least Popular Songs"
        ) +
   guides(color = FALSE) +
   scale_fill_manual(values = c(
@@ -303,7 +307,9 @@ filter(popularity_level %in% c("High", "Very Low")) %>%
    geom_density_ridges(alpha = 0.2, bandwidth = 0.04) +
   labs(x = "Speechiness",
        y = NULL,
-       fill = "Popularity Level"
+       fill = "Popularity Level",
+       title = "Distibution of Speechiness Across Genres",
+       subtitle = "Grouped by Most and Least Popular Songs"
        ) +
   guides(color = FALSE) +
   scale_fill_manual(values = c(
@@ -311,6 +317,8 @@ filter(popularity_level %in% c("High", "Very Low")) %>%
     "High" = "#fd0000"
   )) +
   theme_minimal()
+
+
 ```
 ---
 
@@ -323,7 +331,9 @@ songs_ridges %>%
    geom_density_ridges(alpha = 0.2, bandwidth = 0.05) +
   labs(x = "Acousticness",
        y = NULL,
-       fill = "Popularity Level"
+       fill = "Popularity Level",
+       title = "Distibution of Acousticness Across Genres",
+       subtitle = "Grouped by Most and Least Popular Songs"
        ) +
   guides(color = FALSE) +
   scale_fill_manual(values = c(
@@ -343,7 +353,9 @@ songs_ridges %>%
    geom_density_ridges(alpha = 0.2, bandwidth = 0.045) +
   labs(x = "Liveness",
        y = NULL,
-       fill = "Popularity Level"
+       fill = "Popularity Level",
+       title = "Distibution of Liveness Across Genres",
+       subtitle = "Grouped by Most and Least Popular Songs"
        ) +
   guides(color = FALSE) +
   scale_fill_manual(values = c(
@@ -363,7 +375,9 @@ songs_ridges %>%
    geom_density_ridges(alpha = 0.2, bandwidth = 10) +
   labs(x = "Tempo (Bpm)",
        y = NULL,
-       fill = "Popularity Level"
+       fill = "Popularity Level",
+       title = "Distibution of Tempo Across Genres",
+       subtitle = "Grouped by Most and Least Popular Songs"
        ) +
   guides(color = FALSE) +
   scale_fill_manual(values = c(
@@ -384,7 +398,9 @@ songs_ridges %>%
   geom_density_ridges(alpha = 0.2, bandwidth = 20) +
   labs(x = "Duration (s)",
        y = NULL,
-       fill = "Popularity Level"
+       fill = "Popularity Level",
+       title = "Distibution of Song Duration Across Genres",
+       subtitle = "Grouped by Most and Least Popular Songs"
        ) +
   guides(color = FALSE) +
   scale_fill_manual(values = c(
@@ -404,7 +420,9 @@ songs_ridges %>%
    geom_density_ridges(alpha = 0.2, bandwidth = 0.06) +
   labs(x = "Instrumentalness",
        y = NULL,
-       fill = "Popularity Level"
+       fill = "Popularity Level",
+       title = "Distibution of Instrumentalness Across Genres",
+       subtitle = "Grouped by Most and Least Popular Songs"
        ) +
   guides(color = FALSE) +
   scale_fill_manual(values = c(
@@ -413,7 +431,7 @@ songs_ridges %>%
   )) +
   theme_minimal()
 ```
-
+---
 
 # Multiple Variable Analysis
 
