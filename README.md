@@ -4,7 +4,7 @@ by Louhavidandros
 
 # Summary
 
-We chose to use the `spotify_songs`dataset. variables, which range from
+We chose to use the `spotify_songs`dataset. Variables range from
 information about the song such as name, as well as numerical variables
 which look at aspects of the songs character such as its energy. Our
 goal was to explore every genre of music and see how the numerical

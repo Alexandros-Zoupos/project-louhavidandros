@@ -85,7 +85,7 @@ all_clean <- clean_rock %>%
 ```
 # Summary
 
-We chose to use the `spotify_songs`dataset. variables, which range from information about the song such as name, as well as numerical variables which look at aspects of the songs character such as its energy. 
+We chose to use the `spotify_songs`dataset. Variables range from information about the song such as name, as well as numerical variables which look at aspects of the songs character such as its energy. 
 Our goal was to explore every genre of music and see how the numerical variables affected a song's popularity. We then wanted to compare this across genres to see whether they had different contributing factors .
 Finally we looked at how the characteristics of popular songs have changed over time, and predicted what characteristics a popular song released next year might have.
 
