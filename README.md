@@ -78,7 +78,7 @@ Our exploration of changes in trends over time led us to create models
 which predict the mean of each numeric variable using the release year
 as the explanatory. When we plotted the data, we saw patterns emerge
 which we could then use to predict the characteristics of next years
-songs.
+popular songs.
 
 ## Conclusion
 
@@ -86,6 +86,8 @@ Whilst we did not achieve our goal by the expected means, we
 successfully identified many characteristics which would give a song the
 highest likelihood of it being popular, which are outlined in our
 presentation.
+
+The predicted values for next years popular songs are:
 
 <table>
 
