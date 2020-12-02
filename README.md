@@ -29,30 +29,27 @@ categorising song’s popularity based on which quartile they fell into.
 This was done separately for each genre, this way there was a roughly
 even number of songs in each popularity level in each genre. For every
 genre we then looked at only the “High” and “Very Low” brackets of
-popularity, and for each variable we created a density plot that showed
-what values were most frequent in each popularity level. For example:
+popularity, and for each variable we created a density plot.
 
 ![](README_files/figure-gfm/pop-density-example-1.png)<!-- -->
 
-This graph shows the distribution of danceability levels of pop songs in
-the highest and lowest popularity brackets. The range of values where
-the red line is higher than the blue was defined as the optimal range
-for song popularity, as this is where if you picked a pop song at random
-you would have a higher chance of it being very popular than being very
+This shows the distribution of danceability levels of pop songs in the
+highest and lowest popularity brackets. The range of values where the
+red line is higher than the blue was defined as the optimal range for
+song popularity, as this is where if you picked a pop song at random you
+would have a higher chance of it being very popular than being very
 unpopular.
 
-Ridge plots were made where each row was a density plot for a certain
-variable and all genres were stacked on top of each other so that
-comparisons could be made. For example:
+Ridge plots were made for every variable so that comparisons could be
+made:
 
 ![](README_files/figure-gfm/ridge-plot-1.png)<!-- -->
 
-We can see that rock is on average the least danceable as its
-distribution appears to have been shifted to the left. Danceability has
-a negligible effect on the likelihood of popularity for EDM music, and
-only a very small effect for R\&B. For pop, rap and latin and rock
-however, a high danceability leads to a higher likelihood of a song
-being popular.
+Rock is on average the least danceable as its distribution is furthest
+left. Danceability has a negligible effect on the likelihood of
+popularity for EDM music, and only a small effect for R\&B. For pop, rap
+and latin and rock, a high danceability leads to a higher likelihood of
+a song being popular.
 
 These graphs were made for every variable which showed useful
 information.
@@ -60,8 +57,7 @@ information.
 ## Multiple Variable Analysis
 
 After having looked at individual variables, we explored a combination
-of variables; The combination of danceability, valence and energy into
-one variable showed some interesting results.
+of variables - danceability, energy and valence:
 
 ![](README_files/figure-gfm/pop-multiple-variable-analysis-1-1.png)<!-- -->
 
@@ -76,19 +72,18 @@ happy.
 
 ## Changes in Trends Over Time
 
-Finally we decided to explore how the trends of popular songs have
-changed over time. Models were fitted to predict each numeric variable
-using the song release date as the explanatory variable to see whether
-there was any relationship between when a song was released and the
-level of a certain variable it had.
+Our exploration of changes in trends over time led us to create models
+which predict the mean of each numeric variable using the release year
+as the explanatory. When we plotted the data, we saw patterns emerge
+which we could then use to predict the characteristics of next years
+songs.
 
 ## Conclusion
 
 Whilst we did not achieve our goal by the expected means, we
 successfully identified many characteristics which would give a song the
-highest likelihood of it being popular. For example, a song with a
-duration between 180-220 seconds has a much higher chance of being
-popular in all genres except rock.
+highest likelihood of it being popular, which are outlined in our
+presentation.
 
 ## Evaluation
 
