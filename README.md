@@ -87,6 +87,98 @@ successfully identified many characteristics which would give a song the
 highest likelihood of it being popular, which are outlined in our
 presentation.
 
+<table>
+
+<thead>
+
+<tr>
+
+<th style="text-align:right;">
+
+acousticness
+
+</th>
+
+<th style="text-align:right;">
+
+danceability
+
+</th>
+
+<th style="text-align:right;">
+
+energy
+
+</th>
+
+<th style="text-align:right;">
+
+instrumentalness
+
+</th>
+
+<th style="text-align:right;">
+
+liveness
+
+</th>
+
+<th style="text-align:right;">
+
+valence
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:right;">
+
+0.0874
+
+</td>
+
+<td style="text-align:right;">
+
+0.6767
+
+</td>
+
+<td style="text-align:right;">
+
+0.7331
+
+</td>
+
+<td style="text-align:right;">
+
+0.0097
+
+</td>
+
+<td style="text-align:right;">
+
+0.1967
+
+</td>
+
+<td style="text-align:right;">
+
+0.8828
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
 ## Evaluation
 
 We did our best to make the data set as appropriate as possible, however

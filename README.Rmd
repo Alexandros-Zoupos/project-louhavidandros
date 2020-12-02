@@ -10,6 +10,7 @@ library(dplyr)
 library(ggridges)
 library(fmsb)
 library(patchwork)
+library(knitr)
 ```
 
 ```{r load-data, include = FALSE}
@@ -235,7 +236,9 @@ all_clean %>%
   facet_wrap(~name) +
   labs(x = "Release year",
        y = "Value",
-       colour = "Variables") +
+       colour = "Variables",
+       title = "Mean Value of Variables over Time",
+       subtitle = "1970 - 2020") +
 theme(axis.text.x = element_text(angle=45, hjust = 1))
 ```
 
@@ -245,6 +248,11 @@ Our exploration of changes in trends over time led us to create models which pre
 
 Whilst we did not achieve our goal by the expected means, we successfully identified many characteristics which would give a song the highest likelihood of it being popular, which are outlined in our presentation. 
 
+```{r, echo = FALSE}
+model_table <- tibble(acousticness = 0.0874, danceability = 0.6767, 
+                      energy = 0.7331, instrumentalness = 0.0097, liveness = 0.1967, valence = 0.8828)
+kable(head(model_table), format = "html")
+```
 
 ## Evaluation
 We did our best to make the data set as appropriate as possible, however there were a few problems with our data set which we could not change and that may have lead to inaccuracies in our result:
