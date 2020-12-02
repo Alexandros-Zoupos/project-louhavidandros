@@ -137,14 +137,14 @@ class: inverse, center, middle
 
 ---
 
-```{r messy-plot, echo = FALSE}
+```{r messy-plot, echo = FALSE, message=FALSE}
 clean_songs %>%
 ggplot(aes(x = speechiness, y = track_popularity)) +
 geom_point() +
 geom_smooth() +
 labs(x = "Speechiness",
 y = "Track popularity",
-title = "Track popularity vs tempo") +
+title = "Track popularity vs speechiness") +
 theme_minimal() +
 scale_color_viridis_d()
 ```
