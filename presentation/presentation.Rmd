@@ -516,7 +516,7 @@ mvg_rnb+mvg_latin
 
 # Changes in Trends Over Time
 
-```{r Timeline, echo = FALSE, message = FALSE}
+```{r Timeline, echo=FALSE, message=FALSE}
 songs_ridges %>%
   filter(popularity_level == "High") %>%
   mutate(track_album_release_year = as.integer(str_sub(track_album_release_date, end = 4))) %>%
@@ -530,7 +530,11 @@ songs_ridges %>%
   geom_point()+
   geom_smooth() +
   theme_minimal() +
-  facet_wrap(~name)
+  facet_wrap(~name) +
+  labs(x = "Release year",
+       y = "Value",
+       colour = "Variables") +
+theme(axis.text.x = element_text(angle=45, hjust = 1))
 ```
 
 ---
