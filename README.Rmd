@@ -9,7 +9,6 @@ library(tidyverse)
 library(dplyr)
 library(ggridges)
 library(fmsb)
-library(ggradar)
 library(patchwork)
 ```
 
@@ -218,6 +217,27 @@ mvg_rnb+mvg_latin
  As shown in graphs, the songs in the "High" bracket for popularity also had the highest value for this new variable in 4 out of the 6 genres. The 2 genres in which "High" wasn't were R&B and Latin; for Latin however it was a very close second. This shows that popular songs in general, throughout most genres, are more danceable, energetic and happy.
 
 ## Changes in Trends Over Time
+
+```{r Timeline, echo=FALSE, message=FALSE}
+all_clean %>%
+  filter(popularity_level == "High") %>%
+  mutate(track_album_release_year = as.integer(str_sub(track_album_release_date, end = 4))) %>%
+  filter(track_album_release_year >= 1970) %>%
+  group_by(track_album_release_year) %>%
+  summarise(acousticness = mean(acousticness), danceability = mean(danceability), energy = mean(energy), liveness = mean(liveness), 
+            speechiness = mean(speechiness), valence = mean(valence)) %>%
+  pivot_longer(cols = c(danceability, energy, speechiness, acousticness,
+         liveness, valence)) %>%
+  ggplot(aes(x = track_album_release_year, y = value, colour = name)) +
+  geom_point()+
+  geom_smooth() +
+  theme_minimal() +
+  facet_wrap(~name) +
+  labs(x = "Release year",
+       y = "Value",
+       colour = "Variables") +
+theme(axis.text.x = element_text(angle=45, hjust = 1))
+```
 
 Our exploration of changes in trends over time led us to create models which predict the mean of each numeric variable using the release year as the explanatory. When we plotted the data, we saw patterns emerge which we could then use to predict the characteristics of next years songs.
 

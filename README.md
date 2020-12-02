@@ -72,6 +72,8 @@ happy.
 
 ## Changes in Trends Over Time
 
+![](README_files/figure-gfm/Timeline-1.png)<!-- -->
+
 Our exploration of changes in trends over time led us to create models
 which predict the mean of each numeric variable using the release year
 as the explanatory. When we plotted the data, we saw patterns emerge
