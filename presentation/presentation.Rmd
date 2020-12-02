@@ -103,10 +103,21 @@ clean_rock <- clean_full %>%
 
 songs_ridges <- rbind(clean_rock, clean_rnb, clean_rap, clean_pop, clean_latin, clean_edm)
 ```
+---
+#Summary of data
 
+```{r summary_data, echo = FALSE}
+summary_table <- spotify_songs %>%
+  select(track_name, track_popularity, playlist_genre, danceability) %>%
+  slice_max(danceability, n = 5)
+
+kable(head(summary_table), format = "html")
+```
+
+---
 
 ```{r messy-plot, echo = FALSE, message=FALSE}
-clean_songs %>%
+clean_full %>%
 ggplot(aes(x = speechiness, y = track_popularity)) +
 geom_point() +
 geom_smooth() +
@@ -117,13 +128,13 @@ theme_minimal() +
 scale_color_viridis_d()
 ```
 
-- Over 23,000 observations
+- Over 27,000 observations
 ---
 
 
 ```{r data-split, echo = FALSE}
 set.seed(666)
-clean_songs_split <- initial_split(clean_songs)
+clean_songs_split <- initial_split(clean_full)
 spotify_train <- training(clean_songs_split)
 spotify_test <- testing(clean_songs_split)
 ```

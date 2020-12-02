@@ -31,11 +31,57 @@ class: center, middle, inverse, title-slide
 
 
 
+---
+#Summary of data
 
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; track_name &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; track_popularity &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; playlist_genre &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; danceability &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; If Only I Could (feat. Steve Lucas) - Liem Remix &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 41 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; edm &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.983 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Mega Run - Downtown Jump &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 27 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; edm &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.981 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Ice Ice Baby &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 70 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; pop &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.979 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Enseñame a Soñar - Original Mix &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 65 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; latin &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.979 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Cha Cha Slide - Original Live Platinum Band Mix &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 54 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; latin &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.978 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
 
 &lt;img src="presentation_files/figure-html/messy-plot-1.png" width="80%" /&gt;
 
-- Over 23,000 observations
+- Over 27,000 observations
 ---
 
 
@@ -50,10 +96,16 @@ class: center, middle, inverse, title-slide
 
 Track popularity predicted by model vs actual track popularity
 
+
+```
+## Adding missing grouping variables: `playlist_genre`
+```
+
 &lt;table&gt;
  &lt;thead&gt;
   &lt;tr&gt;
    &lt;th style="text-align:right;"&gt; .pred &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; playlist_genre &lt;/th&gt;
    &lt;th style="text-align:right;"&gt; track_popularity &lt;/th&gt;
    &lt;th style="text-align:left;"&gt; track_name &lt;/th&gt;
    &lt;th style="text-align:left;"&gt; track_artist &lt;/th&gt;
@@ -61,37 +113,43 @@ Track popularity predicted by model vs actual track popularity
  &lt;/thead&gt;
 &lt;tbody&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 47.20333 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 47.18484 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; pop &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 60 &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; Call You Mine - Keanu Silva Remix &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; The Chainsmokers &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 46.18834 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 46.48161 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; pop &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 69 &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; Post Malone (feat. RANI) - GATTÜSO Remix &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; Sam Feldt &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 44.49431 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 44.10329 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; pop &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 68 &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; SOS - Laidback Luke Tribute Remix / Radio Edit &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; Avicii &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 46.46700 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 46.58702 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; pop &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 62 &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; Don't Leave Me Alone (feat. Anne-Marie) - EDX's Indian Summer Remix &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; David Guetta &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 46.30905 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 46.17936 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; pop &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 70 &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; Slow Dance (feat. Ava Max) - Sam Feldt Remix &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; AJ Mitchell &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 46.44196 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 46.22933 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; pop &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 63 &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; Hold Me While You Wait - Steve Void Remix &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; Lewis Capaldi &lt;/td&gt;
@@ -113,7 +171,7 @@ R squared (rsq) and root mean square error (rmse) of model
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; rsq &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; standard &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.0923458 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0781285 &lt;/td&gt;
   &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
@@ -130,7 +188,7 @@ R squared (rsq) and root mean square error (rmse) of model
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; rmse &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; standard &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 22.49317 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 23.38767 &lt;/td&gt;
   &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
