@@ -199,7 +199,11 @@ it was in which lead to some song’s genres being mislabeled.
 
 ## Presentation
 
-Our presentation can be found [here](presentation/presentation.html).
+Our presentation slides can be found
+[here](presentation/presentation.html).
+
+Our presentation video can be found
+[here](https://media.ed.ac.uk/media/Louhavidandros+-+Exploring+the+Factors+of+Song+Popularity/1_0xe780lu)
 
 ## Data
 
