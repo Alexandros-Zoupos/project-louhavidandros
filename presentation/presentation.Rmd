@@ -165,7 +165,7 @@ songs_fit <- songs_wflow %>%
 ```
 Track popularity predicted by model vs actual track popularity
 
-```{r pred-testing, echo = FALSE}
+```{r pred-testing, echo = FALSE, message = FALSE}
 songs_test_pred <- predict(songs_fit, new_data = spotify_test) %>%
   bind_cols(spotify_test %>% select(track_popularity, track_name, track_artist))
 
@@ -238,7 +238,7 @@ songs_ridges %>%
        y = NULL,
        fill = "Popularity Level",
        title = "Distibution of Danceability Across Genres",
-       subtitle = "Danceability=How suitable a song is for dancing"
+       subtitle = "Danceability - How suitable a track is for dancing"
   ) + guides(color = FALSE) +
   scale_fill_manual(values = c(
     "Very Low" = "#008dfd",
@@ -259,7 +259,7 @@ songs_ridges %>%
        y = NULL,
        fill = "Popularity Level",
        title = "Distibution of Valence Across Genres",
-       subtitle = "Valence=The positivity or happiness of a song"
+       subtitle = "Valence -The positivity or happiness of a track"
        ) +
   guides(color = FALSE) +
   scale_fill_manual(values = c(
@@ -280,7 +280,7 @@ songs_ridges %>%
        y = NULL,
        fill = "Popularity Level",
        title = "Distibution of Energy Across Genres",
-       subtitle = "Energy=General itensity and level of activity in a song"
+       subtitle = "Energy - General intensity and level of activity of a track"
        ) +
   guides(color = FALSE) +
   scale_fill_manual(values = c(
@@ -303,7 +303,7 @@ filter(popularity_level %in% c("High", "Very Low")) %>%
        y = NULL,
        fill = "Popularity Level",
        title = "Distibution of Speechiness Across Genres",
-       subtitle = "Speechiness= The amount of spoken (not sung) words in a track"
+       subtitle = "Speechiness - A measure of the presence of spoken (not sung) words"
        ) +
   guides(color = FALSE) +
   scale_fill_manual(values = c(
@@ -327,7 +327,7 @@ songs_ridges %>%
        y = NULL,
        fill = "Popularity Level",
        title = "Distibution of Acousticness Across Genres",
-       subtitle = "Acousticness= A measure of how likely the track is to be acoustic"
+       subtitle = "Acousticness - A confidence measure of whether the track is acoustic"
        ) +
   guides(color = FALSE) +
   scale_fill_manual(values = c(
@@ -349,7 +349,7 @@ songs_ridges %>%
        y = NULL,
        fill = "Popularity Level",
        title = "Distibution of Liveness Across Genres",
-       subtitle = "Liveness= Likelihood the track is a live recording"
+       subtitle = "Liveness - Likelihood the track is a live recording"
        ) +
   guides(color = FALSE) +
   scale_fill_manual(values = c(
@@ -371,7 +371,7 @@ songs_ridges %>%
        y = NULL,
        fill = "Popularity Level",
        title = "Distibution of Tempo Across Genres",
-       subtitle = "Tempo=The estimated tempo of a track in beats per minute"
+       subtitle = "Tempo - The estimated tempo of a track in beats per minute"
        ) +
   guides(color = FALSE) +
   scale_fill_manual(values = c(
@@ -394,7 +394,7 @@ songs_ridges %>%
        y = NULL,
        fill = "Popularity Level",
        title = "Distibution of Song Duration Across Genres",
-       subtitle = "Duration= A tracks length in seconds"
+       subtitle = "Duration - A track's length in seconds"
        ) +
   guides(color = FALSE) +
   scale_fill_manual(values = c(
@@ -416,7 +416,7 @@ songs_ridges %>%
        y = NULL,
        fill = "Popularity Level",
        title = "Distibution of Instrumentalness Across Genres",
-       subtitle = "Instrumentalness=Measure of the lack of singing or words in a track"
+       subtitle = "Instrumentalness - A measure of the lack of vocals in a track"
        ) +
   guides(color = FALSE) +
   scale_fill_manual(values = c(
@@ -475,7 +475,7 @@ mvg_rock <- clean_rock %>%
 ```
 ---
 
-# Multiple Variable analysis part 2
+# Multiple Variable Analysis part 2
 
 ```{r multiple-variable-analysis-2, echo = FALSE}
 mvg_latin <- clean_latin  %>%
