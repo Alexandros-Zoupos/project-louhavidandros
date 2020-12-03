@@ -619,3 +619,31 @@ all_songs %>%
 ```
 
 
+```{r}
+edm_quartile_range_all <- all_songs %>%
+  mutate(Popularity = case_when(
+    track_popularity <= 17 ~ "0-17",
+    track_popularity > 17 & track_popularity <= 36 ~ "18-36",
+    track_popularity > 36 & track_popularity < 51 ~ "37-50",
+    track_popularity >= 51 & track_popularity <= 100 ~ "51-100"
+  ))
+```
+
+```{r}
+genre <- c("edm", "edm", "edm", "edm")
+popularity <- c("0-17", "18-36", "37-50", "51-100")
+popularity_level <- c("Very Low", "Low", "Fairly High", "High")
+
+pop_level_example <- data.frame(genre, popularity, popularity_level)
+```
+
+
+```{r}
+edm_quartile_range_all %>%
+  filter(playlist_genre == "edm") %>%
+  select(playlist_genre, Popularity, popularity_level) %>%
+  group_by(Popularity) %>%
+  glimpse()
+```
+
+
