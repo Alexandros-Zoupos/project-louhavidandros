@@ -104,7 +104,7 @@ clean_rock <- clean_full %>%
 songs_ridges <- rbind(clean_rock, clean_rnb, clean_rap, clean_pop, clean_latin, clean_edm)
 ```
 
-#Summary of data
+#Summary of Data
 
 ```{r summary_data, echo = FALSE}
 summary_table <- spotify_songs %>%
@@ -338,28 +338,6 @@ songs_ridges %>%
 ```
 ---
 
-# Liveness Ridge Plot
-
-```{r liveness-ridge, echo = FALSE}
-songs_ridges %>%
-  filter(popularity_level %in% c("High", "Very Low")) %>%
-  ggplot(aes(x = liveness, y = playlist_genre, fill = popularity_level, color = popularity_level)) +
-   geom_density_ridges(alpha = 0.2, bandwidth = 0.045) +
-  labs(x = "Liveness",
-       y = NULL,
-       fill = "Popularity Level",
-       title = "Distibution of Liveness Across Genres",
-       subtitle = "Liveness - Likelihood the track is a live recording"
-       ) +
-  guides(color = FALSE) +
-  scale_fill_manual(values = c(
-    "Very Low" = "#008dfd",
-    "High" = "#fd0000"
-  )) +
-  theme_minimal()
-```
----
-
 # Tempo Ridge Plot
 
 ```{r tempo-ridge, echo = FALSE}
@@ -529,7 +507,7 @@ theme(axis.text.x = element_text(angle=45, hjust = 1))
 ```
 
 ---
-#The models for the variables
+#The Models for the Variables
 ```{r create_summary_years, include = FALSE}
 mean_year_songs <- songs_ridges %>%
   filter(popularity_level == "High") %>%
