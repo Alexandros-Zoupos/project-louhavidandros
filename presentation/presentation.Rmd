@@ -225,7 +225,7 @@ songs_ridges %>%
        y = NULL,
        fill = "Popularity Level",
        title = "Distibution of Danceability Across Genres",
-       subtitle = "Grouped by Most and Least Popular Songs"
+       subtitle = "Danceability=How suitable a song is for dancing"
   ) + guides(color = FALSE) +
   scale_fill_manual(values = c(
     "Very Low" = "#008dfd",
@@ -248,7 +248,7 @@ songs_ridges %>%
        y = NULL,
        fill = "Popularity Level",
        title = "Distibution of Valence Across Genres",
-       subtitle = "Grouped by Most and Least Popular Songs"
+       subtitle = "Valence=The positivity or happiness of a song"
        ) +
   guides(color = FALSE) +
   scale_fill_manual(values = c(
@@ -269,7 +269,7 @@ songs_ridges %>%
        y = NULL,
        fill = "Popularity Level",
        title = "Distibution of Energy Across Genres",
-       subtitle = "Grouped by Most and Least Popular Songs"
+       subtitle = "Energy=General itensity and level of activity in a song"
        ) +
   guides(color = FALSE) +
   scale_fill_manual(values = c(
@@ -292,7 +292,7 @@ filter(popularity_level %in% c("High", "Very Low")) %>%
        y = NULL,
        fill = "Popularity Level",
        title = "Distibution of Speechiness Across Genres",
-       subtitle = "Grouped by Most and Least Popular Songs"
+       subtitle = "Speechiness= The amount of spoken (not sung) words in a track"
        ) +
   guides(color = FALSE) +
   scale_fill_manual(values = c(
@@ -316,7 +316,7 @@ songs_ridges %>%
        y = NULL,
        fill = "Popularity Level",
        title = "Distibution of Acousticness Across Genres",
-       subtitle = "Grouped by Most and Least Popular Songs"
+       subtitle = "Acousticness= A measure of how likely the track is to be acoustic"
        ) +
   guides(color = FALSE) +
   scale_fill_manual(values = c(
@@ -338,7 +338,7 @@ songs_ridges %>%
        y = NULL,
        fill = "Popularity Level",
        title = "Distibution of Liveness Across Genres",
-       subtitle = "Grouped by Most and Least Popular Songs"
+       subtitle = "Liveness= Likelihood the track is a live recording"
        ) +
   guides(color = FALSE) +
   scale_fill_manual(values = c(
@@ -360,7 +360,7 @@ songs_ridges %>%
        y = NULL,
        fill = "Popularity Level",
        title = "Distibution of Tempo Across Genres",
-       subtitle = "Grouped by Most and Least Popular Songs"
+       subtitle = "Tempo=The estimated tempo of a track in beats per minute"
        ) +
   guides(color = FALSE) +
   scale_fill_manual(values = c(
@@ -383,7 +383,7 @@ songs_ridges %>%
        y = NULL,
        fill = "Popularity Level",
        title = "Distibution of Song Duration Across Genres",
-       subtitle = "Grouped by Most and Least Popular Songs"
+       subtitle = "Duration= A tracks length in seconds"
        ) +
   guides(color = FALSE) +
   scale_fill_manual(values = c(
@@ -405,7 +405,7 @@ songs_ridges %>%
        y = NULL,
        fill = "Popularity Level",
        title = "Distibution of Instrumentalness Across Genres",
-       subtitle = "Grouped by Most and Least Popular Songs"
+       subtitle = "Instrumentalness=Measure of the lack of singing or words in a track"
        ) +
   guides(color = FALSE) +
   scale_fill_manual(values = c(
