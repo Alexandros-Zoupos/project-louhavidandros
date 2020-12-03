@@ -575,8 +575,9 @@ kable(head(model_table), format = "html")
 
 - Some songs may have been categorized in the wrong genre
 ---
+class: center
 # Thank you for listening
 
-You can find the slides of this presentation here: put link. 
+
 ---
 
