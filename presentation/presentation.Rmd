@@ -547,11 +547,6 @@ kable(head(model_table), format = "html")
 
 --
 
-- `track_popularity` variable does not take into account the popularity that songs had at the time they were released
-
---
-
-
 - Some songs may have been categorized in the wrong genre
 ---
 class: center
