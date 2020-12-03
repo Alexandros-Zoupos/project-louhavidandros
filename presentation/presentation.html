@@ -197,8 +197,9 @@ R squared (rsq) and root mean square error (rmse) of model
 
 # Popularity Level
 
-- A new approach was taken by first finding the quartile values for every genre, and then categorising every song's popularity as either "High", "Fairly High", "Low", or "Very Low" depending on which quartile it fell into.
+- Every song's popularity level was categorised as either "High", "Fairly High", "Low", or "Very Low" depending on which quartile it fell into.
 
+.pull-left[
 &lt;table&gt;
  &lt;thead&gt;
   &lt;tr&gt;
@@ -233,6 +234,40 @@ R squared (rsq) and root mean square error (rmse) of model
   &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
+]
+.pull-right[
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; genre &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; popularity &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; popularity_level &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; edm &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0-17 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Very Low &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; edm &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 18-35 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Low &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; edm &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 36-48 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Fairly High &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; edm &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 49-99 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; High &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
 
 ---
 
@@ -244,9 +279,7 @@ R squared (rsq) and root mean square error (rmse) of model
 
 # Danceability Ridge Plot
 &lt;img src="presentation_files/figure-html/ridge-plot-example-1.png" width="80%" /&gt;
-- EDM: negligible impact
-- Rock, Rap, Pop, Latin: High danceability more likely to be popular
-- R&amp;B: Highest likelihood of popularity in lower optimal range
+
 ---
 
 # Valence Ridge Plot

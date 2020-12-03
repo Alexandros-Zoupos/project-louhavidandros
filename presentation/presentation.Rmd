@@ -188,15 +188,28 @@ kable(head(rmse), format = "html")
 
 # Popularity Level
 
-- A new approach was taken by first finding the quartile values for every genre, and then categorising every song's popularity as either "High", "Fairly High", "Low", or "Very Low" depending on which quartile it fell into.
+- Every song's popularity level was categorised as either "High", "Fairly High", "Low", or "Very Low" depending on which quartile it fell into.
 
+.pull-left[
 ```{r quartile-example, echo = FALSE, message = FALSE}
 quartile_table <- clean_full %>%
   group_by(playlist_genre) %>%
-  summarise(quartiles = quantile(track_popularity))
+  summarise(quartiles = quantile(track_popularity)) 
 
 kable(head(quartile_table), format = "html")
 ```
+]
+.pull-right[
+```{r pop-level table, echo = FALSE}
+genre <- c("edm", "edm", "edm", "edm")
+popularity <- c("0-17", "18-35", "36-48", "49-99")
+popularity_level <- c("Very Low", "Low", "Fairly High", "High")
+
+pop_level_example <- data.frame(genre, popularity, popularity_level)
+
+kable(head(pop_level_example), format = "html")
+```
+]
 
 ---
 
@@ -233,9 +246,7 @@ songs_ridges %>%
   )) +
   theme_minimal()
 ```
-- EDM: negligible impact
-- Rock, Rap, Pop, Latin: High danceability more likely to be popular
-- R&B: Highest likelihood of popularity in lower optimal range
+
 ---
 
 # Valence Ridge Plot
