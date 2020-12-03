@@ -554,11 +554,12 @@ kable(head(model), format = "html")
 - r.squared is 0.4681, noticably larger than our first value.
 
 ---
-#The next best song of 2021
+#The avererage popular song in 2021
 
 ```{r, echo = FALSE}
-model_table <- tibble(acousticness = 0.0874, danceability = 0.6767, 
-                      energy = 0.7331, instrumentalness = 0.0097, liveness = 0.1967, valence = 0.8828)
+model_table <- tibble(acousticness = 0.2668, danceability = 0.6814, 
+                      energy = 0.7288, instrumentalness = 0.0418, 
+                      liveness = 0.1877, valence = 0.5002)
 kable(head(model_table), format = "html")
 ```
 ---
